@@ -32,9 +32,9 @@ data-files: *.txt
 
 executable AdventOfCode
     main-is:          Main.hs
-    other-modules: Paths_AdventOfCode, AoC21E01
+    other-modules: Paths_AdventOfCode, Helpers, AoC21E01, AoC22E01
     autogen-modules: Paths_AdventOfCode
 
-    build-depends:    base >= 4
+    build-depends:    base >= 4, sort >= 1
     hs-source-dirs:   app, lib
     default-language: Haskell2010

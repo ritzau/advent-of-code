@@ -1,25 +1,25 @@
-module AoC21E01(s21E01) where
+module AoC21E01 (sonarSweep) where
 
-import Paths_AdventOfCode(getDataFileName)
+import Helpers (printHeader, readData)
 
-countIncreasing :: [Int] -> Int
-countIncreasing = length . filter isIncreasing . pairs
-  where 
-    pairs = zip <*> tail
-    isIncreasing (a,b) = a < b
-
-parseInput :: String -> [Int]
-parseInput = map read . lines
+sonarSweep :: IO ()
+sonarSweep = do
+  printHeader "2021 Day 1: Sonar Sweep"
+  result <- processData "data-s21e01-sample.txt"
+  putStrLn ("Sample: " ++ show result)
 
 processData :: FilePath -> IO Int
-processData fileName = do
-  path <- getDataFileName fileName
-  content <- readFile path
+processData file = do
+  content <- readData file
   return (process content)
   where
     process = countIncreasing . parseInput
 
-s21E01 = do
-  putStrLn "AoC 2021e01"
-  result <- processData "data-s21e01-sample.txt"
-  putStrLn ("Sample: " ++ show result)
+parseInput :: String -> [Int]
+parseInput = map read . lines
+
+countIncreasing :: [Int] -> Int
+countIncreasing = length . filter isIncreasing . pairs
+  where
+    pairs = zip <*> tail
+    isIncreasing (a, b) = a < b
