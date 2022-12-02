@@ -109,9 +109,7 @@ correctScore = sum . map score
     myMove (Rock, Win) = Paper
     myMove (Paper, Win) = Scissors
     myMove (Scissors, Win) = Rock
-
     myMove (m, Draw) = m
-
     myMove (Rock, Lose) = Scissors
     myMove (Paper, Lose) = Rock
     myMove (Scissors, Lose) = Paper
