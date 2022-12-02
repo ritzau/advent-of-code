@@ -1,6 +1,6 @@
 cabal-version:      2.4
 name:               AdventOfCode
-version:            21.1.0.0
+version:            22.2.0.0
 
 -- A short (one-line) description of the package.
 -- synopsis:
@@ -36,5 +36,5 @@ executable AdventOfCode
     autogen-modules: Paths_AdventOfCode
 
     build-depends:    base >= 4, sort >= 1
-    hs-source-dirs:   app, lib
+    hs-source-dirs:   src, src/AoC21, src/AoC22
     default-language: Haskell2010
