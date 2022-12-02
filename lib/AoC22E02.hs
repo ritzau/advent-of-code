@@ -1,6 +1,5 @@
 module AoC22E02 (rockPaperScissors) where
 
-import Data.Sort (sort)
 import Helpers (formatInt, printHeader, readData)
 
 data Move = Rock | Paper | Scissors
@@ -23,32 +22,32 @@ type CorrectResult = Int
 
 rockPaperScissors :: IO ()
 rockPaperScissors = do
+  let sampleFile = "data-s22e02-sample.txt"
+  let dataFile = "data-s22e02.txt"
+
   printHeader "2022 Day 2: Rock Paper Scissors"
 
-  result <- scoreOf "data-s22e02-sample.txt"
-  putStrLn ("Score of sample:          " ++ formatInt result)
+  result <- scoreOf sampleFile
+  putStrLn ("Score of sample:         " ++ formatInt result)
 
-  result <- scoreOf "data-s22e02.txt"
-  putStrLn ("Score:                    " ++ formatInt result)
+  result <- scoreOf dataFile
+  putStrLn ("Score:                   " ++ formatInt result)
 
-  result <- correctScoreOf "data-s22e02-sample.txt"
-  putStrLn ("Correct score of sample:  " ++ show result)
+  result <- correctScoreOf sampleFile
+  putStrLn ("Correct score of sample: " ++ formatInt result)
 
-  result <- correctScoreOf "data-s22e02.txt"
-  putStrLn ("Correct score:            " ++ formatInt result)
+  result <- correctScoreOf dataFile
+  putStrLn ("Correct score:           " ++ formatInt result)
 
 scoreOf :: FilePath -> IO Result
-scoreOf = process score
+scoreOf file = do
+  content <- readData file
+  return $ (score . parseInput) content
 
 correctScoreOf :: FilePath -> IO CorrectResult
 correctScoreOf file = do
   content <- readData file
   return $ (correctScore . parseCorrectInput) content
-
-process :: (Input -> Result) -> FilePath -> IO Result
-process f file = do
-  input <- getInput file
-  return $ f input
 
 getInput :: FilePath -> IO Input
 getInput file = do
@@ -61,13 +60,14 @@ parseInput = map (toRound . words) . lines
     toRound [a, b] = (toMove a, toMove b)
     toRound _ = undefined
 
-    toMove "A" = Rock
-    toMove "B" = Paper
-    toMove "C" = Scissors
-    toMove "X" = Rock
-    toMove "Y" = Paper
-    toMove "Z" = Scissors
-    toMove _ = undefined
+    toMove x = case x of
+      "A" -> Rock
+      "B" -> Paper
+      "C" -> Scissors
+      "X" -> Rock
+      "Y" -> Paper
+      "Z" -> Scissors
+      _ -> undefined
 
 parseCorrectInput :: String -> CorrectInput
 parseCorrectInput = map (toRound . words) . lines
@@ -75,28 +75,32 @@ parseCorrectInput = map (toRound . words) . lines
     toRound [a, b] = (toMove a, toTargetResult b)
     toRound _ = undefined
 
-    toMove "A" = Rock
-    toMove "B" = Paper
-    toMove "C" = Scissors
-    toMove _ = undefined
+    toMove x = case x of
+      "A" -> Rock
+      "B" -> Paper
+      "C" -> Scissors
+      _ -> undefined
 
-    toTargetResult "X" = Lose
-    toTargetResult "Y" = Draw
-    toTargetResult "Z" = Win
-    toTargetResult _ = undefined
+    toTargetResult x = case x of
+      "X" -> Lose
+      "Y" -> Draw
+      "Z" -> Win
+      _ -> undefined 
 
 score :: Input -> Result
 score = sum . map score
   where
     score m = moveScore m + roundScore m
 
-    moveScore (_, Rock) = 1
-    moveScore (_, Paper) = 2
-    moveScore (_, Scissors) = 3
+    moveScore (_, m) = case m of
+        Rock -> 1
+        Paper -> 2
+        Scissors -> 3
 
     roundScore (Rock, Paper) = 6
     roundScore (Paper, Scissors) = 6
     roundScore (Scissors, Rock) = 6
+
     roundScore (a, b)
       | a == b = 3
       | otherwise = 0
@@ -106,18 +110,24 @@ correctScore = sum . map score
   where
     score m = (moveScore . myMove) m + roundScore m
 
-    myMove (Rock, Win) = Paper
-    myMove (Paper, Win) = Scissors
-    myMove (Scissors, Win) = Rock
+    myMove (m, Win) = case m of
+      Rock -> Paper
+      Paper -> Scissors
+      Scissors -> Rock
+
     myMove (m, Draw) = m
-    myMove (Rock, Lose) = Scissors
-    myMove (Paper, Lose) = Rock
-    myMove (Scissors, Lose) = Paper
 
-    moveScore Rock = 1
-    moveScore Paper = 2
-    moveScore Scissors = 3
+    myMove (m, Lose) = case m of
+      Rock -> Scissors
+      Paper -> Rock
+      Scissors -> Paper
 
-    roundScore (_, Lose) = 0
-    roundScore (_, Draw) = 3
-    roundScore (_, Win) = 6
+    moveScore m = case m of
+      Rock -> 1
+      Paper -> 2
+      Scissors -> 3
+
+    roundScore (_, r) = case r of
+      Lose -> 0
+      Draw -> 3
+      Win -> 6

@@ -6,11 +6,9 @@ import Paths_AdventOfCode (getDataFileName)
 printHeader :: String -> IO ()
 printHeader title = do
   putStrLn ""
-  putStrLn $ map toUpper title
-  putStrLn $ underLine title '='
-  where
-    underLine (c : cs) ch = ch : underLine cs ch
-    underLine _ _ = ""
+  putStrLn ""
+  putStrLn $ "--- " ++ title ++ " ---"
+  putStrLn ""
 
 readData file = do
   path <- getDataFileName file
