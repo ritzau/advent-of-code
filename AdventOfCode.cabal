@@ -32,7 +32,7 @@ data-files: *.txt
 
 executable AdventOfCode
     main-is:          Main.hs
-    other-modules: Paths_AdventOfCode, Helpers, AoC21E01, AoC22E01
+    other-modules: Paths_AdventOfCode, Helpers, AoC21E01, AoC22E01, AoC22E02
     autogen-modules: Paths_AdventOfCode
 
     build-depends:    base >= 4, sort >= 1
