@@ -38,10 +38,10 @@ sliding n a@(x : xs)
 sliding _ _ = []
 
 split :: Char -> [Char] -> [[Char]]
-split e l = split' e [] l
+split e = split' e []
   where
     split' :: Char -> [Char] -> [Char] -> [[Char]]
-    split' e r (x:xs)
-      | e == x = r:split' e [] xs
+    split' e r (x : xs)
+      | e == x = r : split' e [] xs
       | otherwise = split' e (r ++ [x]) xs
     split' e r [] = [r]

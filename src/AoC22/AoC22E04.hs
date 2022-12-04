@@ -1,13 +1,13 @@
 module AoC22E04 (campCleanup) where
 
+import Data.Ix (inRange)
 import Helpers (formatInt, printHeader, readData, split)
 
-data Range = Range Int Int
-  deriving (Show)
+type Range = (Int, Int)
 
-type Pair = (Int, Int)
+type ElfPair = (Range, Range)
 
-type Input = [(Range, Range)]
+type Input = [ElfPair]
 
 type Result = Int
 
@@ -18,61 +18,59 @@ campCleanup = do
 
   printHeader "2022 Day 4: Camp Cleanup"
 
+  result <- countFullOverlapsOf sampleFile
+  putStrLn ("Count full overlaps of sample: " ++ formatInt result)
+
+  result <- countFullOverlapsOf dataFile
+  putStrLn ("Count full overlaps:           " ++ formatInt result)
+
   result <- countOverlapsOf sampleFile
-  putStrLn ("Count overlaps of sample:        " ++ formatInt result)
+  putStrLn ("Count overlaps of sample:      " ++ formatInt result)
 
   result <- countOverlapsOf dataFile
-  putStrLn ("Count overlaps:                  " ++ formatInt result)
+  putStrLn ("Count overlaps:                " ++ formatInt result)
 
-  result <- countOverlapsAtAllOf sampleFile
-  putStrLn ("Count overlaps at all of sample: " ++ show result)
-
-  result <- countOverlapsAtAllOf dataFile
-  putStrLn ("Count overlaps at all:           " ++ formatInt result)
-
-inputOf :: FilePath -> IO Input
-inputOf file = do
-  content <- readData file
-  return $ parseInput content
+countFullOverlapsOf :: FilePath -> IO Result
+countFullOverlapsOf = process countFullOverlaps
 
 countOverlapsOf :: FilePath -> IO Result
-countOverlapsOf file = do
-  content <- readData file
-  return $ (countOverlaps . parseInput) content
+countOverlapsOf = process countOverlaps
 
-countOverlapsAtAllOf :: FilePath -> IO Result
-countOverlapsAtAllOf file = do
+process :: (Input -> r) -> FilePath -> IO r 
+process f file = do
   content <- readData file
-  return $ (countOverlapsAtAll . parseInput) content
+  return $ (f . parseInput) content
 
 parseInput :: String -> Input
 parseInput = map processLine . lines
   where
-    processLine :: String -> (Range, Range)
-    processLine = toPair . map toSectionRange . split ','
+    processLine :: String -> ElfPair
+    processLine = toElfPair . toRanges . split ','
+      where
+        toRanges = map $ toRange' . map read . split '-'
+          where
+            toRange' [a, b] = (a, b)
+            toRange' _ = undefined
 
-    toSectionRange :: String -> Range
-    toSectionRange = toRange . map read . split '-'
+        toElfPair [a, b] = (a, b)
+        toElfPair _ = undefined
 
-    toPair [a, b] = (a, b)
-    toPair _ = undefined
-
-    toRange [a, b] = Range a b
-    toRange _ = undefined
+countFullOverlaps :: Input -> Result
+countFullOverlaps = length . filter isFullyOverlapping
 
 countOverlaps :: Input -> Result
 countOverlaps = length . filter isOverlapping
 
-countOverlapsAtAll :: Input -> Result
-countOverlapsAtAll = length . filter isOverlappingAtAll
+isFullyOverlapping :: (Range, Range) -> Bool
+isFullyOverlapping (a, b) =
+  isOverlapping' a b || isOverlapping' b a
+  where
+    isOverlapping' r (low', high') =
+      inRange r low' && inRange r high'
 
 isOverlapping :: (Range, Range) -> Bool
-isOverlapping (a, b) = isOverlapping' a b || isOverlapping' b a
+isOverlapping (a, b) =
+  isOverlapping' a b || isOverlapping' b a
   where
-    isOverlapping' (Range a b) (Range a' b') = a <= a' && b' <= b
-
-isOverlappingAtAll :: (Range, Range) -> Bool
-isOverlappingAtAll (a, b) = isOverlapping' a b || isOverlapping' b a
-  where
-    isOverlapping' (Range a b) (Range a' b') = 
-      (a <= a' && a' <= b) || (a <= b' && b' <= b)
+    isOverlapping' r (low', high') =
+      inRange r low' || inRange r high'
