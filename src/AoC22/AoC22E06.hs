@@ -1,5 +1,6 @@
 module AoC22E06 (tuningTrouble) where
 
+import Data.List (nub)
 import Helpers (printHeader, printResult, readData, sliding)
 
 type Input = String
@@ -71,5 +72,4 @@ findMarker n = findMarker' . zip [n ..] . sliding n
       | otherwise = findMarker' ms
 
     isMarker :: String -> Bool
-    isMarker [] = True
-    isMarker (c : cs) = c `notElem` cs && isMarker cs
+    isMarker s = n == length (nub s)

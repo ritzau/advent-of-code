@@ -1,5 +1,6 @@
 module AoC22E05 (supplyStacks) where
 
+import Data.Char (isSpace)
 import Data.List (transpose)
 import Helpers (afterEmpty, printHeader, printResult, readData, untilEmpty)
 
@@ -31,7 +32,6 @@ supplyStacks = do
   result <- endStateForCrateMover9001Of dataFile
   printResult "CrateMover 9001 end state" result "RBTWJWMCF"
 
-
 endStateForCrateMover9000Of :: FilePath -> IO Result
 endStateForCrateMover9000Of = process endStateForCrateMover9000
 
@@ -48,21 +48,16 @@ parseInput = parseInput' . lines
   where
     parseInput' ls = Input (parseState ls) (parseMoves ls)
 
-    parseState = parseState' . extractStateLines
+    parseState :: [String] -> [String]
+    parseState = reverseAndTrim . transpose . removeRedundantChars . getStateLines
       where
-        extractStateLines = drop 1 . reverse . untilEmpty
-        parseState' = map (reverse . chopEnd) . (transpose . map parseStateLine)
+        getStateLines = drop 1 . reverse . takeWhile (not . null)
 
-        parseStateLine (_ : c : _ : cs) = c : parseStateLine (chopStart cs)
-        parseStateLine _ = []
+        removeRedundantChars = map (removeRedundantChars' . drop 1)
+        removeRedundantChars' [] = []
+        removeRedundantChars' (c : cs) = c : removeRedundantChars' (drop 3 cs)
 
-        chopStart (' ' : cs) = cs
-        chopStart cs = cs
-
-        chopEnd (c : cs) = case c of
-          ' ' -> ""
-          _ -> c : chopEnd cs
-        chopEnd _ = ""
+        reverseAndTrim = map (dropWhile isSpace . reverse)
 
     parseMoves = map parseMove . afterEmpty
       where
