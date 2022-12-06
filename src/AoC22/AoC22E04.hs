@@ -1,7 +1,7 @@
 module AoC22E04 (campCleanup) where
 
 import Data.Ix (inRange)
-import Helpers (formatInt, printHeader, readData, split)
+import Helpers (printHeader, printResult, readData, split)
 
 type Range = (Int, Int)
 
@@ -19,16 +19,16 @@ campCleanup = do
   printHeader "2022 Day 4: Camp Cleanup"
 
   result <- countFullOverlapsOf sampleFile
-  putStrLn ("Count full overlaps of sample: " ++ formatInt result)
+  printResult "Count full overlaps of sample" result 2
 
   result <- countFullOverlapsOf dataFile
-  putStrLn ("Count full overlaps:           " ++ formatInt result)
+  printResult "Count full overlaps" result 483
 
   result <- countOverlapsOf sampleFile
-  putStrLn ("Count overlaps of sample:      " ++ formatInt result)
+  printResult "Count overlaps of sample" result 4
 
   result <- countOverlapsOf dataFile
-  putStrLn ("Count overlaps:                " ++ formatInt result)
+  printResult "Count overlaps" result 874
 
 countFullOverlapsOf :: FilePath -> IO Result
 countFullOverlapsOf = process countFullOverlaps

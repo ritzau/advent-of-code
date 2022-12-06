@@ -1,23 +1,23 @@
 module AoC22E01 (calorieCounting) where
 
 import Data.Sort (sort)
-import Helpers (formatInt, printHeader, readData)
+import Helpers (formatInt, printHeader, printResult, readData)
 
 calorieCounting :: IO ()
 calorieCounting = do
   printHeader "2022 Day 1: Calorie Counting"
 
   result <- maxCaloriesOf "data-s22e01-sample.txt"
-  putStrLn ("Max calories sample: " ++ formatInt result)
+  printResult "Max calories sample" result 24000
 
   result <- maxCaloriesOf "data-s22e01.txt"
-  putStrLn ("Max calories:        " ++ formatInt result)
+  printResult "Max calories" result 74711
 
   result <- top3SumOf "data-s22e01-sample.txt"
-  putStrLn ("Top 3 total sample:  " ++ formatInt result)
+  printResult "Top 3 total sample" result 45000
 
   result <- top3SumOf "data-s22e01.txt"
-  putStrLn ("Top 3 total:         " ++ formatInt result)
+  printResult "Top 3 total" result 209481
 
 maxCaloriesOf :: FilePath -> IO Int
 maxCaloriesOf = process maxCalories

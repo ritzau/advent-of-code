@@ -2,7 +2,7 @@ module AoC22E03 (rucksackReorganization) where
 
 import Data.Char (isAscii, isLower, isUpper, ord)
 import qualified Data.Set as Set
-import Helpers (formatInt, printHeader, readData)
+import Helpers (formatInt, printHeader, printResult, readData)
 
 type Input = [(Set.Set Char, Set.Set Char)]
 
@@ -20,16 +20,16 @@ rucksackReorganization = do
   printHeader "2022 Day 3: Rucksack Reorganization"
 
   result <- sumPrioritiesOf sampleFile
-  putStrLn ("Pritority of sample:      " ++ formatInt result)
+  printResult "Pritority of sample" result 157
 
   result <- sumPrioritiesOf dataFile
-  putStrLn ("Priority:                 " ++ formatInt result)
+  printResult "Pritority" result 7990
 
   result <- sumBadgePrioritiesOf sampleFile
-  putStrLn ("Badge priority of sample: " ++ formatInt result)
+  printResult "Badge priority of sample" result 70
 
   result <- sumBadgePrioritiesOf dataFile
-  putStrLn ("Badge priority:           " ++ formatInt result)
+  printResult "Badge priority" result 2602
 
 sumPrioritiesOf :: FilePath -> IO Result
 sumPrioritiesOf file = do

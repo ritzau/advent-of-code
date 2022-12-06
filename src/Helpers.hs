@@ -1,8 +1,10 @@
 module Helpers
   ( afterEmpty,
     formatInt,
-    printHeader,
+    padEnd,
     padStart,
+    printHeader,
+    printResult,
     readData,
     sliding,
     split,
@@ -31,6 +33,16 @@ formatInt x
             then format' next ++ "," ++ padStart 3 '0' (show rest)
             else show rest
 
+padEnd :: Int -> Char -> String -> String
+padEnd n char string
+  | length string < n = padEnd n char (string ++ [char])
+  | otherwise = string
+
+padStart :: Int -> Char -> String -> String
+padStart n char string
+  | length string < n = padStart n char (char : string)
+  | otherwise = string
+
 printHeader :: String -> IO ()
 printHeader title = do
   putStrLn ""
@@ -38,15 +50,16 @@ printHeader title = do
   putStrLn $ "--- " ++ title ++ " ---"
   putStrLn ""
 
+printResult :: Eq a => Show a => String -> a -> a -> IO ()
+printResult msg actual expected = do
+  let check = if actual == expected then "✅" else "❌ " ++ show expected ++ " /="
+
+  putStrLn (padEnd 42 ' ' (msg ++ ": ") ++ check ++ " " ++ show actual)
+
 readData :: FilePath -> IO String
 readData file = do
   path <- getDataFileName file
   readFile path
-
-padStart :: Int -> Char -> String -> String
-padStart n char string
-  | length string < n = padStart n char (char : string)
-  | otherwise = string
 
 sliding n a@(x : xs)
   | length xs >= n = take n a : sliding n xs

@@ -1,6 +1,6 @@
 module AoC22E02 (rockPaperScissors) where
 
-import Helpers (formatInt, printHeader, readData)
+import Helpers (printHeader, printResult, readData)
 
 data Move = Rock | Paper | Scissors
   deriving (Eq, Show)
@@ -28,16 +28,16 @@ rockPaperScissors = do
   printHeader "2022 Day 2: Rock Paper Scissors"
 
   result <- scoreOf sampleFile
-  putStrLn ("Score of sample:         " ++ formatInt result)
+  printResult "Score of sample" result 15
 
   result <- scoreOf dataFile
-  putStrLn ("Score:                   " ++ formatInt result)
+  printResult "Score" result 11603
 
   result <- correctScoreOf sampleFile
-  putStrLn ("Correct score of sample: " ++ formatInt result)
+  printResult "Correct score of sample" result 12
 
   result <- correctScoreOf dataFile
-  putStrLn ("Correct score:           " ++ formatInt result)
+  printResult "Correct score" result 12725
 
 scoreOf :: FilePath -> IO Result
 scoreOf file = do

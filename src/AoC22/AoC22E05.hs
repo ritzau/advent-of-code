@@ -1,7 +1,7 @@
 module AoC22E05 (supplyStacks) where
 
 import Data.List (transpose)
-import Helpers (afterEmpty, printHeader, readData, untilEmpty)
+import Helpers (afterEmpty, printHeader, printResult, readData, untilEmpty)
 
 type State = [[Char]]
 
@@ -20,16 +20,17 @@ supplyStacks = do
   printHeader "2022 Day 5: Supply Stacks"
 
   result <- endStateForCrateMover9000Of sampleFile
-  putStrLn ("CrateMover 9000 sample end state: " ++ result)
+  printResult "CrateMover 9000 sample end state" result "CMZ"
 
   result <- endStateForCrateMover9000Of dataFile
-  putStrLn ("CrateMover 9000 end state:        " ++ result)
+  printResult "CrateMover 9000 end state" result "VRWBSFZWM"
 
   result <- endStateForCrateMover9001Of sampleFile
-  putStrLn ("CrateMover 9001 sample end state: " ++ result)
+  printResult "CrateMover 9001 sample end state" result "MCD"
 
   result <- endStateForCrateMover9001Of dataFile
-  putStrLn ("CrateMover 9001 end state:        " ++ result)
+  printResult "CrateMover 9001 end state" result "RBTWJWMCF"
+
 
 endStateForCrateMover9000Of :: FilePath -> IO Result
 endStateForCrateMover9000Of = process endStateForCrateMover9000
