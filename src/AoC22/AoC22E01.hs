@@ -8,16 +8,16 @@ calorieCounting = do
   printHeader "2022 Day 1: Calorie Counting"
 
   result <- maxCaloriesOf "data-s22e01-sample.txt"
-  printResult "Max calories sample" result 24000
+  printResult "Max calories sample" 24000 result
 
   result <- maxCaloriesOf "data-s22e01.txt"
-  printResult "Max calories" result 74711
+  printResult "Max calories" 74711 result
 
   result <- top3SumOf "data-s22e01-sample.txt"
-  printResult "Top 3 total sample" result 45000
+  printResult "Top 3 total sample" 45000 result
 
   result <- top3SumOf "data-s22e01.txt"
-  printResult "Top 3 total" result 209481
+  printResult "Top 3 total" 209481 result
 
 maxCaloriesOf :: FilePath -> IO Int
 maxCaloriesOf = process maxCalories

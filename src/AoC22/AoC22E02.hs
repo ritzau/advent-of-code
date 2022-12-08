@@ -28,16 +28,16 @@ rockPaperScissors = do
   printHeader "2022 Day 2: Rock Paper Scissors"
 
   result <- scoreOf sampleFile
-  printResult "Score of sample" result 15
+  printResult "Score of sample" 15 result
 
   result <- scoreOf dataFile
-  printResult "Score" result 11603
+  printResult "Score" 11603 result
 
   result <- correctScoreOf sampleFile
-  printResult "Correct score of sample" result 12
+  printResult "Correct score of sample" 12 result
 
   result <- correctScoreOf dataFile
-  printResult "Correct score" result 12725
+  printResult "Correct score" 12725 result
 
 scoreOf :: FilePath -> IO Result
 scoreOf file = do
@@ -85,7 +85,7 @@ parseCorrectInput = map (toRound . words) . lines
       "X" -> Lose
       "Y" -> Draw
       "Z" -> Win
-      _ -> undefined 
+      _ -> undefined
 
 score :: Input -> Result
 score = sum . map score
@@ -93,14 +93,13 @@ score = sum . map score
     score m = moveScore m + roundScore m
 
     moveScore (_, m) = case m of
-        Rock -> 1
-        Paper -> 2
-        Scissors -> 3
+      Rock -> 1
+      Paper -> 2
+      Scissors -> 3
 
     roundScore (Rock, Paper) = 6
     roundScore (Paper, Scissors) = 6
     roundScore (Scissors, Rock) = 6
-
     roundScore (a, b)
       | a == b = 3
       | otherwise = 0
@@ -114,9 +113,7 @@ correctScore = sum . map score
       Rock -> Paper
       Paper -> Scissors
       Scissors -> Rock
-
     myMove (m, Draw) = m
-
     myMove (m, Lose) = case m of
       Rock -> Scissors
       Paper -> Rock

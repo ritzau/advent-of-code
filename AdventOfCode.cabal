@@ -1,6 +1,6 @@
 cabal-version:      2.4
 name:               AdventOfCode
-version:            22.6.0.0
+version:            22.7.0.0
 
 -- A short (one-line) description of the package.
 -- synopsis:
@@ -34,7 +34,8 @@ executable AdventOfCode
     main-is:          Main.hs
     other-modules: 
       Paths_AdventOfCode, Helpers, 
-      AoC21E01, AoC22E01, AoC22E02, AoC22E03, AoC22E04, AoC22E05, AoC22E06
+      AoC21E01, AoC22E01, AoC22E02, AoC22E03, AoC22E04, AoC22E05, AoC22E06,
+      AoC22E07
     autogen-modules: Paths_AdventOfCode
 
     build-depends:    base ^>= 4.14, containers ^>= 0.6.6, sort ^>= 1.0

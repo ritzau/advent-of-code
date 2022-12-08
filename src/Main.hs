@@ -7,6 +7,7 @@ import AoC22E03 (rucksackReorganization)
 import AoC22E04 (campCleanup)
 import AoC22E05 (supplyStacks)
 import AoC22E06 (tuningTrouble)
+import AoC22E07 (noSpaceLeftOnDevice)
 
 data Episode
   = S21E01
@@ -16,6 +17,7 @@ data Episode
   | S22E04
   | S22E05
   | S22E06
+  | S22E07
 
 runEpisode e = case e of
   S21E01 -> sonarSweep
@@ -25,6 +27,7 @@ runEpisode e = case e of
   S22E04 -> campCleanup
   S22E05 -> supplyStacks
   S22E06 -> tuningTrouble
+  S22E07 -> noSpaceLeftOnDevice
 
 main :: IO ()
 main =
@@ -34,7 +37,8 @@ main =
       S22E03,
       S22E04,
       S22E05,
-      S22E06
+      S22E06,
+      S22E07
     ]
   where
     runEpisodes (e : es) = do

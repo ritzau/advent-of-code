@@ -51,7 +51,7 @@ printHeader title = do
   putStrLn ""
 
 printResult :: Eq a => Show a => String -> a -> a -> IO ()
-printResult msg actual expected = do
+printResult msg expected actual  = do
   let check = if actual == expected then "✅" else "❌ " ++ show expected ++ " /="
 
   putStrLn (padEnd 42 ' ' (msg ++ ": ") ++ check ++ " " ++ show actual)

@@ -1,20 +1,21 @@
 module AoC22E06 (tuningTrouble) where
 
 import Data.List (nub)
+import Data.Maybe (fromJust)
 import Helpers (printHeader, printResult, readData, sliding)
 
 type Input = String
 
-type Result = Maybe Int
+type Result = Int
 
 tuningTrouble :: IO ()
 tuningTrouble = do
   let samples =
-        [ ("mjqjpqmgbljsphdztnvjfqwrcgsmlb", Just 7, Just 19),
-          ("bvwbjplbgvbhsrlpgdmjqwftvncz", Just 5, Just 23),
-          ("nppdvjthqldpwncqszvftbrmjlhg", Just 6, Just 23),
-          ("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", Just 10, Just 29),
-          ("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", Just 11, Just 26)
+        [ ("mjqjpqmgbljsphdztnvjfqwrcgsmlb", 7, 19),
+          ("bvwbjplbgvbhsrlpgdmjqwftvncz", 5, 23),
+          ("nppdvjthqldpwncqszvftbrmjlhg", 6, 23),
+          ("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", 10, 29),
+          ("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 11, 26)
         ]
 
   let dataFile = "data-s22e06.txt"
@@ -24,12 +25,12 @@ tuningTrouble = do
   runStartOfPacketSamples samples
 
   result <- findStartOfPacketOf dataFile
-  printResult "Input start of packet at" result (Just 1262)
+  printResult "Input start of packet at" 1262 result
 
   runStartOfMessageSamples samples
 
   result <- findStartOfMessageOf dataFile
-  printResult "Input start of message at" result (Just 3444)
+  printResult "Input start of message at" 3444 result
   where
     startOfPacketSamples = map (\(s, e, _) -> (s, e))
     startOfMessageSamples = map (\(s, _, e) -> (s, e))
@@ -42,7 +43,7 @@ tuningTrouble = do
       where
         runSamples' count f ((input, expected) : ss) = do
           let actual = f input
-          printResult ("Sample " ++ show count) actual expected
+          printResult ("Sample " ++ show count) expected actual
           runSamples' (count + 1) f ss
         runSamples' _ _ [] = return ()
 
@@ -57,14 +58,14 @@ process f file = do
   content <- readData file
   return $ f content
 
-findStartOfPacket :: String -> Maybe Int
+findStartOfPacket :: String -> Int
 findStartOfPacket = findMarker 4
 
-findStartOfMessage :: String -> Maybe Int
+findStartOfMessage :: String -> Int
 findStartOfMessage = findMarker 14
 
-findMarker :: Int -> String -> Maybe Int
-findMarker n = findMarker' . zip [n ..] . sliding n
+findMarker :: Int -> String -> Int
+findMarker n = fromJust . findMarker' . zip [n ..] . sliding n
   where
     findMarker' [] = Nothing
     findMarker' ((index, m) : ms)

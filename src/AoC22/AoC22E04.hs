@@ -19,16 +19,16 @@ campCleanup = do
   printHeader "2022 Day 4: Camp Cleanup"
 
   result <- countFullOverlapsOf sampleFile
-  printResult "Count full overlaps of sample" result 2
+  printResult "Count full overlaps of sample" 2 result
 
   result <- countFullOverlapsOf dataFile
-  printResult "Count full overlaps" result 483
+  printResult "Count full overlaps" 483 result
 
   result <- countOverlapsOf sampleFile
-  printResult "Count overlaps of sample" result 4
+  printResult "Count overlaps of sample" 4 result
 
   result <- countOverlapsOf dataFile
-  printResult "Count overlaps" result 874
+  printResult "Count overlaps" 874 result
 
 countFullOverlapsOf :: FilePath -> IO Result
 countFullOverlapsOf = process countFullOverlaps
@@ -36,7 +36,7 @@ countFullOverlapsOf = process countFullOverlaps
 countOverlapsOf :: FilePath -> IO Result
 countOverlapsOf = process countOverlaps
 
-process :: (Input -> r) -> FilePath -> IO r 
+process :: (Input -> r) -> FilePath -> IO r
 process f file = do
   content <- readData file
   return $ (f . parseInput) content

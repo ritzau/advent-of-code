@@ -1,14 +1,15 @@
-module AoC22E03 (rucksackReorganization) where
+module AoC22E03 (rucksackReorganization, rucksackReorganization') where
 
 import Data.Char (isAscii, isLower, isUpper, ord)
-import qualified Data.Set as Set
+import Data.List (intersect, nub)
+import Data.Set (Set, fromList, intersection, toList)
 import Helpers (formatInt, printHeader, printResult, readData)
 
-type Input = [(Set.Set Char, Set.Set Char)]
+type Input = [(Set Char, Set Char)]
 
 type Result = Int
 
-type BadgeInput = [[Set.Set Char]]
+type BadgeInput = [[Set Char]]
 
 type BadgeResult = Int
 
@@ -20,16 +21,19 @@ rucksackReorganization = do
   printHeader "2022 Day 3: Rucksack Reorganization"
 
   result <- sumPrioritiesOf sampleFile
-  printResult "Pritority of sample" result 157
+  printResult "Pritority of sample" 157 result
 
   result <- sumPrioritiesOf dataFile
-  printResult "Pritority" result 7990
+  printResult "Pritority" 7990 result
 
   result <- sumBadgePrioritiesOf sampleFile
-  printResult "Badge priority of sample" result 70
+  printResult "Badge priority of sample" 70 result
 
   result <- sumBadgePrioritiesOf dataFile
-  printResult "Badge priority" result 2602
+  printResult "Badge priority" 2602 result
+
+  result <- rucksackReorganization'
+  printResult "XXX" result 7990
 
 sumPrioritiesOf :: FilePath -> IO Result
 sumPrioritiesOf file = do
@@ -48,32 +52,47 @@ parseInput = map processLine . lines
       let halfLength = length cs `div` 2
           firstHalf = take halfLength cs
           secondHalf = drop halfLength cs
-       in (Set.fromList firstHalf, Set.fromList secondHalf)
+       in (fromList firstHalf, fromList secondHalf)
 
 sumPriorities :: Input -> Result
-sumPriorities = sum . map (scoreOfSingleton . Set.toList . intersect)
+sumPriorities = sum . map (scoreOfSingleton . toList . intersect)
   where
-    intersect (a, b) = Set.intersection a b
+    intersect (a, b) = intersection a b
 
 parseBadgeInput :: String -> BadgeInput
-parseBadgeInput = batch 3 . map Set.fromList . lines
+parseBadgeInput = batch 3 . map fromList . lines
   where
-    batch n xs 
-      | length xs > n = take n xs:batch n (drop n xs)
+    batch n xs
+      | length xs > n = take n xs : batch n (drop n xs)
       | otherwise = [xs]
 
-sumBadgePriorities:: BadgeInput -> BadgeResult
+sumBadgePriorities :: BadgeInput -> BadgeResult
 sumBadgePriorities = sum . map processGroup
   where
-    processGroup :: [Set.Set Char] -> Int
-    processGroup (g:gs) = (scoreOfSingleton . Set.toList . foldr Set.intersection g) gs
+    processGroup :: [Set Char] -> Int
+    processGroup (g : gs) = (scoreOfSingleton . toList . foldr intersection g) gs
     processGroup _ = undefined
 
-scoreOfSingleton [c] = score c     
+scoreOfSingleton [c] = score c
 scoreOfSingleton _ = undefined
 
 score :: Char -> Int
-score c 
+score c
   | isAscii c && isLower c = 1 + ord c - ord 'a'
   | isAscii c && isUpper c = 27 + ord c - ord 'A'
-  | otherwise = undefined 
+  | otherwise = undefined
+
+-- Bonus
+
+rucksackReorganization' :: IO Int
+rucksackReorganization' = do
+  content <- readData "data-s22e03.txt"
+  return $ priority content
+  where
+    priority = sum . map processLine . lines
+      where
+        processLine l =
+          let hl = length l `div` 2
+           in score $ ord $ head $ nub (take hl l) `intersect` nub (drop hl l)
+
+        score x = if x > 96 then x - 96 else x - 38
