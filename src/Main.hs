@@ -9,6 +9,7 @@ import AoC22E05 (supplyStacks)
 import AoC22E06 (tuningTrouble)
 import AoC22E07 (noSpaceLeftOnDevice)
 import AoC22E08 (treetopTreeHouse)
+import AoC22E09 (ropeBridge)
 
 data Episode
   = S21E01
@@ -20,6 +21,7 @@ data Episode
   | S22E06
   | S22E07
   | S22E08
+  | S22E09
 
 runEpisode e = case e of
   S21E01 -> sonarSweep
@@ -31,6 +33,7 @@ runEpisode e = case e of
   S22E06 -> tuningTrouble
   S22E07 -> noSpaceLeftOnDevice
   S22E08 -> treetopTreeHouse
+  S22E09 -> ropeBridge
 
 main :: IO ()
 main =
@@ -42,7 +45,8 @@ main =
       S22E05,
       S22E06,
       S22E07,
-      S22E08
+      S22E08,
+      S22E09
     ]
   where
     runEpisodes (e : es) = do
