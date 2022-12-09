@@ -35,7 +35,7 @@ executable AdventOfCode
     other-modules: 
       Paths_AdventOfCode, Helpers, 
       AoC21E01, AoC22E01, AoC22E02, AoC22E03, AoC22E04, AoC22E05, AoC22E06,
-      AoC22E07, AoC22E08, AoC22E09
+      AoC22E07, AoC22E08, AoC22E09, AoC22E10
     autogen-modules: Paths_AdventOfCode
 
     build-depends:    base ^>= 4.14, containers ^>= 0.6.6, sort ^>= 1.0
