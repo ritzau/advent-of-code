@@ -1,88 +1,91 @@
-module AoC22E10 (ropeBridge) where
+module AoC22E10 (cathodRayTube) where
 
-import Data.Char (intToDigit)
-import Data.List (elemIndex, nub)
-import Debug.Trace (trace, traceShowId)
-import Helpers (printHeader, printResult, readData)
+import Data.Maybe (fromJust)
+import Helpers (batch, printHeader, printResult, printStrResult, readData)
 
-data Direction = GoUp | GoRight | GoDown | GoLeft
+data Instruction = Noop | AddX' Int
   deriving (Show)
 
-ropeBridge :: IO ()
-ropeBridge = do
-  sampleContent <- readData "data-s22e09-sample.txt"
-  sampleContent2 <- readData "data-s22e09-sample-2.txt"
-  content <- readData "data-s22e09.txt"
+cathodRayTube :: IO ()
+cathodRayTube = do
+  sampleContent <- readData "data-s22e10-sample.txt"
+  content <- readData "data-s22e10.txt"
 
   let sampleInput = parseInput sampleContent
-  let sampleInput2 = parseInput sampleContent2
   let input = parseInput content
 
-  printHeader "2022 Day 9: Rope Bridge"
+  printHeader "2022 Day 10: Cathode-Ray Tube"
 
-  printResult "Count distinct sample positions" 13 $
-    countDistinctRopePositions 2 sampleInput
+  printResult "Sum of sample samples" 13140 $
+    sumOfSamples [20, 60, 100, 140, 180, 220] sampleInput
 
-  printResult "Count distinct positions" 6339 $
-    countDistinctRopePositions 2 input
+  printResult "Sum of samples" 14780 $
+    sumOfSamples [20, 60, 100, 140, 180, 220] input
 
-  printResult "Count distinct rope sample positions 1" 1 $
-    countDistinctRopePositions 10 sampleInput
+  let expectedSample =
+        "##..##..##..##..##..##..##..##..##..##..\n"
+          ++ "###...###...###...###...###...###...###.\n"
+          ++ "####....####....####....####....####....\n"
+          ++ "#####.....#####.....#####.....#####.....\n"
+          ++ "######......######......######......####\n"
+          ++ "#######.......#######.......#######.....\n"
 
-  printResult "Count distinct rope sample positions 2" 36 $
-    countDistinctRopePositions 10 sampleInput2
+  let expected =
+        "####.#....###..#....####..##..####.#....\n"
+          ++ "#....#....#..#.#.......#.#..#....#.#....\n"
+          ++ "###..#....#..#.#......#..#......#..#....\n"
+          ++ "#....#....###..#.....#...#.##..#...#....\n"
+          ++ "#....#....#....#....#....#..#.#....#....\n"
+          ++ "####.####.#....####.####..###.####.####.\n"
 
-  printResult "Count distinct rope positions" 2541 $
-    countDistinctRopePositions 10 input
+  printStrResult "Sample screen render" expectedSample $
+    render $ init sampleInput
 
-countDistinctRopePositions :: Int -> [Direction] -> Int
-countDistinctRopePositions n input =
-  length $ traceRope $ nub $ map last $ process (replicate n (0, 0)) input
+  printStrResult "Screen render" expected $
+    render $ init input
+
+render :: [Instruction] -> String
+render = renderScreen . execute
+
+renderScreen :: [Int] -> String
+renderScreen = unlines . map renderLine . batch 40
+
+renderLine :: [Int] -> String
+renderLine = zipWith sprite [0 ..]
   where
-    process :: [(Int, Int)] -> [Direction] -> [[(Int, Int)]]
-    process (k : ks) (d : ds) =
-      let rope = moveRope (moveHead k d : ks)
-       in rope : process rope ds
-    process _ _ = []
+    sprite :: Int -> Int -> Char
+    sprite a b = if abs (a - b) <= 1 then '#' else '.'
 
-    moveRope (k : k' : ks) = k : moveRope (moveKnot k k' : ks)
-    moveRope [k] = [k]
-    moveRope [] = undefined
-
-    moveHead (x, y) d = case d of
-      GoUp -> (x, y + 1)
-      GoRight -> (x + 1, y)
-      GoDown -> (x, y - 1)
-      GoLeft -> (x -1, y)
-
-    moveKnot h@(hx, hy) t@(tx, ty)
-      | isTouching h t = t
-      | otherwise = (tx + signum (hx - tx), ty + signum (hy - ty))
-
-    isTouching (hx, hy) (tx, ty) =
-      abs (hx - tx) <= 1 && abs (hy - ty) <= 1
-
-traceRope r = r -- trace (renderRope 20 10 r) r
-
-renderRope w h r =
-  unlines $ reverse $ map generateLine [- h .. h]
+sumOfSamples :: [Int] -> [Instruction] -> Int
+sumOfSamples samples =
+  sum . map snd . filterSamples . signalStrength . execute
   where
-    generateLine r = [marker r c | c <- [- w .. w]]
-    marker x y = maybe '.' marker' ((y, x) `elemIndex` r)
-    marker' x = intToDigit (x `mod` 16)
+    filterSamples = filter (\(c, _) -> c `elem` samples)
 
-parseInput :: String -> [Direction]
+signalStrength :: [Int] -> [(Int, Int)]
+signalStrength = zipWith (\c x -> (c, c * x)) [1 ..]
+
+execute :: [Instruction] -> [Int]
+execute = scanl (+) 1 . execute'
+  where
+    execute' (i : is) = execute'' i : execute' is
+    execute' _ = []
+
+    execute'' Noop = 0
+    execute'' (AddX' x) = x
+
+parseInput :: String -> [Instruction]
 parseInput = concatMap processLine . lines
   where
     processLine = processLine' . words
 
-    processLine' [d, n] = toMove d $ read n
+    processLine' :: [String] -> [Instruction]
+    processLine' [i, n] = toInstruction i (Just (read n))
+    processLine' [i] = toInstruction i Nothing
     processLine' _ = undefined
 
-    toMove d n =
-      replicate n $ case d of
-        "U" -> GoUp
-        "R" -> GoRight
-        "D" -> GoDown
-        "L" -> GoLeft
-        _ -> undefined
+    toInstruction :: String -> Maybe Int -> [Instruction]
+    toInstruction instruction arg = case instruction of
+      "noop" -> [Noop]
+      "addx" -> [Noop, AddX' (fromJust arg)]
+      _ -> undefined

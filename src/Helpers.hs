@@ -1,10 +1,12 @@
 module Helpers
   ( afterEmpty,
+    batch,
     formatInt,
     padEnd,
     padStart,
     printHeader,
     printResult,
+    printStrResult,
     readData,
     sliding,
     split,
@@ -19,6 +21,12 @@ afterEmpty :: [String] -> [String]
 afterEmpty ("" : ls) = ls
 afterEmpty (l : ls) = afterEmpty ls
 afterEmpty _ = []
+
+batch :: Int -> [a] -> [[a]]
+batch _ [] = []
+batch n xs =
+  let (prefix, rest) = splitAt n xs
+   in prefix : batch n rest
 
 formatInt :: Int -> String
 formatInt x
@@ -51,10 +59,16 @@ printHeader title = do
   putStrLn ""
 
 printResult :: Eq a => Show a => String -> a -> a -> IO ()
-printResult msg expected actual  = do
+printResult msg expected actual = do
   let check = if actual == expected then "✅" else "❌ " ++ show expected ++ " /="
 
   putStrLn (padEnd 42 ' ' (msg ++ ": ") ++ check ++ " " ++ show actual)
+
+printStrResult :: String -> String -> String -> IO ()
+printStrResult msg expected actual = do
+  let check = if actual == expected then "✅" else "❌ \n" ++ expected ++ " /="
+
+  putStrLn (padEnd 42 ' ' (msg ++ ": ") ++ check ++ " \n" ++ actual)
 
 readData :: FilePath -> IO String
 readData file = do

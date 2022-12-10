@@ -9,7 +9,7 @@ import qualified AoC22E06 (tuningTrouble)
 import qualified AoC22E07 (noSpaceLeftOnDevice)
 import qualified AoC22E08 (treetopTreeHouse)
 import qualified AoC22E09 (ropeBridge)
-import qualified AoC22E10 (ropeBridge)
+import qualified AoC22E10 (cathodRayTube)
 
 main :: IO ()
 main = do
@@ -22,4 +22,4 @@ main = do
   AoC22E07.noSpaceLeftOnDevice
   AoC22E08.treetopTreeHouse
   AoC22E09.ropeBridge
-  AoC22E10.ropeBridge
+  AoC22E10.cathodRayTube
