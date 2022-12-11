@@ -37,21 +37,18 @@ monkeyInTheMiddle = do
   printResult "Crazy monkey business" 17408399184 $
     monkeyBusiness' 10000 input
 
-monkeyBusiness n =
-  product . take 2 . reverse . sort . map (\(_, _, n) -> n) . processRounds n next
+monkeyBusiness n = summarize . processRounds n next
   where
     next op lvl = nextLevel op lvl `div` 3
+    summarize = product . take 2 . reverse . sort . map (\(_, _, n) -> n)
 
 monkeyBusiness' :: Int -> [State] -> Int
 monkeyBusiness' n states =
-  let modulo = product (map (\(m, _, _) -> divisableTest m) states)
-   in product $
-        take 2 $
-          reverse $
-            sort $
-              map (\(_, q, n) -> n) (processRounds n (next modulo) states)
+  let modulo = product $ map (\(m, _, _) -> divisableTest m) states
+   in summarize $ processRounds n (next modulo) states
   where
     next modulo op lvl = nextLevel op lvl `mod` modulo
+    summarize = product . take 2 . reverse . sort . map (\(_, q, n) -> n)
 
 processRounds 0 _ states = states
 processRounds n f states = processRounds (n -1) f $ processRound f states
