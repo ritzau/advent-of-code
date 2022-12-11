@@ -1,27 +1,24 @@
-module AoC22E11 (cathodRayTube) where
+module AoC22E11 (monkeyInTheMiddle) where
 
 import Data.Char (isDigit)
 import Data.List (sort, stripPrefix)
 import Data.Maybe (fromJust)
-import Debug.Trace (traceShowId)
 import Helpers (batch, printHeader, printResult, printStrResult, readData)
 
-type MonkeyInt = Integer
-
-data Monkey = Monkey Int Operation MonkeyInt Int Int
+data Monkey = Monkey Int Operation Int Int Int
   deriving (Show)
 
-data Operation = MultOp MonkeyInt | AddOp MonkeyInt | SquareOp
+divisableTest (Monkey _ _ d _ _) = d
+
+data Operation = MultOp Int | AddOp Int | SquareOp
   deriving (Show)
 
-type State = (Monkey, [MonkeyInt], MonkeyInt)
+type State = (Monkey, [Int], Int)
 
-queue (_, q, _) = q
+type NextLevelFunction = Operation -> Int -> Int
 
-count (_, _, n) = n
-
-cathodRayTube :: IO ()
-cathodRayTube = do
+monkeyInTheMiddle :: IO ()
+monkeyInTheMiddle = do
   sampleContent <- readData "data-s22e11-sample.txt"
   content <- readData "data-s22e11.txt"
 
@@ -30,39 +27,54 @@ cathodRayTube = do
 
   printHeader "2022 Day 11: Monkey in the Middle"
 
-  printResult "Sample monkey business" 10605 $ monkeyBusiness 20 3 sampleInput
-  printResult "Monkey business" 62491 $ monkeyBusiness 20 3 input
+  printResult "Sample monkey business" 10605 $ monkeyBusiness 20 sampleInput
 
-  putStrLn $ unlines $ monkeyBusiness' 1 1 sampleInput
+  printResult "Monkey business" 62491 $ monkeyBusiness 20 input
 
-monkeyBusiness n divider =
-  product . take 2 . reverse . sort . map (\(_, _, n) -> n) . processRounds n divider
+  printResult "Sample crazy monkey business" 2713310158 $
+    monkeyBusiness' 10000 sampleInput
 
-monkeyBusiness' n divider =
-  map (\(_, q, n) -> show q) . processRounds n divider
+  printResult "Crazy monkey business" 17408399184 $
+    monkeyBusiness' 10000 input
+
+monkeyBusiness n =
+  product . take 2 . reverse . sort . map (\(_, _, n) -> n) . processRounds n next
+  where
+    next op lvl = nextLevel op lvl `div` 3
+
+monkeyBusiness' :: Int -> [State] -> Int
+monkeyBusiness' n states =
+  let modulo = product (map (\(m, _, _) -> divisableTest m) states)
+   in product $
+        take 2 $
+          reverse $
+            sort $
+              map (\(_, q, n) -> n) (processRounds n (next modulo) states)
+  where
+    next modulo op lvl = nextLevel op lvl `mod` modulo
 
 processRounds 0 _ states = states
-processRounds n divider states = processRounds (n -1) divider $ processRound divider states
+processRounds n f states = processRounds (n -1) f $ processRound f states
 
-processRound :: MonkeyInt -> [State] -> [State]
-processRound divider states =
+processRound :: NextLevelFunction -> [State] -> [State]
+processRound f states =
   processMonkeyId 0 states
   where
     processMonkeyId mid states
-      | mid < length states = processMonkeyId (mid + 1) $ processMonkey divider mid states
+      | mid < length states = processMonkeyId (mid + 1) $ processMonkey f mid states
       | otherwise = states
 
-processMonkey :: MonkeyInt -> Int -> [State] -> [State]
-processMonkey divider iden states = processMonkey' divider (states !! iden) states
+processMonkey :: NextLevelFunction -> Int -> [State] -> [State]
+processMonkey f iden states = processMonkey' f (states !! iden) states
   where
-    processMonkey' :: MonkeyInt -> State -> [State] -> [State]
-    processMonkey' divider (m, q, _) states =
-      processQueue divider m q states
+    processMonkey' :: NextLevelFunction -> State -> [State] -> [State]
+    processMonkey' f (m, q, _) states =
+      processQueue f m q states
 
-processQueue divider m@(Monkey iden op test trueTarget falseTarget) (level : ls) states =
-  let newLevel = nextLevel op level `div` divider
+processQueue f m@(Monkey iden op test trueTarget falseTarget) (level : ls) states =
+  let newLevel = f op level
       target = if newLevel `mod` test == 0 then trueTarget else falseTarget
-   in processQueue divider m ls $ addItem target newLevel $ dropItem iden states
+   in processQueue f m ls $ addItem target newLevel $ dropItem iden states
 processQueue _ _ [] states = states
 
 nextLevel op level = case op of
@@ -77,7 +89,7 @@ dropItem mid = map process
       | mid == mid' = (m, drop 1 q, n + 1)
       | otherwise = s
 
-addItem :: Int -> MonkeyInt -> [State] -> [State]
+addItem :: Int -> Int -> [State] -> [State]
 addItem mid item = map process
   where
     process s@(m@(Monkey mid' _ _ _ _), q, n)
@@ -97,7 +109,7 @@ parseInput = map (parseMonkey . take 6) . split [] . lines
         parseStartItems items,
         0
       )
-    parseMonkey _ = (Monkey 0 (AddOp 0) 0 0 0, [], 0)
+    parseMonkey _ = undefined
 
     parseId = read . takeWhile isDigit . fromJust . stripPrefix "Monkey "
     parseStartItems = parseIntList . fromJust . stripPrefix "  Starting items: "
@@ -119,7 +131,7 @@ parseInput = map (parseMonkey . take 6) . split [] . lines
 
     parseIfFalse = read . fromJust . stripPrefix "    If false: throw to monkey"
 
-    parseIntList :: String -> [MonkeyInt]
+    parseIntList :: String -> [Int]
     parseIntList [] = []
     parseIntList is =
       let (number, rest) = span isDigit is
