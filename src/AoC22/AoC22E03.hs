@@ -2,14 +2,13 @@ module AoC22E03 (rucksackReorganization, rucksackReorganization') where
 
 import Data.Char (isAscii, isLower, isUpper, ord)
 import Data.List (intersect, nub)
-import Data.Set (Set, fromList, intersection, toList)
 import Helpers (formatInt, printHeader, printResult, readData)
 
-type Input = [(Set Char, Set Char)]
+type Input = [([Char], [Char])]
 
 type Result = Int
 
-type BadgeInput = [[Set Char]]
+type BadgeInput = [[[Char]]]
 
 type BadgeResult = Int
 
@@ -33,7 +32,7 @@ rucksackReorganization = do
   printResult "Badge priority" 2602 result
 
   result <- rucksackReorganization'
-  printResult "XXX" result 7990
+  printResult "Bonus" result 7990
 
 sumPrioritiesOf :: FilePath -> IO Result
 sumPrioritiesOf file = do
@@ -52,15 +51,13 @@ parseInput = map processLine . lines
       let halfLength = length cs `div` 2
           firstHalf = take halfLength cs
           secondHalf = drop halfLength cs
-       in (fromList firstHalf, fromList secondHalf)
+       in (nub firstHalf, nub secondHalf)
 
 sumPriorities :: Input -> Result
-sumPriorities = sum . map (scoreOfSingleton . toList . intersect)
-  where
-    intersect (a, b) = intersection a b
+sumPriorities = sum . map (\(a,b) -> scoreOfSingleton $ intersect a b)
 
 parseBadgeInput :: String -> BadgeInput
-parseBadgeInput = batch 3 . map fromList . lines
+parseBadgeInput = batch 3 . map nub . lines
   where
     batch n xs
       | length xs > n = take n xs : batch n (drop n xs)
@@ -69,8 +66,8 @@ parseBadgeInput = batch 3 . map fromList . lines
 sumBadgePriorities :: BadgeInput -> BadgeResult
 sumBadgePriorities = sum . map processGroup
   where
-    processGroup :: [Set Char] -> Int
-    processGroup (g : gs) = (scoreOfSingleton . toList . foldr intersection g) gs
+    processGroup :: [[Char]] -> Int
+    processGroup (g : gs) = (scoreOfSingleton . foldr intersect g) gs
     processGroup _ = undefined
 
 scoreOfSingleton [c] = score c

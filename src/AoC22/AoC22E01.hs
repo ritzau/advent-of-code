@@ -1,6 +1,6 @@
 module AoC22E01 (calorieCounting) where
 
-import Data.Sort (sort)
+import Data.List (sort)
 import Helpers (formatInt, printHeader, printResult, readData)
 
 calorieCounting :: IO ()

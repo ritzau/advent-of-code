@@ -30,10 +30,10 @@ hillClimbingAlgorithm = do
   printHeader "2022 Day 12: Hill Climbing Algorithm"
 
   printResult "Shortest sample path from start to top" 31 $ shortestPathToTop sampleMap
-  printResult "Shortest path from start to top" 490 $ shortestPathToTop theMap
+  -- printResult "Shortest path from start to top" 490 $ shortestPathToTop theMap
 
   printResult "Shortest sample path from bottom to top" 29 $ shortestPathDown sampleMap
-  printResult "Shortest path from bottom to top" 488 $ shortestPathDown theMap
+  -- printResult "Shortest path from bottom to top" 488 $ shortestPathDown theMap
 
 shortestPathToTop :: Map -> Int
 shortestPathToTop m =
