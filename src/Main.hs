@@ -12,6 +12,7 @@ import qualified AoC22E09 (ropeBridge)
 import qualified AoC22E10 (cathodRayTube)
 import qualified AoC22E11 (monkeyInTheMiddle)
 import qualified AoC22E12 (hillClimbingAlgorithm)
+import qualified AoC22E13 (distressSignal)
 
 main :: IO ()
 main = do
@@ -27,3 +28,4 @@ main = do
   AoC22E10.cathodRayTube
   AoC22E11.monkeyInTheMiddle
   AoC22E12.hillClimbingAlgorithm
+  AoC22E13.distressSignal
