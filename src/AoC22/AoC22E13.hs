@@ -22,12 +22,6 @@ distressSignal :: IO ()
 distressSignal = do
   printHeader "2022 Day 13: Distress Signal"
 
-  -- print $ parseItem "1"
-  -- print $ parseItem "42"
-  -- print $ parseItem "[42]"
-  -- print $ parseItem "[42,17]"
-  -- print $ parseItem "[42,17,[13,1337]]"
-
   sampleContent <- readData "data-s22e13-sample.txt"
   content <- readData "data-s22e13.txt"
 
@@ -37,14 +31,13 @@ distressSignal = do
   printResult "Magic sum of sample" 13 $ sumOfIndicesOfMatchingPairs sampleInput
   printResult "Magic sum" 5330 $ sumOfIndicesOfMatchingPairs input
 
-  printResult "Decoder key of sample" 140  $ decoderKey sampleContent
+  printResult "Decoder key of sample" 140 $ decoderKey sampleContent
   printResult "Decoder key" 27648 $ decoderKey content
 
-sumOfIndicesOfMatchingPairs pairs = 
-  let 
-    indexedComparisons = zip [1 ..] $ map (uncurry compareItems) pairs
-    matchingPairs = filter (\(_, cmp) -> cmp == LT) indexedComparisons
-  in sum $ map fst matchingPairs 
+sumOfIndicesOfMatchingPairs pairs =
+  let indexedComparisons = zip [1 ..] $ map (uncurry compareItems) pairs
+      matchingPairs = filter (\(_, cmp) -> cmp == LT) indexedComparisons
+   in sum $ map fst matchingPairs
 
 decoderKey content =
   let div1 = List [List [Number 2]]
