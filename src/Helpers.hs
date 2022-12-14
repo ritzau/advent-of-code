@@ -8,6 +8,7 @@ module Helpers
     printResult,
     printStrResult,
     readData,
+    singleton,
     sliding,
     split,
     untilEmpty,
@@ -80,15 +81,23 @@ sliding n a@(x : xs)
   | otherwise = [a]
 sliding _ _ = []
 
-split :: Char -> [Char] -> [[Char]]
-split e = split' e []
-  where
-    split' :: Char -> [Char] -> [Char] -> [[Char]]
-    split' e r (x : xs)
-      | e == x = r : split' e [] xs
-      | otherwise = split' e (r ++ [x]) xs
-    split' e r [] = [r]
+-- split :: Char -> [Char] -> [[Char]]
+-- split e = split' e []
+--   where
+--     split' :: Char -> [Char] -> [Char] -> [[Char]]
+--     split' e r (x : xs)
+--       | e == x = r : split' e [] xs
+--       | otherwise = split' e (r ++ [x]) xs
+--     split' e r [] = [r]
 
+singleton x = [x]
+
+split :: Eq a => a -> [a] -> [[a]]
+split _ [] = []
+split sep ls =
+  let (item, rest) = break (== sep) ls
+  in item:split sep (drop 1 rest)
+      
 untilEmpty :: [String] -> [String]
 untilEmpty ("" : ls) = []
 untilEmpty (l : ls) = l : untilEmpty ls

@@ -10,9 +10,10 @@ import qualified AoC22E07 (noSpaceLeftOnDevice)
 import qualified AoC22E08 (treetopTreeHouse)
 import qualified AoC22E09 (ropeBridge)
 import qualified AoC22E10 (cathodRayTube)
-import qualified AoC22E11 (monkeyInTheMiddle)
+import qualified AoC22E11 (crazyMonkeyBusiness, monkeyBusiness, parseInput)
 import qualified AoC22E12 (hillClimbingAlgorithm)
 import qualified AoC22E13 (distressSignal)
+import Helpers (printHeader, printResult, readData)
 
 main :: IO ()
 main = do
@@ -26,6 +27,27 @@ main = do
   AoC22E08.treetopTreeHouse
   AoC22E09.ropeBridge
   AoC22E10.cathodRayTube
-  AoC22E11.monkeyInTheMiddle
+  s22e10MonkeyInTheMiddle
   AoC22E12.hillClimbingAlgorithm
   AoC22E13.distressSignal
+
+s22e10MonkeyInTheMiddle = do
+  printHeader "2022 Day 11: Monkey in the Middle"
+
+  sampleContent <- readData "data-s22e11-sample.txt"
+  content <- readData "data-s22e11.txt"
+
+  let sampleInput = AoC22E11.parseInput sampleContent
+  let input = AoC22E11.parseInput content
+
+  printResult "Sample monkey business" 10605 $
+    AoC22E11.monkeyBusiness 20 sampleInput
+
+  printResult "Monkey business" 62491 $
+    AoC22E11.monkeyBusiness 20 input
+
+  printResult "Sample crazy monkey business" 2713310158 $
+    AoC22E11.crazyMonkeyBusiness 10000 sampleInput
+
+  printResult "Crazy monkey business" 17408399184 $
+    AoC22E11.crazyMonkeyBusiness 10000 input

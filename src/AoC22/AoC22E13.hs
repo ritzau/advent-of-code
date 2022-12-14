@@ -42,7 +42,7 @@ sumOfIndicesOfMatchingPairs pairs =
 decoderKey content =
   let div1 = List [List [Number 2]]
       div2 = List [List [Number 6]]
-      result = sort (parseInput2 content ++ [div1, div2])
+      result = sort (div1:div2:parseInput2 content)
       ind1 = 1 + fromJust (div1 `elemIndex` result)
       ind2 = 1 + fromJust (div2 `elemIndex` result)
    in ind1 * ind2
