@@ -13,6 +13,7 @@ import qualified AoC22E10 (cathodRayTube)
 import qualified AoC22E11 (crazyMonkeyBusiness, monkeyBusiness, parseInput)
 import qualified AoC22E12 (hillClimbingAlgorithm)
 import qualified AoC22E13 (distressSignal)
+import qualified AoC22E14 (simulateRegolithSand)
 import Helpers (printHeader, printResult, readData)
 
 main :: IO ()
@@ -27,11 +28,12 @@ main = do
   AoC22E08.treetopTreeHouse
   AoC22E09.ropeBridge
   AoC22E10.cathodRayTube
-  s22e10MonkeyInTheMiddle
+  s22e11MonkeyInTheMiddle
   AoC22E12.hillClimbingAlgorithm
   AoC22E13.distressSignal
+  AoC22E14.simulateRegolithSand
 
-s22e10MonkeyInTheMiddle = do
+s22e11MonkeyInTheMiddle = do
   printHeader "2022 Day 11: Monkey in the Middle"
 
   sampleContent <- readData "data-s22e11-sample.txt"
