@@ -14,6 +14,7 @@ import qualified AoC22E11 (crazyMonkeyBusiness, monkeyBusiness, parseInput)
 import qualified AoC22E12 (hillClimbingAlgorithm)
 import qualified AoC22E13 (distressSignal)
 import qualified AoC22E14 (simulateRegolithSand)
+import qualified AoC22E15 (beaconExclusionZone)
 import Helpers (printHeader, printResult, readData)
 
 main :: IO ()
@@ -32,6 +33,7 @@ main = do
   AoC22E12.hillClimbingAlgorithm
   AoC22E13.distressSignal
   AoC22E14.simulateRegolithSand
+  AoC22E15.beaconExclusionZone
 
 s22e11MonkeyInTheMiddle = do
   printHeader "2022 Day 11: Monkey in the Middle"
