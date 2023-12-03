@@ -1,4 +1,6 @@
 import fs from 'fs'
+import { open, FileHandle } from 'node:fs/promises';
+import { Interface } from 'readline';
 
 type CubeSet = {
     red: number
@@ -22,6 +24,58 @@ export async function main() {
     console.log("Part 1:  ", part1(input))
     console.log("Sample 2:", part2(sample))
     console.log("Part 2:  ", part2(input))
+
+    console.log("\nAsync version of p1 sample:", await part1Async(readLinesFromFile('AoC23E02-sample.txt')))
+    console.log("Async version of p1 input: ", await part1Async(readLinesFromFile('AoC23E02-input.txt')))
+    console.log("Async version of p2 sample:", await part2Async(readLinesFromFile('AoC23E02-sample.txt')))
+    console.log("Async version of p2 input: ", await part2Async(readLinesFromFile('AoC23E02-input.txt')))
+}
+
+async function readLinesFromFile(path: string): Promise<Interface> {
+    const file = await open(path)
+    return file.readLines()
+}
+
+async function asyncSum(generator: AsyncGenerator<number, void, unknown>): Promise<number> {
+    let sum = 0
+    for await (const p of generator) {
+        sum += p
+    }
+
+    return sum
+}
+
+async function part1Async(lineReader: Promise<Interface>): Promise<number> {
+    return await asyncSum(possibleGames(await lineReader))
+}
+
+async function part2Async(lineReader: Promise<Interface>): Promise<number> {
+    return await asyncSum(minimumPower(await lineReader))
+}
+
+async function *possibleGames(asyncLines: Interface) {
+    const bag: CubeSet = { red: 12, green: 13, blue: 14 }
+    
+    for await (const line of asyncLines) {
+        if (line.length === 0) continue;
+
+        const game = parseLine(line)
+        if (!possible(bag, game)) continue
+
+        yield game.game
+    }
+} 
+
+async function *minimumPower(asyncLines: Interface) {
+    const bag: CubeSet = { red: 12, green: 13, blue: 14 }
+    
+    for await (const line of asyncLines) {
+        if (line.length === 0) continue;
+
+        const game = parseLine(line)
+        const min = minimumSet(game)
+        yield min.red * min.green * min.blue
+    }
 }
 
 function part1(input: string[]): number {
