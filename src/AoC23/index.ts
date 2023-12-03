@@ -6,8 +6,9 @@ async function launch(module: string) {
 
 try {
     const episodes = [
-        "./AoC23E01",
-        "./AoC23E02",
+        // "./AoC23E01",
+        // "./AoC23E02",
+        "./AoC23E03",
     ]
 
     for (const episode of episodes) {
