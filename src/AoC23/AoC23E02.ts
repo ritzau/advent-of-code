@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { open, FileHandle } from 'node:fs/promises';
+import { open } from 'node:fs/promises';
 import { Interface } from 'readline';
 
 type CubeSet = {

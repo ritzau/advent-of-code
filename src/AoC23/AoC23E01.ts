@@ -1,7 +1,6 @@
 import fs from 'fs';
 import { readAocInputFile } from './aoclib';
 
-<<<<<<< HEAD
 export async function main() {
     const sample1 = fs.readFileSync('./AoC23E01-sample-1.txt').toString();
     const sample2 = fs.readFileSync('./AoC23E01-sample-2.txt').toString();

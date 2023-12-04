@@ -9,13 +9,13 @@ type Card = {
 }
 
 export async function main() {
-    console.log("Part 1 sample:", await part1Async(createReadStream('AoC23E04-sample.txt')))
-    console.log("Part 1 input: ", await part1Async(createReadStream('AoC23E04-input.txt')))
-    console.log("Part 2 sample:", await part2Async(createReadStream('AoC23E04-sample.txt')))
-    console.log("Part 2 input: ", await part2Async(createReadStream('AoC23E04-input.txt')))
+    console.log("Part 1 sample:", await part1(createReadStream('AoC23E04-sample.txt')))
+    console.log("Part 1 input: ", await part1(createReadStream('AoC23E04-input.txt')))
+    console.log("Part 2 sample:", await part2(createReadStream('AoC23E04-sample.txt')))
+    console.log("Part 2 input: ", await part2(createReadStream('AoC23E04-input.txt')))
 }
 
-async function part1Async(input: Readable) {
+async function part1(input: Readable) {
     return asyncSum(totalPointsScored(input))
 
     async function* totalPointsScored(input: Readable) {
@@ -31,7 +31,7 @@ async function part1Async(input: Readable) {
     }
 }
 
-async function part2Async(input: Readable) {
+async function part2(input: Readable) {
     const copies: number[] = []
 
     for await (const line of createInterface(input)) {
