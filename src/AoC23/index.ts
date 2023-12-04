@@ -15,6 +15,7 @@ async function main() {
         "./AoC23E02",
         "./AoC23E03",
         "./AoC23E04",
+        "./AoC23E05",
     ]
 
     for (const episode of episodes) {

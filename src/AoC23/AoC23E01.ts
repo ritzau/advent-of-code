@@ -3,19 +3,19 @@ import fs from 'fs'
 export function main() {
     const sample1 = fs.readFileSync('./AoC23E01-sample-1.txt').toString()
     const sample2 = fs.readFileSync('./AoC23E01-sample-2.txt').toString()
-    const input = fs.readFileSync('./AoC23E01-data.txt').toString()
-    
+    const input = fs.readFileSync('./AoC23E01-input.txt').toString()
+
     console.log("Sample 1:", part1(sample1))
     console.log("Part 1:  ", part1(input))
-    console.log("Sample 2:", part2(sample2))    
-    console.log("Part 2:  ", part2(input))    
+    console.log("Sample 2:", part2(sample2))
+    console.log("Part 2:  ", part2(input))
 }
 
 function part1(input: string): any {
     return input.split('\n')
         .map((line) => line.replace(RegExp(/\D+/g), ''))
         .filter((line) => line.length > 0)
-        .map((digits) => Array.from(digits))        
+        .map((digits) => Array.from(digits))
         .map((line) => line[0] + line[line.length - 1])
         .map((line) => parseInt(line))
         .reduce((a, b) => a + b)
@@ -25,7 +25,7 @@ function part2(input: string): any {
     return input.split('\n')
         .map((line) => [firstDigit(line), lastDigit(line)])
         .filter((ds) => ds[0] !== -1)
-        .map((ds) => 10 * ds[0] + ds[1])        
+        .map((ds) => 10 * ds[0] + ds[1])
         .reduce((a, b) => a + b)
 }
 

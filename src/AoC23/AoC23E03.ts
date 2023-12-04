@@ -2,10 +2,10 @@ import { open } from 'node:fs/promises';
 import { Interface } from 'readline';
 
 export async function main() {
-    console.log("Part 1 sample:", await part1Async(readLinesFromFile('AoC23E03-sample.txt')))
-    console.log("Part 1 input: ", await part1Async(readLinesFromFile('AoC23E03-input.txt')))
-    console.log("Part 2 sample:", await part2Async(readLinesFromFile('AoC23E03-sample.txt')))
-    console.log("Part 2 input: ", await part2Async(readLinesFromFile('AoC23E03-input.txt')))
+    console.log("Part 1 sample:", await part1(readLinesFromFile('AoC23E03-sample.txt')))
+    console.log("Part 1 input: ", await part1(readLinesFromFile('AoC23E03-input.txt')))
+    console.log("Part 2 sample:", await part2(readLinesFromFile('AoC23E03-sample.txt')))
+    console.log("Part 2 input: ", await part2(readLinesFromFile('AoC23E03-input.txt')))
 }
 
 async function readLinesFromFile(path: string): Promise<Interface> {
@@ -22,17 +22,17 @@ async function asyncSum(generator: AsyncGenerator<number, void, unknown>): Promi
     return sum
 }
 
-async function part1Async(lineReader: Promise<Interface>): Promise<number> {
+async function part1(lineReader: Promise<Interface>): Promise<number> {
     return await asyncSum(partNumbers(await lineReader))
 }
 
-async function part2Async(lineReader: Promise<Interface>): Promise<number> {
+async function part2(lineReader: Promise<Interface>): Promise<number> {
     return await asyncSum(gearRatios(await lineReader))
 }
 
 
 async function* partNumbers(asyncLines: Interface) {
-    function *handleNeighours(ns: Number[]) {
+    function* handleNeighours(ns: Number[]) {
         yield* ns.map(n => parseInt(n.value))
     }
 
@@ -53,7 +53,7 @@ type Number = {
 }
 
 async function* gearRatios(asyncLines: Interface) {
-    function *handleNeighours(ns: Number[]) {
+    function* handleNeighours(ns: Number[]) {
         if (ns.length === 2) {
             yield ns.map(n => parseInt(n.value)).reduce((a, b) => a * b);
         }
@@ -79,8 +79,8 @@ function isDigit(x: string) {
 
 type SymbolPredicate = (x: string) => boolean
 
-type NeighbourHandler = { 
-    (ns: Number[]): Generator<number, void, unknown>; (ns: Number[]): Generator<number, void, unknown> 
+type NeighbourHandler = {
+    (ns: Number[]): Generator<number, void, unknown>; (ns: Number[]): Generator<number, void, unknown>
 }
 
 class EngineSchematic {
