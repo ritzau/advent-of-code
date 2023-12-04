@@ -14,9 +14,6 @@ type CubeGame = {
 }
 
 export async function main() {
-    console.log("\nAoC23E02")
-    console.log("========")
-
     const sample = fs.readFileSync('AoC23E02-sample.txt').toString().split('\n')
     const input = fs.readFileSync('AoC23E02-input.txt').toString().split('\n')
 

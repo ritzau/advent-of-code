@@ -5,8 +5,6 @@ export function main() {
     const sample2 = fs.readFileSync('./AoC23E01-sample-2.txt').toString()
     const input = fs.readFileSync('./AoC23E01-data.txt').toString()
     
-    console.log("\nAoC23E01")
-    console.log("========")
     console.log("Sample 1:", part1(sample1))
     console.log("Part 1:  ", part1(input))
     console.log("Sample 2:", part2(sample2))    

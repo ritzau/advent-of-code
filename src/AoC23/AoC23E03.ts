@@ -1,11 +1,7 @@
-import { Hash } from 'node:crypto';
 import { open } from 'node:fs/promises';
 import { Interface } from 'readline';
 
 export async function main() {
-    console.log("\nAoC23E03")
-    console.log("========\n")
-
     console.log("Part 1 sample:", await part1Async(readLinesFromFile('AoC23E03-sample.txt')))
     console.log("Part 1 input: ", await part1Async(readLinesFromFile('AoC23E03-input.txt')))
     console.log("Part 2 sample:", await part2Async(readLinesFromFile('AoC23E03-sample.txt')))
