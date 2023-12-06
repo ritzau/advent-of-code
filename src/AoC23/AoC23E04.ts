@@ -1,6 +1,7 @@
 import { createReadStream } from 'node:fs';
 import { createInterface } from 'node:readline';
 import { Readable } from 'node:stream';
+import { asyncSum, logResult } from './aoclib';
 
 type Card = {
     cardNumber: number
@@ -9,10 +10,10 @@ type Card = {
 }
 
 export async function main() {
-    console.log("Part 1 sample:", await part1(createReadStream('AoC23E04-sample.txt')))
-    console.log("Part 1 input: ", await part1(createReadStream('AoC23E04-input.txt')))
-    console.log("Part 2 sample:", await part2(createReadStream('AoC23E04-sample.txt')))
-    console.log("Part 2 input: ", await part2(createReadStream('AoC23E04-input.txt')))
+    logResult("Part 1 sample:", await part1(createReadStream('AoC23E04-sample.txt')), 13)
+    logResult("Part 1 input: ", await part1(createReadStream('AoC23E04-input.txt')), 22674)
+    logResult("Part 2 sample:", await part2(createReadStream('AoC23E04-sample.txt')), 30)
+    logResult("Part 2 input: ", await part2(createReadStream('AoC23E04-input.txt')), 5747443)
 }
 
 async function part1(input: Readable) {
@@ -58,16 +59,6 @@ async function part2(input: Readable) {
         }
         return copies[index]
     }
-}
-
-async function asyncSum(generator: AsyncGenerator<number, void, unknown>) {
-    let sum = 0
-
-    for await (const value of generator) {
-        sum += value
-    }
-
-    return sum
 }
 
 function matchingNumbers(card: Card) {

@@ -1,14 +1,15 @@
 import fs from 'fs'
+import { logResult } from './aoclib'
 
 export function main() {
     const sample1 = fs.readFileSync('./AoC23E01-sample-1.txt').toString()
     const sample2 = fs.readFileSync('./AoC23E01-sample-2.txt').toString()
     const input = fs.readFileSync('./AoC23E01-input.txt').toString()
 
-    console.log("Sample 1:", part1(sample1))
-    console.log("Part 1:  ", part1(input))
-    console.log("Sample 2:", part2(sample2))
-    console.log("Part 2:  ", part2(input))
+    logResult("Sample 1:", part1(sample1), 142)
+    logResult("Part 1:  ", part1(input), 54159)
+    logResult("Sample 2:", part2(sample2), 281)
+    logResult("Part 2:  ", part2(input), 53866)
 }
 
 function part1(input: string): any {

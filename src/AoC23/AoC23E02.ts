@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { open } from 'node:fs/promises';
 import { Interface } from 'readline';
+import { asyncSum, logResult } from './aoclib';
 
 type CubeSet = {
     red: number
@@ -17,29 +18,20 @@ export async function main() {
     const sample = fs.readFileSync('AoC23E02-sample.txt').toString().split('\n')
     const input = fs.readFileSync('AoC23E02-input.txt').toString().split('\n')
 
-    console.log("Sample 1:", part1(sample))
-    console.log("Part 1:  ", part1(input))
-    console.log("Sample 2:", part2(sample))
-    console.log("Part 2:  ", part2(input))
+    logResult("Sample 1:", part1(sample), 8)
+    logResult("Part 1:  ", part1(input), 2632)
+    logResult("Sample 2:", part2(sample), 2286)
+    logResult("Part 2:  ", part2(input), 69629)
 
-    console.log("\nAsync version of p1 sample:", await part1Async(readLinesFromFile('AoC23E02-sample.txt')))
-    console.log("Async version of p1 input: ", await part1Async(readLinesFromFile('AoC23E02-input.txt')))
-    console.log("Async version of p2 sample:", await part2Async(readLinesFromFile('AoC23E02-sample.txt')))
-    console.log("Async version of p2 input: ", await part2Async(readLinesFromFile('AoC23E02-input.txt')))
+    logResult("\nAsync p1 sample:", await part1Async(readLinesFromFile('AoC23E02-sample.txt')), 8)
+    logResult("Async p1 input: ", await part1Async(readLinesFromFile('AoC23E02-input.txt')), 2632)
+    logResult("Async p2 sample:", await part2Async(readLinesFromFile('AoC23E02-sample.txt')), 2286)
+    logResult("Async p2 input: ", await part2Async(readLinesFromFile('AoC23E02-input.txt')), 69629)
 }
 
 async function readLinesFromFile(path: string): Promise<Interface> {
     const file = await open(path)
     return file.readLines()
-}
-
-async function asyncSum(generator: AsyncGenerator<number, void, unknown>): Promise<number> {
-    let sum = 0
-    for await (const p of generator) {
-        sum += p
-    }
-
-    return sum
 }
 
 async function part1Async(lineReader: Promise<Interface>): Promise<number> {
@@ -50,9 +42,9 @@ async function part2Async(lineReader: Promise<Interface>): Promise<number> {
     return await asyncSum(minimumPower(await lineReader))
 }
 
-async function *possibleGames(asyncLines: Interface) {
+async function* possibleGames(asyncLines: Interface) {
     const bag: CubeSet = { red: 12, green: 13, blue: 14 }
-    
+
     for await (const line of asyncLines) {
         if (line.length === 0) continue;
 
@@ -61,11 +53,11 @@ async function *possibleGames(asyncLines: Interface) {
 
         yield game.game
     }
-} 
+}
 
-async function *minimumPower(asyncLines: Interface) {
+async function* minimumPower(asyncLines: Interface) {
     const bag: CubeSet = { red: 12, green: 13, blue: 14 }
-    
+
     for await (const line of asyncLines) {
         if (line.length === 0) continue;
 
@@ -132,7 +124,7 @@ function parseSets(setsPart: string): CubeSet[] {
 
 function parseSet(setPart: string): CubeSet {
     const set: CubeSet = { red: 0, green: 0, blue: 0 }
-    
+
     const items = setPart
         .split(/\s*,\s*/)
         .forEach(item => {
