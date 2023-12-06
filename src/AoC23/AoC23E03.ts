@@ -1,25 +1,17 @@
 import { open } from 'node:fs/promises';
 import { Interface } from 'readline';
+import { asyncSum, logResult } from './aoclib';
 
 export async function main() {
-    console.log("Part 1 sample:", await part1(readLinesFromFile('AoC23E03-sample.txt')))
-    console.log("Part 1 input: ", await part1(readLinesFromFile('AoC23E03-input.txt')))
-    console.log("Part 2 sample:", await part2(readLinesFromFile('AoC23E03-sample.txt')))
-    console.log("Part 2 input: ", await part2(readLinesFromFile('AoC23E03-input.txt')))
+    logResult("Part 1 sample:", await part1(readLinesFromFile('AoC23E03-sample.txt')), 4361)
+    logResult("Part 1 input: ", await part1(readLinesFromFile('AoC23E03-input.txt')), 544664)
+    logResult("Part 2 sample:", await part2(readLinesFromFile('AoC23E03-sample.txt')), 467835)
+    logResult("Part 2 input: ", await part2(readLinesFromFile('AoC23E03-input.txt')), 84495585)
 }
 
 async function readLinesFromFile(path: string): Promise<Interface> {
     const file = await open(path)
     return file.readLines()
-}
-
-async function asyncSum(generator: AsyncGenerator<number, void, unknown>): Promise<number> {
-    let sum = 0
-    for await (const p of generator) {
-        sum += p
-    }
-
-    return sum
 }
 
 async function part1(lineReader: Promise<Interface>): Promise<number> {
