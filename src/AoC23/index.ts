@@ -12,14 +12,8 @@ async function launch(moduleName: string) {
 }
 
 async function main() {
-    const episodes = [
-        "./AoC23E01",
-        "./AoC23E02",
-        "./AoC23E03",
-        "./AoC23E04",
-        "./AoC23E05",
-        "./AoC23E06",
-    ]
+    const episodes = Array.from({ length: 6 }, (_, k) =>
+        `./AoC23E${(k + 1).toString().padStart(2, '0')}`)
 
     for (const episode of episodes) {
         await launch(episode)
