@@ -1,5 +1,6 @@
 import { createReadStream } from "node:fs"
 import * as readline from "node:readline";
+import { expectBlankLine, expectLine, readLine } from "./aoclib";
 
 export async function minLocationFromFile(path: string, start: number, length: number) {
     const readable = createReadStream(path)
@@ -153,35 +154,4 @@ async function parseMap(input: readline.Interface) {
     }
 
     return map
-}
-
-type ReadLineResult = {
-    done: boolean
-    line: string
-}
-
-async function readLine(input: readline.Interface): Promise<ReadLineResult> {
-    for await (const line of input) {
-        return { done: false, line }
-    }
-    return { done: true, line: '' }
-}
-
-async function expectLine(input: readline.Interface) {
-    for await (const line of input) {
-        return line
-    }
-
-    throw new Error("Unexpected EOF")
-}
-
-async function expectBlankLine(input: readline.Interface) {
-    for await (const line of input) {
-        if (line.length !== 0) {
-            throw new Error(`Unexpected non-bank line: ${line}`)
-        }
-        return
-    }
-
-    throw new Error("Unexpected EOF")
 }

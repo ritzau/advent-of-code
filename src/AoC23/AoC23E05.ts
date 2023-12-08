@@ -6,7 +6,7 @@ import { logResult } from "./aoclib"
 export async function main(all: boolean) {
     logResult("Part 1 sample:", await part1('AoC23E05-sample.txt'), 35)
     logResult("Part 1 input: ", await part1('AoC23E05-input.txt'), 240320250)
-    logResult("Part 2 sample:", await part2('AoC23E05-sample.txt'), 46)
+    if (all) logResult("Part 2 sample:", await part2('AoC23E05-sample.txt'), 46)
     if (all) logResult("Part 2 input: ", await part2('AoC23E05-input.txt'), 28580589)
 }
 
