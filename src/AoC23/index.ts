@@ -12,11 +12,19 @@ async function launch(moduleName: string) {
 }
 
 async function main() {
-    const episodes = Array.from({ length: 7 }, (_, k) =>
+    const episodes = Array.from({ length: 25 }, (_, k) =>
         `./AoC23E${(k + 1).toString().padStart(2, '0')}`)
 
-    for (const episode of episodes) {
-        await launch(episode)
+    try {
+        for (const episode of episodes) {
+            await launch(episode)
+        }
+    } catch (error) {
+        if (error instanceof Error && error.message.startsWith("Cannot find module")) {
+            console.log("NYI")
+        } else {
+            throw error
+        }
     }
 }
 
