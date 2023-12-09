@@ -82,3 +82,7 @@ export async function readAocInputFile(date: number, year = 2023) {
     const path = await getAocInputFile(date, year);
     return readFileSync(path).toString();
 }
+
+export function sum(values: number[]) {
+    return values.reduce((a, b) => a + b, 0)
+}
