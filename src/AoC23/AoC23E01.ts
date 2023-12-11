@@ -6,10 +6,10 @@ export function main() {
     const sample2 = fs.readFileSync('./AoC23E01-sample-2.txt').toString()
     const input = fs.readFileSync('./AoC23E01-input.txt').toString()
 
-    logResult("Sample 1:", part1(sample1), 142)
-    logResult("Part 1:  ", part1(input), 54159)
-    logResult("Sample 2:", part2(sample2), 281)
-    logResult("Part 2:  ", part2(input), 53866)
+    logResult("Part 1 - sample", part1(sample1), 142)
+    logResult("Part 1 - input", part1(input), 54159)
+    logResult("Part 2 - sample", part2(sample2), 281)
+    logResult("Part 2 - input", part2(input), 53866)
 }
 
 function part1(input: string): any {

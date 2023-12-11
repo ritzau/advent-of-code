@@ -18,15 +18,15 @@ export async function main() {
     const sample = fs.readFileSync('AoC23E02-sample.txt').toString().split('\n')
     const input = fs.readFileSync('AoC23E02-input.txt').toString().split('\n')
 
-    logResult("Sample 1:", part1(sample), 8)
-    logResult("Part 1:  ", part1(input), 2632)
-    logResult("Sample 2:", part2(sample), 2286)
-    logResult("Part 2:  ", part2(input), 69629)
+    logResult("Part 1 - sample", part1(sample), 8)
+    logResult("Part 1 - input", part1(input), 2632)
+    logResult("Part 2 - sample", part2(sample), 2286)
+    logResult("Part 2 - input", part2(input), 69629)
 
-    logResult("Async p1 sample:", await part1Async(readLinesFromFile('AoC23E02-sample.txt')), 8)
-    logResult("Async p1 input: ", await part1Async(readLinesFromFile('AoC23E02-input.txt')), 2632)
-    logResult("Async p2 sample:", await part2Async(readLinesFromFile('AoC23E02-sample.txt')), 2286)
-    logResult("Async p2 input: ", await part2Async(readLinesFromFile('AoC23E02-input.txt')), 69629)
+    logResult("Async p1 sample", await part1Async(readLinesFromFile('AoC23E02-sample.txt')), 8)
+    logResult("Async p1 input", await part1Async(readLinesFromFile('AoC23E02-input.txt')), 2632)
+    logResult("Async p2 sample", await part2Async(readLinesFromFile('AoC23E02-sample.txt')), 2286)
+    logResult("Async p2 input", await part2Async(readLinesFromFile('AoC23E02-input.txt')), 69629)
 }
 
 async function readLinesFromFile(path: string): Promise<Interface> {

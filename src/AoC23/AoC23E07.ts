@@ -5,10 +5,10 @@ import assert from "node:assert"
 import { logResult } from "./aoclib"
 
 export async function main() {
-    logResult("Part 1 sample: ", await part1('AoC23E07-sample.txt'), 6440)
-    logResult("Part 1 input: ", await part1('AoC23E07-input.txt'), 253933213)
-    logResult("Part 2 sample: ", await part2('AoC23E07-sample.txt'), 5905)
-    logResult("Part 2 input: ", await part2('AoC23E07-input.txt'), 253473930)
+    logResult("Part 1 - sample", await part1('AoC23E07-sample.txt'), 6440)
+    logResult("Part 1 - input", await part1('AoC23E07-input.txt'), 253933213)
+    logResult("Part 2 - sample", await part2('AoC23E07-sample.txt'), 5905)
+    logResult("Part 2 - input", await part2('AoC23E07-input.txt'), 253473930)
 }
 
 enum HandType {

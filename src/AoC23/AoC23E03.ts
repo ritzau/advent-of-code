@@ -3,10 +3,10 @@ import { Interface } from 'readline';
 import { asyncSum, logResult } from './aoclib';
 
 export async function main() {
-    logResult("Part 1 sample:", await part1(readLinesFromFile('AoC23E03-sample.txt')), 4361)
-    logResult("Part 1 input: ", await part1(readLinesFromFile('AoC23E03-input.txt')), 544664)
-    logResult("Part 2 sample:", await part2(readLinesFromFile('AoC23E03-sample.txt')), 467835)
-    logResult("Part 2 input: ", await part2(readLinesFromFile('AoC23E03-input.txt')), 84495585)
+    logResult("Part 1 - sample", await part1(readLinesFromFile('AoC23E03-sample.txt')), 4361)
+    logResult("Part 1 - input", await part1(readLinesFromFile('AoC23E03-input.txt')), 544664)
+    logResult("Part 2 - sample", await part2(readLinesFromFile('AoC23E03-sample.txt')), 467835)
+    logResult("Part 2 - input", await part2(readLinesFromFile('AoC23E03-input.txt')), 84495585)
 }
 
 async function readLinesFromFile(path: string): Promise<Interface> {
