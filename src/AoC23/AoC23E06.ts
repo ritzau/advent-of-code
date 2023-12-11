@@ -4,10 +4,10 @@ import * as readline from "node:readline"
 import { logResult } from "./aoclib"
 
 export async function main() {
-    logResult("Part 1 sample:", await part1('AoC23E06-sample.txt'), 288)
-    logResult("Part 1 input: ", await part1('AoC23E06-input.txt'), 1413720)
-    logResult("Part 2 sample:", await part2('AoC23E06-sample.txt'), 71503)
-    logResult("Part 2 input: ", await part2('AoC23E06-input.txt'), 30565288)
+    logResult("Part 1 - sample", await part1('AoC23E06-sample.txt'), 288)
+    logResult("Part 1 - input", await part1('AoC23E06-input.txt'), 1413720)
+    logResult("Part 2 - sample", await part2('AoC23E06-sample.txt'), 71503)
+    logResult("Part 2 - input", await part2('AoC23E06-input.txt'), 30565288)
 }
 
 type RaceParameters = {

@@ -10,10 +10,10 @@ type Card = {
 }
 
 export async function main() {
-    logResult("Part 1 sample:", await part1(createReadStream('AoC23E04-sample.txt')), 13)
-    logResult("Part 1 input: ", await part1(createReadStream('AoC23E04-input.txt')), 22674)
-    logResult("Part 2 sample:", await part2(createReadStream('AoC23E04-sample.txt')), 30)
-    logResult("Part 2 input: ", await part2(createReadStream('AoC23E04-input.txt')), 5747443)
+    logResult("Part 1 - sample", await part1(createReadStream('AoC23E04-sample.txt')), 13)
+    logResult("Part 1 - input", await part1(createReadStream('AoC23E04-input.txt')), 22674)
+    logResult("Part 2 - sample", await part2(createReadStream('AoC23E04-sample.txt')), 30)
+    logResult("Part 2 - input", await part2(createReadStream('AoC23E04-input.txt')), 5747443)
 }
 
 async function part1(input: Readable) {
