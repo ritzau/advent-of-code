@@ -1,3 +1,5 @@
+import assert from "node:assert"
+
 console.log("Hello, world!!")
 
 const runAllTests = false
@@ -25,12 +27,34 @@ async function launch(moduleName: string) {
 }
 
 async function main() {
-    const episodes = Array.from({ length: 25 }, (_, k) =>
-        `./AoC23E${(k + 1).toString().padStart(2, '0')}`)
-
-    for (const episode of episodes) {
+    for (const episode of episodes()) {
         if (!await launch(episode)) break
     }
+}
+
+function episodes(start: number | undefined = undefined, end: number | undefined = undefined) {
+    if (start === undefined && end === undefined) {
+        return episodeRange(1, 25)
+    }
+
+    if (start !== undefined && end !== undefined) {
+        return episodeRange(start, end)
+    }
+
+    if (start !== undefined && end === undefined) {
+        return episodeRange(start, start)
+    }
+
+    if (start === undefined && end !== undefined) {
+        return episodeRange(1, end)
+    }
+
+    assert.fail()
+}
+
+function episodeRange(start: number, end: number) {
+    return Array.from({ length: end - start + 1 }, (_, k) =>
+        `./AoC23E${(k + start).toString().padStart(2, '0')}`)
 }
 
 main()
