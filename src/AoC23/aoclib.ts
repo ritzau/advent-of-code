@@ -1,7 +1,7 @@
 import * as readline from "node:readline"
 
 export function logResult(message: string, actual: number, expected: number) {
-    console.log(`${message} `.padEnd(24, '_') + ` ${actual}`.padStart(15, '_'), actual === expected ? "✅" : "❌")
+    console.log(`${message} `.padEnd(24, '_') + ` ${actual}`.padStart(16, '_'), actual === expected ? "✅" : "❌")
 }
 
 export async function asyncSum(generator: AsyncGenerator<number, void, unknown>) {
