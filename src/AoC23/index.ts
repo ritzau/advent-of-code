@@ -1,30 +1,6 @@
 import assert from "node:assert"
 
-console.log("Hello, world!!")
-
 const runAllTests = false
-
-async function launch(moduleName: string) {
-    console.log()
-    const title = moduleName.replace(/.*\//, '')
-    console.group(title)
-    console.time(title)
-    try {
-        const module = await require(moduleName)
-        await module.main(runAllTests)
-        return true
-    } catch (error) {
-        if (error instanceof Error && error.message.startsWith("Cannot find module")) {
-            console.log("NYI")
-            return false
-        } else {
-            throw error
-        }
-    } finally {
-        console.timeEnd(title)
-        console.groupEnd()
-    }
-}
 
 async function main() {
     for (const episode of episodes()) {
@@ -55,6 +31,28 @@ function episodes(start: number | undefined = undefined, end: number | undefined
 function episodeRange(start: number, end: number) {
     return Array.from({ length: end - start + 1 }, (_, k) =>
         `./AoC23E${(k + start).toString().padStart(2, '0')}`)
+}
+
+async function launch(moduleName: string) {
+    console.log()
+    const title = moduleName.replace(/.*\//, '')
+    console.group(title)
+    console.time(title)
+    try {
+        const module = await require(moduleName)
+        await module.main(runAllTests)
+        return true
+    } catch (error) {
+        if (error instanceof Error && error.message.startsWith("Cannot find module")) {
+            console.log("NYI")
+            return false
+        } else {
+            throw error
+        }
+    } finally {
+        console.timeEnd(title)
+        console.groupEnd()
+    }
 }
 
 main()
