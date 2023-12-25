@@ -3,7 +3,7 @@ import assert from "node:assert";
 const runAllTests = false;
 
 async function main() {
-    for (const episode of episodes()) {
+    for (const episode of episodes(20)) {
         if (!await launch(episode)) break;
     }
 }

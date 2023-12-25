@@ -1,6 +1,6 @@
 {
   "name": "AoC23",
-  "version": "23.19.0",
+  "version": "23.20.0",
   "main": "index.ts",
   "repository": "https://github.com/ritzau/advent-of-code/tree/main/src/AoC23",
   "author": "tobias@ritzau.se",
