@@ -1,4 +1,5 @@
 import assert from "node:assert";
+import { getAocInput } from "./aoclib";
 
 const runAllTests = false;
 
