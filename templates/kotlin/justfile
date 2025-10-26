@@ -2,15 +2,18 @@
 
 # Run a specific part with input from stdin
 run PART:
-    kotlinc -script {{PART}}.kts
+    #!/usr/bin/env bash
+    kotlinc {{PART}}.kt common.kt -include-runtime -d /tmp/aoc-{{PART}}.jar
+    java -jar /tmp/aoc-{{PART}}.jar
+    rm /tmp/aoc-{{PART}}.jar
 
 # Test both parts with sample input
 test:
     @echo "Testing Part 1:"
-    @cat sample.txt | kotlinc -script part1.kts
+    @just run part1 < sample.txt
     @echo "\nTesting Part 2:"
-    @cat sample.txt | kotlinc -script part2.kts
+    @just run part2 < sample.txt
 
 # Format code
 format:
-    ktlint -F *.kts
+    ktlint -F *.kt
