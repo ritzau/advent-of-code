@@ -3,3 +3,14 @@
 # Run a specific part with input from stdin
 run PART:
     go run {{PART}}.go common.go
+
+# Test both parts with sample input
+test:
+    @echo "Testing Part 1:"
+    @cat sample.txt | go run part1.go common.go
+    @echo "\nTesting Part 2:"
+    @cat sample.txt | go run part2.go common.go
+
+# Format code
+format:
+    go fmt .

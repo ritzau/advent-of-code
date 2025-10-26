@@ -3,3 +3,14 @@
 # Run a specific part with input from stdin
 run PART:
     kotlinc -script {{PART}}.kts
+
+# Test both parts with sample input
+test:
+    @echo "Testing Part 1:"
+    @cat sample.txt | kotlinc -script part1.kts
+    @echo "\nTesting Part 2:"
+    @cat sample.txt | kotlinc -script part2.kts
+
+# Format code
+format:
+    ktlint -F *.kts

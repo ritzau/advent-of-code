@@ -3,3 +3,14 @@
 # Run a specific part with input from stdin
 run PART:
     cargo run --quiet --release --bin {{PART}}
+
+# Test both parts with sample input
+test:
+    @echo "Testing Part 1:"
+    @cat sample.txt | cargo run --quiet --release --bin part1
+    @echo "\nTesting Part 2:"
+    @cat sample.txt | cargo run --quiet --release --bin part2
+
+# Format code
+format:
+    cargo fmt

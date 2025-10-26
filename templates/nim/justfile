@@ -3,3 +3,14 @@
 # Run a specific part with input from stdin
 run PART:
     nim r -d:release --hints:off --verbosity:0 {{PART}}.nim
+
+# Test both parts with sample input
+test:
+    @echo "Testing Part 1:"
+    @cat sample.txt | nim r -d:release --hints:off --verbosity:0 part1.nim
+    @echo "\nTesting Part 2:"
+    @cat sample.txt | nim r -d:release --hints:off --verbosity:0 part2.nim
+
+# Format code
+format:
+    nimpretty *.nim

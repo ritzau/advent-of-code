@@ -16,6 +16,7 @@
           buildInputs = with pkgs; [
             kotlin
             kotlin-language-server
+            ktlint
           ];
 
           shellHook = ''

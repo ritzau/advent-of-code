@@ -80,13 +80,29 @@ cat input.txt | just run part2
 # Output: 54100
 ```
 
-Each day has its own `justfile` with a simple `run` command:
+Each day has its own `justfile` with convenient commands:
 
 ```justfile
 # Run a specific part with input from stdin
 run PART:
     python3 {{PART}}.py
+
+# Test both parts with sample input
+test:
+    @echo "Testing Part 1:"
+    @cat sample.txt | python3 part1.py
+    @echo "\nTesting Part 2:"
+    @cat sample.txt | python3 part2.py
+
+# Format code
+format:
+    black *.py
 ```
+
+Available commands:
+- `just run part1` / `just run part2` - Run with input from stdin
+- `just test` - Test both parts with sample.txt
+- `just format` - Format code with language-specific formatter
 
 ### Nix Flakes
 
