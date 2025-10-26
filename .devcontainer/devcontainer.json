@@ -1,0 +1,44 @@
+{
+  "name": "Advent of Code - Multi-Language with Nix",
+  "image": "nixos/nix:latest",
+
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "installOhMyZsh": false,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    }
+  },
+
+  "postCreateCommand": "nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs && nix-channel --update && nix-env -iA nixpkgs.just nixpkgs.curl",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "jnoortheen.nix-ide",
+        "skellock.just",
+        "ms-python.python",
+        "rust-lang.rust-analyzer",
+        "golang.go"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "files.watcherExclude": {
+          "**/inputs/**": true,
+          "**/.git/objects/**": true,
+          "**/.git/subtree-cache/**": true,
+          "**/node_modules/**": true
+        }
+      }
+    }
+  },
+
+  "remoteUser": "root",
+
+  "mounts": [
+    "source=${localEnv:HOME}/.config/aoc,target=/root/.config/aoc,type=bind,consistency=cached"
+  ]
+}
