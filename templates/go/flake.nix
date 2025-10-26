@@ -83,7 +83,8 @@
         # Package outputs for building
         packages = {
           default = aoc-solution;
-          aoc-solution = aoc-solution;
+          part1 = part1;
+          part2 = part2;
         };
         
         # App outputs for running

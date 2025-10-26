@@ -30,10 +30,7 @@
       in
       {
         # Package outputs for building
-        packages = {
-          default = aoc-solution;
-          aoc-solution = aoc-solution;
-        };
+        packages.default = aoc-solution;
         
         # App outputs for running
         apps = {
