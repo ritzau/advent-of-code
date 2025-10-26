@@ -6,6 +6,11 @@
 /.aoc-session
 .aoc-session
 
+# Nix
+.direnv/
+result
+result-*
+
 # Language-specific
 node_modules/
 target/

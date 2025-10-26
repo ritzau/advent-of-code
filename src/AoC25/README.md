@@ -1,11 +1,12 @@
 # Advent of Code 2025
 
-This year's focus: **Learning Nix** by solving AoC problems in different languages, each with its own Nix environment.
+This year's focus: **Learning Nix Flakes** by solving AoC problems in different languages, each with its own reproducible Nix environment.
 
 ## Philosophy
 
 - **One language per day** - 12 problems, 12 languages
-- **Nix for everything** - Each day has its own `shell.nix` for reproducible builds
+- **Nix Flakes for everything** - Each day has its own `flake.nix` for reproducible builds
+- **Minimal devcontainer** - Only Nix installed, all languages provided by flakes
 - **Simple interface** - stdin/stdout for all solutions
 - **No fancy unification** - Keep each day self-contained
 
@@ -56,7 +57,9 @@ Each day follows this pattern:
 
 ```
 day01/
-├── shell.nix      # Nix environment with language and tools
+├── flake.nix      # Nix flake defining the environment
+├── flake.lock     # Locked dependencies (committed for reproducibility)
+├── run.sh         # Execution script (part1/part2)
 ├── part1.py       # Part 1 solution (reads stdin, prints result)
 ├── part2.py       # Part 2 solution (reads stdin, prints result)
 ├── common.py      # Shared code (optional)
@@ -65,17 +68,37 @@ day01/
 
 ## How Solutions Work
 
+### Stdin/Stdout Interface
+
 All solutions follow a simple stdin/stdout interface:
 
 ```bash
-cat input.txt | python part1.py
+cat input.txt | ./run.sh part1
 # Output: 54877
 
-cat input.txt | python part2.py
+cat input.txt | ./run.sh part2
 # Output: 54100
 ```
 
-The `just` command orchestrates:
+### Nix Flakes
+
+Each day uses Nix flakes for reproducible environments:
+
+```bash
+# Enter the environment
+cd day01
+nix develop
+
+# Now you have Python (or Rust, Go, etc.) available
+python3 part1.py < input.txt
+
+# Or run directly without entering the shell
+nix develop --command ./run.sh part1 < input.txt
+```
+
+### Orchestration
+
+The `just` command orchestrates everything:
 - Input downloading and caching
 - Running solutions in Nix shells
 - Timing execution

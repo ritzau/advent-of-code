@@ -112,9 +112,9 @@ _run-parts YEAR DAY INPUT:
     chmod +x run.sh
     input_path="../../$INPUT"
 
-    # Detect how to run (with or without Nix)
-    if [ -f "shell.nix" ]; then
-        runner="nix-shell --run"
+    # Detect how to run (with or without Nix flake)
+    if [ -f "flake.nix" ]; then
+        runner="nix develop --command bash -c"
     else
         runner="bash -c"
     fi

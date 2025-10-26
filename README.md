@@ -50,7 +50,7 @@ Multi-year, multi-language solutions for [Advent of Code](https://adventofcode.c
 - `nim` - Nim
 - `zig` - Zig
 
-Each template includes a Nix shell for reproducible builds.
+Each template includes a Nix flake for reproducible builds.
 
 ## 📋 Commands
 
@@ -84,7 +84,8 @@ advent-of-code/
 ## 🎯 2025 Goals
 
 - **12 languages in 12 days** - One different language per day
-- **Learn Nix** - Each day has its own reproducible Nix environment
+- **Learn Nix Flakes** - Each day has its own reproducible Nix flake
+- **Minimal dependencies** - Only Nix in devcontainer, languages provided by flakes
 - **Simple interface** - All solutions use stdin/stdout
 - **GitHub Codespaces** - Develop anywhere with zero local setup
 
@@ -108,8 +109,10 @@ cabal run
 
 - Inputs are downloaded on demand and cached locally (gitignored)
 - Sample inputs from problem descriptions are checked into git
+- `flake.lock` files are committed for reproducibility
 - Each year may use different approaches as I experiment and learn
-- 2025+ uses Nix for reproducible environments across all languages
+- 2025+ uses Nix Flakes for reproducible environments across all languages
+- Devcontainer only installs Nix - all language tooling comes from flakes
 
 ## 🤝 Contributing
 

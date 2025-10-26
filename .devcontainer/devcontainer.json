@@ -1,5 +1,5 @@
 {
-  "name": "Advent of Code - Multi-Language with Nix",
+  "name": "Advent of Code - Nix Flakes",
   "image": "nixos/nix:latest",
 
   "features": {
@@ -13,16 +13,13 @@
     }
   },
 
-  "postCreateCommand": "nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs && nix-channel --update && nix-env -iA nixpkgs.just nixpkgs.curl",
+  "postCreateCommand": "mkdir -p ~/.config/nix && echo 'experimental-features = nix-command flakes' > ~/.config/nix/nix.conf && nix profile install nixpkgs#just nixpkgs#curl",
 
   "customizations": {
     "vscode": {
       "extensions": [
         "jnoortheen.nix-ide",
-        "skellock.just",
-        "ms-python.python",
-        "rust-lang.rust-analyzer",
-        "golang.go"
+        "skellock.just"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
@@ -30,7 +27,8 @@
           "**/inputs/**": true,
           "**/.git/objects/**": true,
           "**/.git/subtree-cache/**": true,
-          "**/node_modules/**": true
+          "**/node_modules/**": true,
+          "**/.direnv/**": true
         }
       }
     }
