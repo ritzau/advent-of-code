@@ -18,3 +18,7 @@ test:
 # Format code
 format:
     black *.py
+
+# Clean build artifacts
+clean:
+    rm -rf __pycache__/ *.pyc .pytest_cache/

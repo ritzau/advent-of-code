@@ -22,3 +22,7 @@ test:
 # Format code
 format:
     nimpretty *.nim
+
+# Clean build artifacts
+clean:
+    rm -rf build/ nimcache/

@@ -104,6 +104,7 @@ Available commands:
 - `just run part1` / `just run part2` - Run with input from stdin
 - `just test` - Test both parts with sample.txt
 - `just format` - Format code with language-specific formatter
+- `just clean` - Remove build artifacts
 
 ### Nix Flakes
 
