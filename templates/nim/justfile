@@ -1,15 +1,23 @@
 # Advent of Code Solution
 
+# Build both parts
+build:
+    #!/usr/bin/env bash
+    mkdir -p build
+    nim c -d:release --hints:off --verbosity:0 --out:build/part1 part1.nim
+    nim c -d:release --hints:off --verbosity:0 --out:build/part2 part2.nim
+
 # Run a specific part with input from stdin
 run PART:
-    nim r -d:release --hints:off --verbosity:0 {{PART}}.nim
+    ./build/{{PART}}
 
 # Test both parts with sample input
 test:
     @echo "Testing Part 1:"
-    @cat sample.txt | nim r -d:release --hints:off --verbosity:0 part1.nim
+    @just build > /dev/null 2>&1
+    @cat sample.txt | just run part1
     @echo "\nTesting Part 2:"
-    @cat sample.txt | nim r -d:release --hints:off --verbosity:0 part2.nim
+    @cat sample.txt | just run part2
 
 # Format code
 format:

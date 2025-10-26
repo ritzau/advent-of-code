@@ -100,6 +100,7 @@ format:
 ```
 
 Available commands:
+- `just build` - Build both parts (or no-op for interpreted languages)
 - `just run part1` / `just run part2` - Run with input from stdin
 - `just test` - Test both parts with sample.txt
 - `just format` - Format code with language-specific formatter

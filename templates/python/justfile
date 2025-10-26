@@ -1,5 +1,9 @@
 # Advent of Code Solution
 
+# Build (no-op for Python)
+build:
+    @echo "No build step needed for Python"
+
 # Run a specific part with input from stdin
 run PART:
     python3 {{PART}}.py

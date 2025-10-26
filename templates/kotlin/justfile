@@ -1,18 +1,23 @@
 # Advent of Code Solution
 
+# Build both parts
+build:
+    #!/usr/bin/env bash
+    mkdir -p build
+    kotlinc part1.kt common.kt -include-runtime -d build/part1.jar
+    kotlinc part2.kt common.kt -include-runtime -d build/part2.jar
+
 # Run a specific part with input from stdin
 run PART:
-    #!/usr/bin/env bash
-    kotlinc {{PART}}.kt common.kt -include-runtime -d /tmp/aoc-{{PART}}.jar
-    java -jar /tmp/aoc-{{PART}}.jar
-    rm /tmp/aoc-{{PART}}.jar
+    java -jar build/{{PART}}.jar
 
 # Test both parts with sample input
 test:
     @echo "Testing Part 1:"
-    @just run part1 < sample.txt
+    @just build > /dev/null 2>&1
+    @cat sample.txt | just run part1
     @echo "\nTesting Part 2:"
-    @just run part2 < sample.txt
+    @cat sample.txt | just run part2
 
 # Format code
 format:
