@@ -1,0 +1,5 @@
+# Advent of Code Solution
+
+# Run a specific part with input from stdin
+run PART:
+    go run {{PART}}.go common.go

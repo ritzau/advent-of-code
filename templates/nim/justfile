@@ -1,0 +1,5 @@
+# Advent of Code Solution
+
+# Run a specific part with input from stdin
+run PART:
+    nim r -d:release --hints:off --verbosity:0 {{PART}}.nim

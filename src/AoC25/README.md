@@ -59,7 +59,7 @@ Each day follows this pattern:
 day01/
 ├── flake.nix      # Nix flake defining the environment
 ├── flake.lock     # Locked dependencies (committed for reproducibility)
-├── run.sh         # Execution script (part1/part2)
+├── justfile       # Local commands (run, test, etc.)
 ├── part1.py       # Part 1 solution (reads stdin, prints result)
 ├── part2.py       # Part 2 solution (reads stdin, prints result)
 ├── common.py      # Shared code (optional)
@@ -68,16 +68,24 @@ day01/
 
 ## How Solutions Work
 
-### Stdin/Stdout Interface
+### Stdin/Stdout Interface with `just`
 
-All solutions follow a simple stdin/stdout interface:
+All solutions follow a simple stdin/stdout interface using `just`:
 
 ```bash
-cat input.txt | ./run.sh part1
+cat input.txt | just run part1
 # Output: 54877
 
-cat input.txt | ./run.sh part2
+cat input.txt | just run part2
 # Output: 54100
+```
+
+Each day has its own `justfile` with a simple `run` command:
+
+```justfile
+# Run a specific part with input from stdin
+run PART:
+    python3 {{PART}}.py
 ```
 
 ### Nix Flakes
@@ -93,7 +101,7 @@ nix develop
 python3 part1.py < input.txt
 
 # Or run directly without entering the shell
-nix develop --command ./run.sh part1 < input.txt
+nix develop --command just run part1 < input.txt
 ```
 
 ### Orchestration

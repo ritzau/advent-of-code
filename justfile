@@ -103,26 +103,29 @@ _run-parts YEAR DAY INPUT:
 
     cd "$day_dir"
 
-    # Check for run.sh script
-    if [ ! -f "run.sh" ]; then
-        echo "Error: run.sh not found in $day_dir"
+    # Check for justfile
+    if [ ! -f "justfile" ]; then
+        echo "Error: justfile not found in $day_dir"
         exit 1
     fi
 
-    chmod +x run.sh
     input_path="../../$INPUT"
 
     # Detect how to run (with or without Nix flake)
     if [ -f "flake.nix" ]; then
-        runner="nix develop --command bash -c"
+        runner="nix develop --command"
     else
-        runner="bash -c"
+        runner=""
     fi
 
     # Part 1
     echo -n "Part 1: "
     start=$(date +%s%N)
-    result1=$($runner "cat $input_path | ./run.sh part1" 2>&1) || { echo "❌ Failed"; exit 1; }
+    if [ -n "$runner" ]; then
+        result1=$($runner just run part1 < $input_path 2>&1) || { echo "❌ Failed"; exit 1; }
+    else
+        result1=$(just run part1 < $input_path 2>&1) || { echo "❌ Failed"; exit 1; }
+    fi
     end=$(date +%s%N)
     duration1=$(echo "scale=1; ($end - $start) / 1000000" | bc)
     echo "$result1 (${duration1}ms)"
@@ -130,7 +133,12 @@ _run-parts YEAR DAY INPUT:
     # Part 2
     echo -n "Part 2: "
     start=$(date +%s%N)
-    result2=$($runner "cat $input_path | ./run.sh part2" 2>&1)
+    if [ -n "$runner" ]; then
+        result2=$($runner just run part2 < $input_path 2>&1)
+    else
+        result2=$(just run part2 < $input_path 2>&1)
+    fi
+
     if [ $? -ne 0 ]; then
         echo "Not yet implemented"
     else
