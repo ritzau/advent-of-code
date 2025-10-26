@@ -11,37 +11,68 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         
-        # Build the Go package using buildGoModule
-        aoc-solution = pkgs.buildGoModule {
-          pname = "aoc-solution";
+        # Build part1 binary
+        part1 = pkgs.buildGoModule {
+          pname = "aoc-part1";
           version = "0.1.0";
           
           src = ./.;
           
-          # vendorHash needs to be set for Go modules
-          # Use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" as placeholder
-          # or lib.fakeHash, then update with the correct hash after first build
           vendorHash = null; # No external dependencies in template
           
-          # Build both binaries
-          subPackages = [ "." ];
-          
-          # Custom build phase to build both part1 and part2
+          # Build only the part1 binary
           buildPhase = ''
             runHook preBuild
-            mkdir -p $out/bin
-            go build -o $out/bin/part1 part1.go common.go
-            go build -o $out/bin/part2 part2.go common.go
+            go build -o part1 part1.go common.go
             runHook postBuild
           '';
           
-          # Skip install phase since we handle it in buildPhase
           installPhase = ''
             runHook preInstall
-            # Binaries already in $out/bin from buildPhase
+            mkdir -p $out/bin
+            cp part1 $out/bin/part1
             runHook postInstall
           '';
           
+          meta = with pkgs.lib; {
+            description = "Advent of Code solution part 1 in Go";
+            license = licenses.mit;
+          };
+        };
+        
+        # Build part2 binary
+        part2 = pkgs.buildGoModule {
+          pname = "aoc-part2";
+          version = "0.1.0";
+          
+          src = ./.;
+          
+          vendorHash = null; # No external dependencies in template
+          
+          # Build only the part2 binary
+          buildPhase = ''
+            runHook preBuild
+            go build -o part2 part2.go common.go
+            runHook postBuild
+          '';
+          
+          installPhase = ''
+            runHook preInstall
+            mkdir -p $out/bin
+            cp part2 $out/bin/part2
+            runHook postInstall
+          '';
+          
+          meta = with pkgs.lib; {
+            description = "Advent of Code solution part 2 in Go";
+            license = licenses.mit;
+          };
+        };
+        
+        # Combined package with both binaries
+        aoc-solution = pkgs.symlinkJoin {
+          name = "aoc-solution";
+          paths = [ part1 part2 ];
           meta = with pkgs.lib; {
             description = "Advent of Code solution in Go";
             license = licenses.mit;
@@ -59,11 +90,11 @@
         apps = {
           part1 = {
             type = "app";
-            program = "${aoc-solution}/bin/part1";
+            program = "${part1}/bin/part1";
           };
           part2 = {
             type = "app";
-            program = "${aoc-solution}/bin/part2";
+            program = "${part2}/bin/part2";
           };
         };
         
