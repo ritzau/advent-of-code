@@ -1,15 +1,15 @@
-import fs from 'fs';
-import { logResult, readAocInputFile } from './aoclib';
+import fs from 'fs'
+import { logResult } from './aoclib'
 
-export async function main() {
-    const sample1 = fs.readFileSync('./AoC23E01-sample-1.txt').toString();
-    const sample2 = fs.readFileSync('./AoC23E01-sample-2.txt').toString();
-    const input = await readAocInputFile(1);
+export function main() {
+    const sample1 = fs.readFileSync('./AoC23E01-sample-1.txt').toString()
+    const sample2 = fs.readFileSync('./AoC23E01-sample-2.txt').toString()
+    const input = fs.readFileSync('./AoC23E01-input.txt').toString()
 
-    logResult("Part 1 - sample", part1(sample1), 142);
-    logResult("Part 1 - input", part1(input), 54159);
-    logResult("Part 2 - sample", part2(sample2), 281);
-    logResult("Part 2 - input", part2(input), 53866);
+    logResult("Part 1 - sample", part1(sample1), 142)
+    logResult("Part 1 - input", part1(input), 54159)
+    logResult("Part 2 - sample", part2(sample2), 281)
+    logResult("Part 2 - input", part2(input), 53866)
 }
 
 function part1(input: string): any {
@@ -19,7 +19,7 @@ function part1(input: string): any {
         .map((digits) => Array.from(digits))
         .map((line) => line[0] + line[line.length - 1])
         .map((line) => parseInt(line))
-        .reduce((a, b) => a + b);
+        .reduce((a, b) => a + b)
 }
 
 function part2(input: string): any {
@@ -27,7 +27,7 @@ function part2(input: string): any {
         .map((line) => [firstDigit(line), lastDigit(line)])
         .filter((ds) => ds[0] !== -1)
         .map((ds) => 10 * ds[0] + ds[1])
-        .reduce((a, b) => a + b);
+        .reduce((a, b) => a + b)
 }
 
 const digitTuples: Array<[string, Number]> = [
@@ -50,28 +50,28 @@ const digitTuples: Array<[string, Number]> = [
     ["seven", 7],
     ["eight", 8],
     ["nine", 9],
-];
+]
 
 function firstDigit(line: string): number {
     const matches = digitTuples
         .map(([match, value]) => [line.indexOf(match), match, value])
-        .filter(([index, ,]) => index != -1);
+        .filter(([index, ,]) => index != -1)
 
     if (matches.length === 0) {
-        return -1;
+        return -1
     }
 
-    return matches.reduce((a, b) => a[0] < b[0] ? a : b)[2] as number;
+    return matches.reduce((a, b) => a[0] < b[0] ? a : b)[2] as number
 }
 
 function lastDigit(line: string): number {
     const matches = digitTuples
         .map(([match, value]) => [line.lastIndexOf(match), match, value])
-        .filter(([index, ,]) => index != -1);
+        .filter(([index, ,]) => index != -1)
 
     if (matches.length === 0) {
-        return -1;
+        return -1
     }
 
-    return matches.reduce((a, b) => a[0] > b[0] ? a : b)[2] as number;
+    return matches.reduce((a, b) => a[0] > b[0] ? a : b)[2] as number
 }

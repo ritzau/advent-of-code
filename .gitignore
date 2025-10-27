@@ -1,2 +1,34 @@
 /.config/
 /dist-newstyle/
+
+# AoC inputs and session (downloaded on demand)
+/inputs/
+/.aoc-session
+.aoc-session
+
+# Nix
+.direnv/
+result
+result-*
+
+# Language-specific
+node_modules/
+target/
+build/
+*.pyc
+__pycache__/
+.pytest_cache/
+*.class
+*.jar
+*.o
+*.exe
+nimcache/
+zig-cache/
+zig-out/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
