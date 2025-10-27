@@ -1,7 +1,7 @@
-package main
+package common
 
 import "strings"
 
-func parseInput(input string) []string {
+func ParseInput(input string) []string {
 	return strings.Split(strings.TrimSpace(input), "\n")
 }

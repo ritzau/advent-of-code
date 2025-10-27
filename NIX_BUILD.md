@@ -81,37 +81,44 @@ packages = {
 
 ### Go
 
-Uses custom `stdenv.mkDerivation`:
+Uses `buildGoModule` with standard Go project layout:
 
 ```nix
 packages = {
-  default = pkgs.stdenv.mkDerivation {
+  default = pkgs.buildGoModule {
     pname = "aoc-solution";
     version = "0.1.0";
     src = ./.;
-    nativeBuildInputs = [ pkgs.go ];
-    buildPhase = ''
-      go build -o part1 part1.go common.go
-      go build -o part2 part2.go common.go
-    '';
-    installPhase = ''
-      mkdir -p $out/bin
-      cp part1 $out/bin/
-      cp part2 $out/bin/
-    '';
+
+    vendorHash = null; # No external dependencies
+
+    subPackages = [ "cmd/part1" "cmd/part2" ];
   };
 };
 ```
 
+**Project structure:**
+```
+cmd/
+  part1/
+    main.go
+  part2/
+    main.go
+common/
+  common.go
+go.mod
+```
+
 **Requirements:**
-- `go.mod` - present in template (minimal)
-- No external dependencies needed
+- `go.mod` - defines module name
+- `cmd/` subdirectories - standard Go layout
+- `vendorHash = null` - for projects without external dependencies
 
 **Build output:**
 - `result/bin/part1`
 - `result/bin/part2`
 
-**Note:** We use `stdenv.mkDerivation` instead of `buildGoModule` because the AoC template structure (multiple main packages at root) doesn't fit Go's typical cmd/ subdirectory pattern.
+**Note:** The template uses the standard Go project layout with `cmd/` subdirectories. This is idiomatic Go and works seamlessly with `buildGoModule`, nixpkgs' official Go builder. The `subPackages` parameter tells Nix which binaries to build.
 
 ## When to Use Each Approach
 

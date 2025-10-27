@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	"aoc-solution/common"
 )
 
 func solve(input string) int {
-	lines := parseInput(input)
+	lines := common.ParseInput(input)
 	_ = lines
 	// TODO: Implement solution
 	return 0

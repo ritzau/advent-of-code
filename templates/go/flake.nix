@@ -13,24 +13,14 @@
       in
       {
         packages = {
-          default = pkgs.stdenv.mkDerivation {
+          default = pkgs.buildGoModule {
             pname = "aoc-solution";
             version = "0.1.0";
             src = ./.;
 
-            nativeBuildInputs = [ pkgs.go ];
+            vendorHash = null; # No external dependencies
 
-            buildPhase = ''
-              export HOME=$TMPDIR
-              go build -o part1 part1.go common.go
-              go build -o part2 part2.go common.go
-            '';
-
-            installPhase = ''
-              mkdir -p $out/bin
-              cp part1 $out/bin/
-              cp part2 $out/bin/
-            '';
+            subPackages = [ "cmd/part1" "cmd/part2" ];
           };
         };
 

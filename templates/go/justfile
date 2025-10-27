@@ -4,8 +4,8 @@
 build:
     #!/usr/bin/env bash
     mkdir -p build
-    go build -o build/part1 part1.go common.go
-    go build -o build/part2 part2.go common.go
+    go build -o build/part1 ./cmd/part1
+    go build -o build/part2 ./cmd/part2
 
 # Run a specific part with input from stdin
 run PART:
@@ -21,7 +21,7 @@ test:
 
 # Format code
 format:
-    go fmt .
+    go fmt ./...
 
 # Clean build artifacts
 clean:
