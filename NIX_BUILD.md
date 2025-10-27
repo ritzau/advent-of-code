@@ -1,6 +1,6 @@
 # Nix Build Support (Optional)
 
-The Rust and Go templates now support building directly with Nix for maximum reproducibility.
+The Rust, Go, and Kotlin templates now support building directly with Nix for maximum reproducibility.
 
 ## Two Build Approaches
 
@@ -120,6 +120,56 @@ go.mod
 
 **Note:** The template uses the standard Go project layout with `cmd/` subdirectories. This is idiomatic Go and works seamlessly with `buildGoModule`, nixpkgs' official Go builder. The `subPackages` parameter tells Nix which binaries to build.
 
+### Kotlin
+
+Uses `buildBazelPackage` with Bazel and rules_kotlin:
+
+```nix
+packages = {
+  default = pkgs.buildBazelPackage {
+    pname = "aoc-solution";
+    version = "0.1.0";
+    src = ./.;
+
+    bazel = pkgs.bazel_7;
+
+    bazelTargets = [ "//:part1" "//:part2" ];
+
+    fetchAttrs = {
+      sha256 = "..."; # Hash of fetched dependencies
+    };
+
+    buildAttrs = {
+      installPhase = ''
+        mkdir -p $out/bin
+        cp bazel-bin/part1 $out/bin/
+        cp bazel-bin/part2 $out/bin/
+      '';
+    };
+  };
+};
+```
+
+**Project structure:**
+```
+BUILD.bazel     # Bazel build definitions
+WORKSPACE       # Bazel workspace with rules_kotlin
+part1.kt
+part2.kt
+common.kt
+```
+
+**Requirements:**
+- `BUILD.bazel` - defines `kt_jvm_binary` targets
+- `WORKSPACE` - configures rules_kotlin (v1.9.0)
+- `fetchAttrs.sha256` - hash of fetched Bazel dependencies
+
+**Build output:**
+- `result/bin/part1`
+- `result/bin/part2`
+
+**Note:** Bazel provides hermetic, reproducible builds with excellent caching. The template uses `buildBazelPackage` which separates dependency fetching (fetch phase) from building (build phase), ensuring full reproducibility. While more complex than simple kotlinc, Bazel scales well and teaches modern build system concepts.
+
 ## When to Use Each Approach
 
 ### Use Dev Shell Build (just build) when:
@@ -149,6 +199,13 @@ cat sample.txt | ./result/bin/part1
 cd src/AoC25/day02
 nix build
 cat sample.txt | ./result/bin/part1
+
+# Kotlin
+cd src/AoC25/day03
+nix build  # First run will fail with hash mismatch - copy the correct hash
+# Update fetchAttrs.sha256 in flake.nix with the correct hash
+nix build
+cat sample.txt | ./result/bin/part1
 ```
 
 ## Complexity Assessment
@@ -157,13 +214,15 @@ cat sample.txt | ./result/bin/part1
 - ✅ Minimal for users (optional feature)
 - ✅ No changes to justfile needed
 - ✅ Dev shell workflow unchanged
-- ⚠️  Requires Cargo.lock (Rust) and go.mod (Go) in templates
+- ⚠️  Requires Cargo.lock (Rust), go.mod (Go), BUILD.bazel + WORKSPACE (Kotlin)
 - ⚠️  Users need to understand two build methods
+- ⚠️  Kotlin requires computing dependency hash on first build
 
 **Benefits:**
 - ✅ True reproducibility for those who want it
 - ✅ Aligns with Nix philosophy
 - ✅ Can be ignored by users who don't care
+- ✅ Kotlin/Bazel teaches modern build systems
 
 ## Recommendation
 
