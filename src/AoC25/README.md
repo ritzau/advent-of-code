@@ -122,6 +122,22 @@ python3 part1.py < input.txt
 nix develop --command just run part1 < input.txt
 ```
 
+### Optional: Pure Nix Build
+
+For Rust and Go templates, you can also build using pure Nix (instead of in a dev shell):
+
+```bash
+cd day01
+nix build              # Build using pure Nix
+./result/bin/part1     # Run the binary
+```
+
+This provides **fully reproducible** builds but is slower than the dev shell approach.
+
+See [NIX_BUILD.md](../../NIX_BUILD.md) for details on when and why to use this.
+
+**Default approach:** Use `just build` (dev shell) for development. Use `nix build` when you need reproducibility guarantees.
+
 ### Orchestration
 
 The `just` command orchestrates everything:
