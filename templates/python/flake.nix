@@ -21,10 +21,16 @@
             buildInputs = [ pkgs.python3 ];
 
             buildPhase = ''
+              runHook preBuild
+
               # No compilation needed for Python
+
+              runHook postBuild
             '';
 
             installPhase = ''
+              runHook preInstall
+
               mkdir -p $out/bin $out/lib
               cp *.py $out/lib/
 
@@ -40,6 +46,8 @@
               EOF
 
               chmod +x $out/bin/part1 $out/bin/part2
+
+              runHook postInstall
             '';
           };
         };

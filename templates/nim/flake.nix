@@ -21,14 +21,22 @@
             nativeBuildInputs = [ pkgs.nim ];
 
             buildPhase = ''
+              runHook preBuild
+
               nim c -d:release --hints:off --verbosity:0 --out:part1 part1.nim
               nim c -d:release --hints:off --verbosity:0 --out:part2 part2.nim
+
+              runHook postBuild
             '';
 
             installPhase = ''
+              runHook preInstall
+
               mkdir -p $out/bin
               cp part1 $out/bin/
               cp part2 $out/bin/
+
+              runHook postInstall
             '';
           };
         };

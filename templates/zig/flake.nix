@@ -21,14 +21,22 @@
             nativeBuildInputs = [ pkgs.zig ];
 
             buildPhase = ''
+              runHook preBuild
+
               zig build-exe part1.zig -O ReleaseSafe -femit-bin=part1
               zig build-exe part2.zig -O ReleaseSafe -femit-bin=part2
+
+              runHook postBuild
             '';
 
             installPhase = ''
+              runHook preInstall
+
               mkdir -p $out/bin
               cp part1 $out/bin/
               cp part2 $out/bin/
+
+              runHook postInstall
             '';
           };
         };
