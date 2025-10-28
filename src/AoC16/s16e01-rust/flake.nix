@@ -77,25 +77,7 @@
             program = "${package}/bin/part2";
           };
 
-          # Run tests
-          test = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "test" ''
-              export PATH=${pkgs.cargo}/bin:$PATH
-              exec ${pkgs.cargo}/bin/cargo test
-            '');
-          };
-
-          # Run clippy linter
-          lint = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "lint" ''
-              export PATH=${pkgs.cargo}/bin:$PATH
-              exec ${pkgs.cargo}/bin/cargo clippy -- -D warnings
-            '');
-          };
-
-          # Format code
+          # Format code (app because it modifies files)
           format = {
             type = "app";
             program = toString (pkgs.writeShellScript "format" ''
@@ -116,10 +98,20 @@
 
           shellHook = ''
             echo "🎄 Rust environment ready"
-            echo "  cargo build   - Build locally"
-            echo "  cargo test    - Run tests locally"
-            echo "  nix build     - Build with Nix"
-            echo "  nix run       - Run main verification"
+            echo ""
+            echo "Local dev:"
+            echo "  cargo build    - Build locally"
+            echo "  cargo test     - Run tests"
+            echo "  cargo clippy   - Lint code"
+            echo ""
+            echo "Nix commands:"
+            echo "  nix build      - Build package"
+            echo "  nix run        - Run verification"
+            echo "  nix flake check - Run all checks"
+            echo ""
+            echo "Just shortcuts:"
+            echo "  just check     - Run all checks"
+            echo "  just run       - Run verification"
           '';
         };
       }

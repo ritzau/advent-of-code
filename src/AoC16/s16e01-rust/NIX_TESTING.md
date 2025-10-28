@@ -9,22 +9,28 @@ mkdir -p ~/.config/nix
 echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 ```
 
-## Basic Commands
+## Core Nix Commands
 
-### Build
+### Build Package
 ```bash
 nix build
 ls -la result/bin/
 # Should contain: s16e01, part1, part2
 ```
 
-### Run Main Binary
+### Run Main Verification Binary
 ```bash
 nix run
-# Should output verification with timing
+# Should output:
+# AoC 2016 Day 1: No Time for a Taxicab
+# ======================================
+# Part 1: ✅ 300 (expected: 300) [~8µs]
+# Part 2: ✅ 159 (expected: 159) [~200µs]
+# Total: ~210µs
+# 🌟🌟 All tests passed!
 ```
 
-### Run Individual Parts
+### Run Individual Parts with Input
 ```bash
 cat input.txt | nix run .#part1
 # Should output: 300
@@ -33,19 +39,7 @@ cat input.txt | nix run .#part2
 # Should output: 159
 ```
 
-### Run Tests
-```bash
-nix run .#test
-# Should run cargo test and show 4 passing tests
-```
-
-### Run Linter
-```bash
-nix run .#lint
-# Should run clippy with -D warnings
-```
-
-### Run Formatter
+### Format Code
 ```bash
 nix run .#format
 # Should run cargo fmt
@@ -54,49 +48,116 @@ nix run .#format
 ### Run All Checks (CI)
 ```bash
 nix flake check
-# Should run both test and lint checks
+# Should run:
+# - checks.build (package builds successfully)
+# - checks.test (4 unit tests pass)
+# - checks.lint (clippy passes with -D warnings)
 ```
 
 ## Justfile Wrapper Commands
 
+The justfile provides convenient shortcuts:
+
 ```bash
 just build      # -> nix build
 just run        # -> nix run
-just test       # -> nix run .#test
-just lint       # -> nix run .#lint
+just run-part part1  # -> nix run .#part1
 just format     # -> nix run .#format
-just check      # -> nix flake check
-just verify     # -> test + lint interactively
+just check      # -> nix flake check (runs all checks)
+just clean      # -> rm -rf target/ result
 ```
 
-## Flake Metadata
+## Flake Structure
 
 ```bash
 nix flake show
 # Should display:
-# - packages.${system}.default
-# - apps.${system}.default
-# - apps.${system}.part1
-# - apps.${system}.part2
-# - apps.${system}.test
-# - apps.${system}.lint
-# - apps.${system}.format
-# - checks.${system}.test
-# - checks.${system}.lint
-# - devShells.${system}.default
+#
+# packages.${system}:
+#   - default (s16e01 with all 3 binaries)
+#
+# apps.${system}:
+#   - default (main verification binary)
+#   - part1 (stdin -> part1 answer)
+#   - part2 (stdin -> part2 answer)
+#   - format (run cargo fmt)
+#
+# checks.${system}:
+#   - build (package builds)
+#   - test (unit tests pass)
+#   - lint (clippy passes)
+#
+# devShells.${system}:
+#   - default (cargo, rustc, rustfmt, clippy, rust-analyzer)
 ```
-
-## Potential Issues to Watch For
-
-1. **Cargo fetch in checks**: The `checks` derivations might need `cargoLock` configuration
-2. **PATH in apps**: The test/lint/format apps might need better PATH setup
-3. **Working directory**: Apps using cargo might need explicit `cd` to source directory
-4. **Rust toolchain**: Ensure clippy is available in check builds
 
 ## Expected Behavior
 
-- `nix build` should produce a working binary in `result/bin/s16e01`
-- `nix run` should show test results with emoji and timing
-- `nix run .#test` should run all 4 unit tests
-- `nix flake check` should pass both test and lint checks
-- All just commands should work without local cargo/rust installed
+### Package Build
+- `nix build` produces `result/bin/{s16e01,part1,part2}`
+- All binaries are statically linked and ready to run
+
+### Apps
+- `nix run` runs the main verification and shows timing
+- `nix run .#part1` and `.#part2` work with stdin
+- `nix run .#format` formats all Rust code
+
+### Checks (CI Integration)
+- `nix flake check` runs all validation
+- Exit code 0 if all checks pass
+- Exit code 1 if any check fails
+- All checks run in isolation with proper Rust toolchain
+
+### Justfile
+- All `just` commands work without local Rust/Cargo installed
+- Everything goes through Nix for reproducibility
+
+## Development Workflow
+
+### Local Development (with devShell)
+```bash
+nix develop
+# Now in shell with cargo, rustc, clippy, rust-analyzer
+
+cargo build     # Fast incremental builds
+cargo test      # Fast test iteration
+cargo clippy    # Quick linting
+```
+
+### CI/Production (pure Nix)
+```bash
+nix flake check  # Runs all checks
+nix build        # Builds release binary
+```
+
+### Convenience (with just)
+```bash
+just check      # CI-style validation
+just run        # Quick verification
+```
+
+## Troubleshooting
+
+If `nix flake check` fails:
+
+1. **Check Cargo.lock is up to date**
+   ```bash
+   cargo update
+   git add Cargo.lock
+   ```
+
+2. **Verify tests pass locally**
+   ```bash
+   cargo test
+   ```
+
+3. **Verify clippy passes**
+   ```bash
+   cargo clippy -- -D warnings
+   ```
+
+4. **Clean and retry**
+   ```bash
+   just clean
+   nix flake check
+   ```

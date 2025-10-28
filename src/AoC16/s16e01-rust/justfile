@@ -13,30 +13,14 @@ run:
 run-part PART:
     nix run .#{{PART}}
 
-# Run unit tests
-test:
-    nix run .#test
-
-# Run clippy linter
-lint:
-    nix run .#lint
-
 # Format code
 format:
     nix run .#format
 
-# Clean build artifacts
-clean:
-    rm -rf target/ result
-
-# Run all nix checks (tests + lint)
+# Run all checks (build + tests + lint)
 check:
     nix flake check
 
-# Verify solution (run tests + lint interactively)
-verify:
-    @echo "Running tests..."
-    @just test
-    @echo "\nRunning linter..."
-    @just lint
-    @echo "\n✅ All checks passed!"
+# Clean build artifacts
+clean:
+    rm -rf target/ result
