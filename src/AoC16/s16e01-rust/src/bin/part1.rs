@@ -1,7 +1,5 @@
 use std::io::{self, Read};
-
-mod common;
-use common::solve_part1;
+use aoc_solution::solve_part1;
 
 fn main() {
     let mut input = String::new();

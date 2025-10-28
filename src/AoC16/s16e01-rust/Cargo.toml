@@ -5,12 +5,6 @@ edition = "2021"
 
 [[bin]]
 name = "part1"
-path = "part1.rs"
 
 [[bin]]
 name = "part2"
-path = "part2.rs"
-
-[[bin]]
-name = "main"
-path = "main.rs"

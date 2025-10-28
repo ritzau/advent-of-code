@@ -1,8 +1,6 @@
 use std::fs;
 use std::time::Instant;
-
-mod common;
-use common::{solve_part1, solve_part2};
+use aoc_solution::{solve_part1, solve_part2};
 
 fn main() {
     println!("AoC 2016 Day 1: No Time for a Taxicab");
