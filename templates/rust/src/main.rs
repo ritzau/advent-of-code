@@ -1,9 +1,12 @@
 use aoc_template::{solve_part1, solve_part2};
-use std::fs;
+use std::io::{self, Read};
 use std::time::Instant;
 
 fn main() {
-    let input = fs::read_to_string("input.txt").expect("Failed to read input.txt");
+    let mut input = String::new();
+    io::stdin()
+        .read_to_string(&mut input)
+        .expect("Failed to read from stdin");
 
     println!("Advent of Code - Day X");
     println!("======================");
