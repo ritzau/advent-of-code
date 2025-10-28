@@ -11,4 +11,8 @@ path = "part1.rs"
 name = "part2"
 path = "part2.rs"
 
+[[bin]]
+name = "main"
+path = "main.rs"
+
 [dependencies]
