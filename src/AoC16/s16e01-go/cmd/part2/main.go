@@ -5,11 +5,11 @@ import (
 	"io"
 	"os"
 
-	"aoc-solution/common"
+	"s16e01/common"
 )
 
 func main() {
 	data, _ := io.ReadAll(os.Stdin)
-	result := common.SolvePart1(string(data))
+	result := common.SolvePart2(string(data))
 	fmt.Println(result)
 }

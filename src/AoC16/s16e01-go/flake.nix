@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code solution in Go";
+  description = "Advent of Code 2016 Day 1 solution in Go";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,7 +13,7 @@
 
         # Build the Go package
         package = pkgs.buildGoModule {
-          pname = "aoc-solution";
+          pname = "s16e01";
           version = "0.1.0";
           src = ./.;
 
@@ -33,7 +33,7 @@
 
           # Run tests with proper Go setup
           test = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-tests";
+            name = "s16e01-tests";
             src = ./.;
             buildInputs = [ pkgs.go ];
             buildPhase = ''
@@ -51,7 +51,7 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-solution";
+            program = "${package}/bin/s16e01";
           };
 
           # Run individual parts
