@@ -61,7 +61,7 @@ The justfile provides convenient shortcuts:
 ```bash
 just build      # -> nix build
 just run        # -> nix run
-just run-part part1  # -> nix run .#part1
+just run-part 1 # -> nix run .#part1
 just format     # -> nix run .#format
 just check      # -> nix flake check (runs all checks)
 just clean      # -> rm -rf target/ result
