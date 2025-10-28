@@ -14,5 +14,3 @@ path = "part2.rs"
 [[bin]]
 name = "main"
 path = "main.rs"
-
-[dependencies]
