@@ -25,13 +25,17 @@
         };
 
         checks = {
-          # Run tests as a check
-          test = pkgs.stdenv.mkDerivation {
-            name = "s16e01-tests";
+          # Build succeeds = package is valid
+          build = package;
+
+          # Run tests with proper Rust setup
+          test = pkgs.rustPlatform.buildRustPackage {
+            pname = "s16e01-tests";
+            version = "0.1.0";
             src = ./.;
-            buildInputs = [ pkgs.cargo pkgs.rustc ];
+            cargoLock.lockFile = ./Cargo.lock;
             buildPhase = ''
-              cargo test
+              cargo test --release
             '';
             installPhase = ''
               mkdir -p $out
@@ -39,13 +43,14 @@
             '';
           };
 
-          # Run clippy as a check
-          lint = pkgs.stdenv.mkDerivation {
-            name = "s16e01-lint";
+          # Run clippy with proper Rust setup
+          lint = pkgs.rustPlatform.buildRustPackage {
+            pname = "s16e01-lint";
+            version = "0.1.0";
             src = ./.;
-            buildInputs = [ pkgs.cargo pkgs.rustc pkgs.clippy ];
+            cargoLock.lockFile = ./Cargo.lock;
             buildPhase = ''
-              cargo clippy -- -D warnings
+              cargo clippy --release -- -D warnings
             '';
             installPhase = ''
               mkdir -p $out
