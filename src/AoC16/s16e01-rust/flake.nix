@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code solution in Rust";
+  description = "Advent of Code 2016 Day 1 solution in Rust";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,7 +13,7 @@
 
         # Build the Rust package
         package = pkgs.rustPlatform.buildRustPackage {
-          pname = "aoc-template";
+          pname = "s16e01";
           version = "0.1.0";
           src = ./.;
           cargoLock.lockFile = ./Cargo.lock;
@@ -30,7 +30,7 @@
 
           # Run tests with proper Rust setup
           test = pkgs.rustPlatform.buildRustPackage {
-            pname = "aoc-template-tests";
+            pname = "s16e01-tests";
             version = "0.1.0";
             src = ./.;
             cargoLock.lockFile = ./Cargo.lock;
@@ -45,7 +45,7 @@
 
           # Run clippy with proper Rust setup
           lint = pkgs.rustPlatform.buildRustPackage {
-            pname = "aoc-template-lint";
+            pname = "s16e01-lint";
             version = "0.1.0";
             src = ./.;
             cargoLock.lockFile = ./Cargo.lock;
@@ -64,7 +64,7 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-template";
+            program = "${package}/bin/s16e01";
           };
 
           # Run individual parts
