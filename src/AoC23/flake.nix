@@ -10,16 +10,17 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        nodejs = pkgs.nodejs_20;
       in
       {
         packages = {
-          default = pkgs.buildNpmPackage {
+          default = pkgs.mkYarnPackage {
             pname = "aoc23";
             version = "23.19.0";
             src = ./.;
-
-            npmDepsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-            # Note: Run `nix build` to get the correct hash, then update this value
+            
+            packageJSON = ./package.json;
+            yarnLock = ./yarn.lock;
 
             buildPhase = ''
               runHook preBuild
@@ -30,14 +31,19 @@
             installPhase = ''
               runHook preInstall
 
-              mkdir -p $out/bin $out/lib
-              cp -r . $out/lib/
+              mkdir -p $out/bin
+              
+              # mkYarnPackage creates deps/aoc23 structure
+              # Copy the entire structure to $out/lib
+              mkdir -p $out/lib
+              cp -r deps/AoC23/* $out/lib/ 2>/dev/null || true
+              cp -r node_modules $out/lib/
 
               # Create wrapper script to run all solutions
               cat > $out/bin/aoc23 <<EOF
               #!/bin/sh
               cd $out/lib
-              exec ${pkgs.nodejs}/bin/node node_modules/.bin/ts-node index.ts "\$@"
+              exec ${nodejs}/bin/node node_modules/.bin/ts-node index.ts "\$@"
               EOF
 
               chmod +x $out/bin/aoc23
@@ -49,10 +55,7 @@
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
-            nodejs
-            typescript
-            nodePackages.ts-node
-            nodePackages.nodemon
+            nodejs_20
             yarn
           ];
 
