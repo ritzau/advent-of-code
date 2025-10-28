@@ -19,6 +19,7 @@
             src = ./.;
 
             npmDepsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+            # Note: Run `nix build` to get the correct hash, then update this value
 
             buildPhase = ''
               runHook preBuild
@@ -36,7 +37,7 @@
               cat > $out/bin/aoc23 <<EOF
               #!/bin/sh
               cd $out/lib
-              exec ${pkgs.nodejs}/bin/node --loader ts-node/esm index.ts "\$@"
+              exec ${pkgs.nodejs}/bin/node node_modules/.bin/ts-node index.ts "\$@"
               EOF
 
               chmod +x $out/bin/aoc23
