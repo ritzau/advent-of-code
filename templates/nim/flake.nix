@@ -13,32 +13,17 @@
       in
       {
         packages = {
-          default = pkgs.stdenv.mkDerivation {
+          default = pkgs.buildNimPackage (finalAttrs: {
             pname = "aoc-solution";
             version = "0.1.0";
             src = ./.;
 
-            nativeBuildInputs = [ pkgs.nim ];
+            lockFile = ./lock.json;
 
-            buildPhase = ''
-              runHook preBuild
+            nimbleFile = ./aoc_solution.nimble;
 
-              nim c -d:release --hints:off --verbosity:0 --out:part1 part1.nim
-              nim c -d:release --hints:off --verbosity:0 --out:part2 part2.nim
-
-              runHook postBuild
-            '';
-
-            installPhase = ''
-              runHook preInstall
-
-              mkdir -p $out/bin
-              cp part1 $out/bin/
-              cp part2 $out/bin/
-
-              runHook postInstall
-            '';
-          };
+            nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
+          });
         };
 
         devShells.default = pkgs.mkShell {
