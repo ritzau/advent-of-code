@@ -5,6 +5,7 @@
 /inputs/
 /.aoc-session
 .aoc-session
+input.txt
 
 # Nix
 .direnv/
