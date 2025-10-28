@@ -1,0 +1,28 @@
+# Advent of Code Solution
+
+# Build both parts
+build:
+    #!/usr/bin/env bash
+    mkdir -p build
+    go build -o build/part1 ./cmd/part1
+    go build -o build/part2 ./cmd/part2
+
+# Run a specific part with input from stdin
+run PART:
+    ./build/{{PART}}
+
+# Test both parts with sample input
+test:
+    @echo "Testing Part 1:"
+    @just build > /dev/null 2>&1
+    @cat sample.txt | just run part1
+    @echo "\nTesting Part 2:"
+    @cat sample.txt | just run part2
+
+# Format code
+format:
+    go fmt ./...
+
+# Clean build artifacts
+clean:
+    rm -rf build/
