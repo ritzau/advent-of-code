@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code solution in Nim";
+  description = "Advent of Code 2016 Day 1 solution in Nim";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,13 +13,13 @@
 
         # Build the Nim package
         package = pkgs.buildNimPackage (finalAttrs: {
-          pname = "aoc-solution";
+          pname = "s16e01";
           version = "0.1.0";
           src = ./.;
 
           lockFile = ./lock.json;
 
-          nimbleFile = ./aoc_solution.nimble;
+          nimbleFile = ./s16e01.nimble;
 
           nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
         });
@@ -35,7 +35,7 @@
 
           # Run tests with proper Nim setup
           test = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-tests";
+            name = "s16e01-tests";
             src = ./.;
             buildInputs = [ pkgs.nim ];
             buildPhase = ''
@@ -53,7 +53,7 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-solution";
+            program = "${package}/bin/s16e01";
           };
 
           # Run individual parts
@@ -88,7 +88,7 @@
             echo ""
             echo "Local dev:"
             echo "  nim c -r common.nim  - Run tests"
-            echo "  nim c part1.nim      - Build part1"
+            echo "  nim c s16e01.nim     - Build main"
             echo "  nimpretty *.nim      - Format code"
             echo ""
             echo "Nix commands:"

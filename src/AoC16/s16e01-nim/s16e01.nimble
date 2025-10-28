@@ -2,10 +2,10 @@
 
 version       = "0.1.0"
 author        = "Advent of Code"
-description   = "Advent of Code solution in Nim"
+description   = "Advent of Code 2016 Day 1 solution in Nim"
 license       = "MIT"
 srcDir        = "."
-bin           = @["aoc-solution", "part1", "part2"]
+bin           = @["s16e01", "part1", "part2"]
 
 # Dependencies
 
