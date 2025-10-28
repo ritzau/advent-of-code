@@ -54,3 +54,59 @@ pub fn parse_input(input: &str) -> Vec<Instruction> {
         })
         .collect()
 }
+
+pub fn solve_part1(input: &str) -> i32 {
+    let instructions = parse_input(input);
+
+    let mut x = 0;
+    let mut y = 0;
+    let mut direction = Direction::North;
+
+    for instruction in instructions {
+        direction = match instruction.turn {
+            'R' => direction.turn_right(),
+            'L' => direction.turn_left(),
+            _ => panic!("Invalid turn: {}", instruction.turn),
+        };
+
+        let (dx, dy) = direction.delta();
+        x += dx * instruction.blocks;
+        y += dy * instruction.blocks;
+    }
+
+    x.abs() + y.abs()
+}
+
+pub fn solve_part2(input: &str) -> i32 {
+    use std::collections::HashSet;
+
+    let instructions = parse_input(input);
+
+    let mut x = 0;
+    let mut y = 0;
+    let mut direction = Direction::North;
+    let mut visited = HashSet::new();
+
+    visited.insert((0, 0));
+
+    for instruction in instructions {
+        direction = match instruction.turn {
+            'R' => direction.turn_right(),
+            'L' => direction.turn_left(),
+            _ => panic!("Invalid turn: {}", instruction.turn),
+        };
+
+        let (dx, dy) = direction.delta();
+
+        for _ in 0..instruction.blocks {
+            x += dx;
+            y += dy;
+
+            if !visited.insert((x, y)) {
+                return x.abs() + y.abs();
+            }
+        }
+    }
+
+    0
+}
