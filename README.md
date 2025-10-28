@@ -44,6 +44,7 @@ Multi-year, multi-language solutions for [Advent of Code](https://adventofcode.c
 ### Available Templates
 
 - `python` - Python 3
+- `typescript` - TypeScript with Node.js
 - `rust` - Rust with Cargo
 - `go` - Go
 - `kotlin` - Kotlin scripting
@@ -93,8 +94,21 @@ advent-of-code/
 
 ### AoC 2023 (TypeScript)
 
+AoC 2023 includes a Nix flake for reproducible builds:
+
 ```bash
 cd src/AoC23
+
+# Using Nix (recommended)
+nix develop        # Enter development shell
+yarn install       # Install dependencies
+yarn start         # Run all solutions
+
+# Or use just commands
+just install       # Install dependencies
+just run           # Run all solutions
+
+# Without Nix
 yarn install
 yarn start
 ```
