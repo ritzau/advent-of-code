@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"aoc-solution/common"
+	"s16e01/common"
 )
 
 func main() {

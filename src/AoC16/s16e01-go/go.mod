@@ -1,3 +1,3 @@
-module aoc-solution
+module s16e01
 
 go 1.21

@@ -8,15 +8,8 @@ import (
 	"aoc-solution/common"
 )
 
-func solve(input string) int {
-	lines := common.ParseInput(input)
-	_ = lines
-	// TODO: Implement solution
-	return 0
-}
-
 func main() {
 	data, _ := io.ReadAll(os.Stdin)
-	result := solve(string(data))
+	result := common.SolvePart1(string(data))
 	fmt.Println(result)
 }
