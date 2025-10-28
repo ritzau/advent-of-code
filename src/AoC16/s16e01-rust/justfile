@@ -1,25 +1,42 @@
 # Advent of Code Solution
+# All commands use Nix for reproducible builds
 
-# Build both parts
+# Build the solution
 build:
-    cargo build --release --bins
+    nix build
+
+# Run the main verification binary
+run:
+    nix run
 
 # Run a specific part with input from stdin
-run PART:
-    ./target/release/{{PART}}
+run-part PART:
+    nix run .#{{PART}}
 
-# Test both parts with sample input
+# Run unit tests
 test:
-    @echo "Testing Part 1:"
-    @just build > /dev/null 2>&1
-    @cat sample.txt | just run part1
-    @echo "\nTesting Part 2:"
-    @cat sample.txt | just run part2
+    nix run .#test
+
+# Run clippy linter
+lint:
+    nix run .#lint
 
 # Format code
 format:
-    cargo fmt
+    nix run .#format
 
 # Clean build artifacts
 clean:
-    cargo clean
+    rm -rf target/ result
+
+# Run all nix checks (tests + lint)
+check:
+    nix flake check
+
+# Verify solution (run tests + lint interactively)
+verify:
+    @echo "Running tests..."
+    @just test
+    @echo "\nRunning linter..."
+    @just lint
+    @echo "\n✅ All checks passed!"

@@ -1,6 +1,6 @@
+use s16e01::{solve_part1, solve_part2};
 use std::fs;
 use std::time::Instant;
-use s16e01::{solve_part1, solve_part2};
 
 fn main() {
     let input = fs::read_to_string("input.txt").expect("Failed to read input.txt");

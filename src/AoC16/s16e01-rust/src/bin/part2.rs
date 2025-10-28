@@ -1,5 +1,5 @@
-use std::io::{self, Read};
 use s16e01::solve_part2;
+use std::io::{self, Read};
 
 fn main() {
     let mut input = String::new();
