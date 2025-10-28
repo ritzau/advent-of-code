@@ -49,6 +49,7 @@
             version = "0.1.0";
             src = ./.;
             cargoLock.lockFile = ./Cargo.lock;
+            nativeBuildInputs = [ pkgs.clippy ];
             buildPhase = ''
               cargo clippy --release -- -D warnings
             '';
