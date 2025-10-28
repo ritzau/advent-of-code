@@ -1,12 +1,10 @@
 import std/strutils
 import common
 
-proc solve(input: string): int =
-  let lines = parseInput(input)
-  # TODO: Implement solution
-  return 0
+proc main() =
+  let input = stdin.readAll().strip()
+  let result = solvePart1(input)
+  echo result
 
 when isMainModule:
-  let input = stdin.readAll().strip()
-  let result = solve(input)
-  echo result
+  main()

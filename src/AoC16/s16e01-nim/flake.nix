@@ -39,6 +39,7 @@
             src = ./.;
             buildInputs = [ pkgs.nim ];
             buildPhase = ''
+              export HOME=$TMPDIR
               nim c -r common.nim
             '';
             installPhase = ''
