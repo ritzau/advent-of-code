@@ -1,0 +1,20 @@
+# Advent of Code Solution
+
+# Build TypeScript
+build:
+    tsc
+
+# Run a specific part with input from stdin
+run PART:
+    ts-node {{PART}}.ts
+
+# Test both parts with sample input
+test:
+    @echo "Testing Part 1:"
+    @cat sample.txt | ts-node part1.ts
+    @echo "\nTesting Part 2:"
+    @cat sample.txt | ts-node part2.ts
+
+# Clean build artifacts
+clean:
+    rm -rf dist/ node_modules/

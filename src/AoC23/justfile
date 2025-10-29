@@ -1,0 +1,25 @@
+# Advent of Code 2023 - TypeScript Solutions
+
+# Install dependencies
+install:
+    yarn install
+
+# Run all solutions
+run:
+    yarn start
+
+# Run a specific episode (e.g., just run-episode 1)
+run-episode EPISODE:
+    ts-node index.ts {{EPISODE}}
+
+# Watch mode - auto-reload on changes
+watch:
+    yarn watch
+
+# Clean build artifacts and dependencies
+clean:
+    rm -rf node_modules dist
+
+# Format code (if formatter is added later)
+format:
+    @echo "No formatter configured"

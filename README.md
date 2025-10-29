@@ -44,6 +44,7 @@ Multi-year, multi-language solutions for [Advent of Code](https://adventofcode.c
 ### Available Templates
 
 - `python` - Python 3
+- `typescript` - TypeScript with Node.js
 - `rust` - Rust with Cargo
 - `go` - Go
 - `kotlin` - Kotlin scripting
@@ -93,11 +94,26 @@ advent-of-code/
 
 ### AoC 2023 (TypeScript)
 
+AoC 2023 includes a Nix flake for reproducible builds using `mkYarnPackage` to respect the upstream yarn.lock file:
+
 ```bash
 cd src/AoC23
+
+# Using Nix (recommended)
+nix develop        # Enter development shell with nodejs_20 and yarn
+yarn install       # Install dependencies from yarn.lock
+yarn start         # Run all solutions
+
+# Or use just commands
+just install       # Install dependencies
+just run           # Run all solutions
+
+# Without Nix
 yarn install
 yarn start
 ```
+
+The flake uses Node.js 20 (matching upstream) and manages dependencies via yarn.lock for reproducibility.
 
 ### AoC 2022 (Haskell)
 
