@@ -20,3 +20,9 @@ pub fn main() !void {
     const stdout = std.io.getStdOut().writer();
     try stdout.print("{d}\n", .{result});
 }
+
+test "part1_sample_1" {
+    // TODO: Add test case from problem description
+    const result = try solve(std.testing.allocator, "sample input");
+    try std.testing.expectEqual(@as(i64, 0), result);
+}

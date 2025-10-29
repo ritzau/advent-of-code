@@ -5,7 +5,7 @@
 build:
     nix build
 
-# Run the default app (part1)
+# Run the main verification binary
 run:
     nix run
 

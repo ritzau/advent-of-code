@@ -1,11 +1,5 @@
 const std = @import("std");
-
-fn solve(allocator: std.mem.Allocator, input: []const u8) !i64 {
-    _ = allocator;
-    _ = input;
-    // TODO: Implement solution
-    return 0;
-}
+const common = @import("common.zig");
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -16,13 +10,13 @@ pub fn main() !void {
     const input = try stdin.readAllAlloc(allocator, 1024 * 1024);
     defer allocator.free(input);
 
-    const result = try solve(allocator, std.mem.trim(u8, input, "\n"));
+    const result = try common.solvePart2(allocator, std.mem.trim(u8, input, "\n"));
     const stdout = std.io.getStdOut().writer();
     try stdout.print("{d}\n", .{result});
 }
 
 test "part2_sample_1" {
-    // TODO: Add test case from problem description
-    const result = try solve(std.testing.allocator, "sample input");
-    try std.testing.expectEqual(@as(i64, 0), result);
+    // R8, R4, R4, R8 - first location visited twice is 4 blocks away, due East
+    const result = try common.solvePart2(std.testing.allocator, "R8, R4, R4, R8");
+    try std.testing.expectEqual(@as(i32, 4), result);
 }
