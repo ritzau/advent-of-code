@@ -94,14 +94,14 @@ advent-of-code/
 
 ### AoC 2023 (TypeScript)
 
-AoC 2023 includes a Nix flake for reproducible builds:
+AoC 2023 includes a Nix flake for reproducible builds using `mkYarnPackage` to respect the upstream yarn.lock file:
 
 ```bash
 cd src/AoC23
 
 # Using Nix (recommended)
-nix develop        # Enter development shell
-yarn install       # Install dependencies
+nix develop        # Enter development shell with nodejs_20 and yarn
+yarn install       # Install dependencies from yarn.lock
 yarn start         # Run all solutions
 
 # Or use just commands
@@ -112,6 +112,8 @@ just run           # Run all solutions
 yarn install
 yarn start
 ```
+
+The flake uses Node.js 20 (matching upstream) and manages dependencies via yarn.lock for reproducibility.
 
 ### AoC 2022 (Haskell)
 
