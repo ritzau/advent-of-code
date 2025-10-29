@@ -11,6 +11,8 @@ function solve(data: string): number {
 }
 
 // Read from stdin
-const data = fs.readFileSync(0, 'utf-8').trim();
+// 0 is the file descriptor for stdin
+const STDIN_FD = 0;
+const data = fs.readFileSync(STDIN_FD, 'utf-8').trim();
 const result = solve(data);
 console.log(result);
