@@ -119,3 +119,28 @@ pub fn solvePart2(allocator: std.mem.Allocator, input: []const u8) !i32 {
 
     return 0;
 }
+
+// Tests
+test "part1_sample_1" {
+    // Following R2, L3 leaves you 2 blocks East and 3 blocks North, or 5 blocks away
+    const result = try solvePart1(std.testing.allocator, "R2, L3");
+    try std.testing.expectEqual(@as(i32, 5), result);
+}
+
+test "part1_sample_2" {
+    // R2, R2, R2 leaves you 2 blocks due South of your starting position, which is 2 blocks away
+    const result = try solvePart1(std.testing.allocator, "R2, R2, R2");
+    try std.testing.expectEqual(@as(i32, 2), result);
+}
+
+test "part1_sample_3" {
+    // R5, L5, R5, R3 leaves you 12 blocks away
+    const result = try solvePart1(std.testing.allocator, "R5, L5, R5, R3");
+    try std.testing.expectEqual(@as(i32, 12), result);
+}
+
+test "part2_sample_1" {
+    // R8, R4, R4, R8 - first location visited twice is 4 blocks away, due East
+    const result = try solvePart2(std.testing.allocator, "R8, R4, R4, R8");
+    try std.testing.expectEqual(@as(i32, 4), result);
+}

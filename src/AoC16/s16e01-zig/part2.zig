@@ -14,9 +14,3 @@ pub fn main() !void {
     const stdout = std.io.getStdOut().writer();
     try stdout.print("{d}\n", .{result});
 }
-
-test "part2_sample_1" {
-    // R8, R4, R4, R8 - first location visited twice is 4 blocks away, due East
-    const result = try common.solvePart2(std.testing.allocator, "R8, R4, R4, R8");
-    try std.testing.expectEqual(@as(i32, 4), result);
-}

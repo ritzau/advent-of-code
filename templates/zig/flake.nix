@@ -54,12 +54,25 @@
             src = ./.;
             nativeBuildInputs = [ pkgs.zig ];
             buildPhase = ''
-              zig test part1.zig
-              zig test part2.zig
+              zig test common.zig
             '';
             installPhase = ''
               mkdir -p $out
               echo "Tests passed" > $out/result
+            '';
+          };
+
+          # Verify formatting is correct
+          format-check = pkgs.stdenv.mkDerivation {
+            name = "aoc-solution-format-check";
+            src = ./.;
+            nativeBuildInputs = [ pkgs.zig ];
+            buildPhase = ''
+              zig fmt --check .
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
             '';
           };
         };
@@ -81,15 +94,6 @@
             type = "app";
             program = "${package}/bin/part2";
           };
-
-          # Format code (app because it modifies files)
-          format = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              export PATH=${pkgs.zig}/bin:$PATH
-              exec ${pkgs.zig}/bin/zig fmt .
-            '');
-          };
         };
 
         devShells.default = pkgs.mkShell {
@@ -103,9 +107,9 @@
             echo ""
             echo "Local dev:"
             echo "  zig build-exe part1.zig - Build part1"
-            echo "  zig test part1.zig     - Run part1 tests"
-            echo "  zig test part2.zig     - Run part2 tests"
-            echo "  zig fmt .              - Format code"
+            echo "  zig test common.zig     - Run tests"
+            echo "  zig fmt .               - Format code"
+            echo "  zig fmt --check .       - Check formatting"
             echo ""
             echo "Nix commands:"
             echo "  nix build       - Build package"
@@ -114,8 +118,10 @@
             echo "  nix flake check - Run all checks"
             echo ""
             echo "Just shortcuts:"
-            echo "  just check     - Run all checks"
-            echo "  just run-part 1 - Run part1"
+            echo "  just check        - Run all checks"
+            echo "  just test         - Run tests"
+            echo "  just format       - Format code"
+            echo "  just format-check - Check formatting"
           '';
         };
       }

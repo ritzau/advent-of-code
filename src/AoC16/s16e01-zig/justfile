@@ -16,17 +16,21 @@ run:
 run-part PART:
     nix run .#part{{PART}}
 
-# Format code
-format:
-    nix run .#format
-
-# Run all checks (build + tests)
+# Run all checks (build + tests + format-check)
 check:
     nix flake check
 
-# Run a specific check (build or test)
-check-one CHECK:
-    nix build .#checks.{{system}}.{{CHECK}}
+# Run tests only
+test:
+    nix build .#checks.{{system}}.test
+
+# Check formatting without modifying files
+format-check:
+    nix build .#checks.{{system}}.format-check
+
+# Format code (requires nix develop or zig installed)
+format:
+    zig fmt .
 
 # Clean build artifacts
 clean:
