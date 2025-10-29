@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code solution in Kotlin";
+  description = "Advent of Code 2016 Day 1 solution in Kotlin";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,7 +13,7 @@
 
         # Build the Kotlin package using Gradle
         package = pkgs.stdenv.mkDerivation {
-          pname = "aoc-solution";
+          pname = "s16e01-kotlin";
           version = "0.1.0";
           src = ./.;
 
@@ -31,12 +31,12 @@
             mkdir -p $out/bin
 
             # Install main verification binary
-            cp build/libs/aoc-solution-*.jar $out/bin/aoc-solution.jar
-            cat > $out/bin/aoc-solution << 'EOF'
+            cp build/libs/s16e01-*.jar $out/bin/s16e01.jar
+            cat > $out/bin/s16e01 << 'EOF'
             #!/bin/sh
-            exec ${pkgs.jdk17}/bin/java -jar $out/bin/aoc-solution.jar "$@"
+            exec ${pkgs.jdk17}/bin/java -jar $out/bin/s16e01.jar "$@"
             EOF
-            chmod +x $out/bin/aoc-solution
+            chmod +x $out/bin/s16e01
 
             # Install part1 binary
             cp build/libs/part1-*.jar $out/bin/part1.jar
@@ -67,7 +67,7 @@
 
           # Run tests with Gradle
           test = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-tests";
+            name = "s16e01-kotlin-tests";
             src = ./.;
             nativeBuildInputs = with pkgs; [ gradle jdk17 ];
             buildPhase = ''
@@ -85,7 +85,7 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-solution";
+            program = "${package}/bin/s16e01";
           };
 
           # Run individual parts
