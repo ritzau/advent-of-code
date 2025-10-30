@@ -18,10 +18,8 @@
           version = "0.1.0";
           src = ./.;
 
-          # Hash of npm dependencies
-          # This will be calculated by Nix on first build
-          # Update with the hash from the error message if it fails
-          npmDepsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          # Hash of npm dependencies (locked for reproducible builds)
+          npmDepsHash = "sha256-4pB1PLqxg35/7tnh25QtXIZUloWlew5Jq/LtUzCYGZ8=";
 
           buildPhase = ''
             runHook preBuild
