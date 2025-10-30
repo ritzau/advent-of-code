@@ -12,14 +12,16 @@
         pkgs = nixpkgs.legacyPackages.${system};
         nodejs = pkgs.nodejs_20;
 
+        # Hash of npm dependencies (locked for reproducible builds)
+        npmDepsHash = "sha256-4pB1PLqxg35/7tnh25QtXIZUloWlew5Jq/LtUzCYGZ8=";
+
         # Build the TypeScript package
         package = pkgs.buildNpmPackage {
           pname = "aoc-solution";
           version = "0.1.0";
           src = ./.;
 
-          # Hash of npm dependencies (locked for reproducible builds)
-          npmDepsHash = "sha256-4pB1PLqxg35/7tnh25QtXIZUloWlew5Jq/LtUzCYGZ8=";
+          inherit npmDepsHash;
 
           buildPhase = ''
             runHook preBuild
@@ -68,15 +70,18 @@
           build = package;
 
           # Verify TypeScript compiles without errors
-          typecheck = pkgs.stdenv.mkDerivation {
+          typecheck = pkgs.buildNpmPackage {
             name = "aoc-solution-typecheck";
             src = ./.;
-            nativeBuildInputs = [ nodejs pkgs.typescript ];
+
+            inherit npmDepsHash;
+
             buildPhase = ''
-              export HOME=$TMPDIR
-              npm install --ignore-scripts
+              runHook preBuild
               npx tsc --noEmit
+              runHook postBuild
             '';
+
             installPhase = ''
               mkdir -p $out
               echo "Type check passed" > $out/result
@@ -87,7 +92,7 @@
           format-check = pkgs.stdenv.mkDerivation {
             name = "aoc-solution-format-check";
             src = ./.;
-            nativeBuildInputs = [ nodejs pkgs.nodePackages.prettier ];
+            nativeBuildInputs = [ pkgs.nodePackages.prettier ];
             buildPhase = ''
               ${pkgs.nodePackages.prettier}/bin/prettier --check "*.ts"
             '';
