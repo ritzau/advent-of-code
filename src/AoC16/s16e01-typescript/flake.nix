@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code solution in TypeScript";
+  description = "Advent of Code 2016 Day 1 solution in TypeScript";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -14,7 +14,7 @@
 
         # Build the TypeScript package
         package = pkgs.stdenv.mkDerivation {
-          pname = "aoc-solution";
+          pname = "s16e01";
           version = "0.1.0";
           src = ./.;
 
@@ -36,7 +36,7 @@
             cp -r dist/* $out/lib/
 
             # Create wrapper scripts
-            cat > $out/bin/aoc-solution <<EOF
+            cat > $out/bin/s16e01 <<EOF
             #!/bin/sh
             exec ${nodejs}/bin/node $out/lib/main.js "\$@"
             EOF
@@ -51,7 +51,7 @@
             exec ${nodejs}/bin/node $out/lib/part2.js "\$@"
             EOF
 
-            chmod +x $out/bin/aoc-solution $out/bin/part1 $out/bin/part2
+            chmod +x $out/bin/s16e01 $out/bin/part1 $out/bin/part2
 
             runHook postInstall
           '';
@@ -71,7 +71,7 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-solution";
+            program = "${package}/bin/s16e01";
           };
 
           # Run individual parts
