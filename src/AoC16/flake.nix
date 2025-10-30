@@ -6,72 +6,69 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     # Day 1 implementations in different languages
-    s16e01-go.url = "path:./s16e01-go";
-    s16e01-kotlin.url = "path:./s16e01-kotlin";
-    s16e01-nim.url = "path:./s16e01-nim";
-    s16e01-python.url = "path:./s16e01-python";
-    s16e01-rust.url = "path:./s16e01-rust";
-    s16e01-typescript.url = "path:./s16e01-typescript";
-    s16e01-zig.url = "path:./s16e01-zig";
+    s16e01-go = {
+      url = "path:./s16e01-go";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-kotlin = {
+      url = "path:./s16e01-kotlin";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-nim = {
+      url = "path:./s16e01-nim";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-python = {
+      url = "path:./s16e01-python";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-rust = {
+      url = "path:./s16e01-rust";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-typescript = {
+      url = "path:./s16e01-typescript";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-zig = {
+      url = "path:./s16e01-zig";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-
-        # List of all day flakes (excluding nixpkgs and flake-utils)
-        dayFlakes = builtins.removeAttrs inputs [ "self" "nixpkgs" "flake-utils" ];
-
-        # Aggregate all checks from all day flakes
-        allChecks = pkgs.lib.foldl'
-          (acc: flakeName:
-            let
-              flake = inputs.${flakeName};
-              flakeChecks = flake.checks.${system} or {};
-              # Prefix each check with the flake name to avoid collisions
-              prefixedChecks = builtins.mapAttrs
-                (checkName: checkValue: checkValue)
-                flakeChecks;
-              # Rename to include flake name
-              renamedChecks = builtins.listToAttrs (
-                map (checkName: {
-                  name = "${flakeName}-${checkName}";
-                  value = flakeChecks.${checkName};
-                }) (builtins.attrNames flakeChecks)
-              );
-            in
-              acc // renamedChecks
-          )
-          {}
-          (builtins.attrNames dayFlakes);
-
-        # Aggregate all packages from all day flakes
-        allPackages = pkgs.lib.foldl'
-          (acc: flakeName:
-            let
-              flake = inputs.${flakeName};
-              flakePackages = flake.packages.${system} or {};
-              # Rename to include flake name
-              renamedPackages = builtins.listToAttrs (
-                map (pkgName: {
-                  name = if pkgName == "default" then flakeName else "${flakeName}-${pkgName}";
-                  value = flakePackages.${pkgName};
-                }) (builtins.attrNames flakePackages)
-              );
-            in
-              acc // renamedPackages
-          )
-          {}
-          (builtins.attrNames dayFlakes);
-
       in
       {
         # Aggregate checks from all sub-flakes
-        checks = allChecks;
+        checks =
+          inputs.s16e01-go.checks.${system} //
+          inputs.s16e01-kotlin.checks.${system} //
+          inputs.s16e01-nim.checks.${system} //
+          inputs.s16e01-python.checks.${system} //
+          inputs.s16e01-rust.checks.${system} //
+          inputs.s16e01-typescript.checks.${system} //
+          inputs.s16e01-zig.checks.${system};
 
         # Aggregate packages from all sub-flakes
-        packages = allPackages;
+        packages = {
+          s16e01-go = inputs.s16e01-go.packages.${system}.default;
+          s16e01-kotlin = inputs.s16e01-kotlin.packages.${system}.default;
+          s16e01-nim = inputs.s16e01-nim.packages.${system}.default;
+          s16e01-python = inputs.s16e01-python.packages.${system}.default;
+          s16e01-rust = inputs.s16e01-rust.packages.${system}.default;
+          s16e01-typescript = inputs.s16e01-typescript.packages.${system}.default;
+          s16e01-zig = inputs.s16e01-zig.packages.${system}.default;
+        };
 
         # Development shell for the whole year
         devShells.default = pkgs.mkShell {
