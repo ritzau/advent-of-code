@@ -2,7 +2,7 @@
   description = "Advent of Code 2016 Day 1 solution in Zig";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -11,13 +11,17 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
+        # Use Zig 0.13.0 which is stable and works across platforms
+        # Zig 0.15.x has known issues on Intel Macs
+        zig = pkgs.zig_0_13;
+
         # Build the Zig package
         package = pkgs.stdenv.mkDerivation {
           pname = "s16e01";
           version = "0.1.0";
           src = ./.;
 
-          nativeBuildInputs = [ pkgs.zig ];
+          nativeBuildInputs = [ zig ];
 
           buildPhase = ''
             runHook preBuild
@@ -54,7 +58,7 @@
           test = pkgs.stdenv.mkDerivation {
             name = "s16e01-tests";
             src = ./.;
-            nativeBuildInputs = [ pkgs.zig ];
+            nativeBuildInputs = [ zig ];
             buildPhase = ''
               zig test common.zig
             '';
@@ -68,7 +72,7 @@
           format-check = pkgs.stdenv.mkDerivation {
             name = "s16e01-format-check";
             src = ./.;
-            nativeBuildInputs = [ pkgs.zig ];
+            nativeBuildInputs = [ zig ];
             buildPhase = ''
               zig fmt --check .
             '';
@@ -99,9 +103,9 @@
         };
 
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
+          buildInputs = [
             zig
-            zls
+            pkgs.zls
           ];
 
           shellHook = ''
