@@ -41,6 +41,8 @@
             echo "  just run               - Run verification"
           '';
         };
-        packages.default = pkgs.callPackage ./build.nix { };
+        packages.default = pkgs.callPackage ./build.nix {
+          jdk = pkgs.temurin-bin-21;
+        };
       });
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, jdk, gradle_8, ktlint, callPackage }:
+{ lib, stdenv, jdk, gradle_8, ktlint, callPackage, makeWrapper }:
 let
   buildMavenRepo = callPackage ./maven-repo.nix { };
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
 
   src = ./.;
 
-  nativeBuildInputs = [ gradle_8 ktlint ];
+  nativeBuildInputs = [ gradle_8 ktlint makeWrapper ];
 
   JDK_HOME = "${jdk.home}";
 
@@ -52,8 +52,10 @@ in stdenv.mkDerivation {
     # Extract the tar distribution created by distTar
     tar -xf build/distributions/*.tar -C $out --strip-components=1
 
-    # Make sure the start script is executable
-    chmod +x $out/bin/s16e01-kotlin
+    # Wrap the start script to use the correct JDK
+    wrapProgram $out/bin/s16e01-kotlin \
+      --set JAVA_HOME "${jdk.home}" \
+      --prefix PATH : "${jdk}/bin"
 
     runHook postInstall
   '';
