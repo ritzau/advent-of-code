@@ -31,19 +31,21 @@
             installPhase = ''
               runHook preInstall
 
-              mkdir -p $out/bin
+              mkdir -p $out/bin $out/lib
 
-              # mkYarnPackage creates deps/aoc23 structure
-              # Copy the entire structure to $out/lib
-              mkdir -p $out/lib
-              cp -r deps/AoC23/* $out/lib/ 2>/dev/null || true
-              cp -r node_modules $out/lib/
+              # mkYarnPackage creates deps/AoC23 structure with node_modules already set up
+              # Copy the source files
+              cp -r deps/AoC23/*.ts $out/lib/ 2>/dev/null || true
+              cp -r deps/AoC23/*.txt $out/lib/ 2>/dev/null || true
+
+              # Create a symlink to node_modules from the deps structure
+              ln -s ${placeholder "out"}/libexec/AoC23/node_modules $out/lib/node_modules
 
               # Create wrapper script to run all solutions
               cat > $out/bin/aoc23 <<EOF
               #!/bin/sh
               cd $out/lib
-              exec ${nodejs}/bin/node node_modules/.bin/ts-node index.ts "\$@"
+              exec ${nodejs}/bin/node $out/lib/node_modules/.bin/ts-node index.ts "\$@"
               EOF
 
               chmod +x $out/bin/aoc23
@@ -77,7 +79,7 @@
           format-check = pkgs.stdenv.mkDerivation {
             name = "aoc23-format-check";
             src = ./.;
-            nativeBuildInputs = [ nodejs pkgs.nodePackages.prettier ];
+            nativeBuildInputs = [ pkgs.nodePackages.prettier ];
             buildPhase = ''
               ${pkgs.nodePackages.prettier}/bin/prettier --check "*.ts"
             '';
