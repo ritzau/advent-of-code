@@ -1,0 +1,41 @@
+# Advent of Code Solution
+# All commands use Nix for reproducible builds
+
+# Get current system (e.g., x86_64-linux, aarch64-darwin)
+system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
+
+# Build the solution
+build:
+    nix build
+
+# Run the default app (part1)
+run:
+    nix run
+
+# Run a specific part with input from stdin
+run-part PART:
+    nix run .#part{{PART}}
+
+# Run all checks (build + tests + format-check)
+check:
+    nix flake check
+
+# Run tests only
+test:
+    nix build .#checks.{{system}}.test
+
+# Check formatting without modifying files
+format-check:
+    nix build .#checks.{{system}}.format-check
+
+# Format code (requires nix develop or ormolu installed)
+format:
+    ormolu -i *.hs
+
+# Lint code (requires hlint)
+lint:
+    hlint .
+
+# Clean build artifacts
+clean:
+    rm -rf dist-newstyle/ result .ghc.environment.*

@@ -47,6 +47,7 @@ Multi-year, multi-language solutions for [Advent of Code](https://adventofcode.c
 - `typescript` - TypeScript with Node.js
 - `rust` - Rust with Cargo
 - `go` - Go
+- `haskell` - Haskell with Cabal
 - `kotlin` - Kotlin scripting
 - `nim` - Nim
 - `zig` - Zig
