@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code solution in Zig";
+  description = "Advent of Code 2016 Day 1 solution in Zig";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
@@ -17,7 +17,7 @@
 
         # Build the Zig package
         package = pkgs.stdenv.mkDerivation {
-          pname = "aoc-solution";
+          pname = "s16e01";
           version = "0.1.0";
           src = ./.;
 
@@ -29,6 +29,7 @@
             # Set cache dir to avoid read-only filesystem issues
             export XDG_CACHE_HOME=$TMPDIR/zig-cache
 
+            zig build-exe main.zig -O ReleaseSafe -femit-bin=s16e01
             zig build-exe part1.zig -O ReleaseSafe -femit-bin=part1
             zig build-exe part2.zig -O ReleaseSafe -femit-bin=part2
 
@@ -39,6 +40,7 @@
             runHook preInstall
 
             mkdir -p $out/bin
+            cp s16e01 $out/bin/
             cp part1 $out/bin/
             cp part2 $out/bin/
 
@@ -57,7 +59,7 @@
 
           # Run tests with proper Zig setup
           test = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-tests";
+            name = "s16e01-tests";
             src = ./.;
             nativeBuildInputs = [ zig ];
             buildPhase = ''
@@ -72,7 +74,7 @@
 
           # Verify formatting is correct
           format-check = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-format-check";
+            name = "s16e01-format-check";
             src = ./.;
             nativeBuildInputs = [ zig ];
             buildPhase = ''
@@ -87,10 +89,10 @@
         };
 
         apps = {
-          # Default: run part1
+          # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/s16e01";
           };
 
           # Run individual parts
@@ -115,21 +117,20 @@
             echo "🎄 Zig environment ready"
             echo ""
             echo "Local dev:"
-            echo "  zig build-exe part1.zig - Build part1"
-            echo "  zig test common.zig     - Run tests"
-            echo "  zig fmt .               - Format code"
-            echo "  zig fmt --check .       - Check formatting"
+            echo "  zig build-exe main.zig - Build main binary"
+            echo "  zig test common.zig    - Run tests"
+            echo "  zig fmt .              - Format code"
+            echo "  zig fmt --check .      - Check formatting"
             echo ""
             echo "Nix commands:"
             echo "  nix build       - Build package"
-            echo "  nix run .#part1 - Run part1"
-            echo "  nix run .#part2 - Run part2"
+            echo "  nix run         - Run verification"
             echo "  nix flake check - Run all checks"
             echo ""
             echo "Just shortcuts:"
-            echo "  just check        - Run all checks"
-            echo "  just test         - Run tests"
-            echo "  just format       - Format code"
+            echo "  just check       - Run all checks"
+            echo "  just test        - Run tests"
+            echo "  just format      - Format code"
             echo "  just format-check - Check formatting"
           '';
         };
