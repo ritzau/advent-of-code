@@ -28,26 +28,22 @@
               runHook postBuild
             '';
 
-            installPhase = ''
-              runHook preInstall
+            # Don't override installPhase - let mkYarnPackage do its thing
+            # It will create: libexec/aoc23/node_modules and libexec/aoc23/deps/aoc23/
 
+            postInstall = ''
+              # Add our wrapper script after mkYarnPackage's default install
               mkdir -p $out/bin
-
-              # mkYarnPackage creates a specific structure:
-              # - libexec/AoC23/deps/AoC23/ contains our source
-              # - libexec/AoC23/node_modules/ contains dependencies
-
-              # Create wrapper script that uses the mkYarnPackage structure directly
               cat > $out/bin/aoc23 <<EOF
               #!/bin/sh
-              cd $out/libexec/AoC23/deps/AoC23
-              exec ${nodejs}/bin/node $out/libexec/AoC23/node_modules/.bin/ts-node index.ts "\$@"
+              cd $out/libexec/aoc23/deps/aoc23
+              exec ${nodejs}/bin/node $out/libexec/aoc23/node_modules/.bin/ts-node index.ts "\$@"
               EOF
-
               chmod +x $out/bin/aoc23
-
-              runHook postInstall
             '';
+
+            # Skip the dist phase which is causing issues
+            doDist = false;
           };
         };
 
