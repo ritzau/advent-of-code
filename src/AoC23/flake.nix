@@ -31,21 +31,17 @@
             installPhase = ''
               runHook preInstall
 
-              mkdir -p $out/bin $out/lib
+              mkdir -p $out/bin
 
-              # mkYarnPackage creates deps/AoC23 structure with node_modules already set up
-              # Copy the source files
-              cp -r deps/AoC23/*.ts $out/lib/ 2>/dev/null || true
-              cp -r deps/AoC23/*.txt $out/lib/ 2>/dev/null || true
+              # mkYarnPackage creates a specific structure:
+              # - libexec/AoC23/deps/AoC23/ contains our source
+              # - libexec/AoC23/node_modules/ contains dependencies
 
-              # Create a symlink to node_modules from the deps structure
-              ln -s ${placeholder "out"}/libexec/AoC23/node_modules $out/lib/node_modules
-
-              # Create wrapper script to run all solutions
+              # Create wrapper script that uses the mkYarnPackage structure directly
               cat > $out/bin/aoc23 <<EOF
               #!/bin/sh
-              cd $out/lib
-              exec ${nodejs}/bin/node $out/lib/node_modules/.bin/ts-node index.ts "\$@"
+              cd $out/libexec/AoC23/deps/AoC23
+              exec ${nodejs}/bin/node $out/libexec/AoC23/node_modules/.bin/ts-node index.ts "\$@"
               EOF
 
               chmod +x $out/bin/aoc23
