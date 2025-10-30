@@ -1,0 +1,131 @@
+name: Nix Flake Checks
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  # Check the root flake which aggregates all sub-flakes
+  check-root:
+    name: Check All Flakes (Root)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v9
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v2
+
+      - name: Check root flake
+        run: nix flake check --all-systems --show-trace
+
+  # Check individual year flakes for more granular reporting
+  check-years:
+    name: Check Year ${{ matrix.year }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        year:
+          - name: "2016"
+            path: "src/AoC16"
+          - name: "2023"
+            path: "src/AoC23"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v9
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v2
+
+      - name: Check ${{ matrix.year.name }} flake
+        working-directory: ${{ matrix.year.path }}
+        run: nix flake check --all-systems --show-trace
+
+  # Check individual templates
+  check-templates:
+    name: Check Template ${{ matrix.template }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        template:
+          - go
+          - kotlin
+          - nim
+          - python
+          - rust
+          - typescript
+          - zig
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v9
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v2
+
+      - name: Check ${{ matrix.template }} template
+        working-directory: templates/${{ matrix.template }}
+        run: nix flake check --all-systems --show-trace
+
+  # Discover and check all flakes (for completeness and future-proofing)
+  discover-and-check:
+    name: Discover and Check All Flakes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v9
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v2
+
+      - name: Discover and check all flakes
+        run: |
+          #!/bin/bash
+          set -e
+
+          echo "🔍 Discovering all flake.nix files..."
+          flakes=$(find . -name "flake.nix" -not -path "*/.*" | sort)
+
+          echo "Found flakes:"
+          echo "$flakes"
+          echo ""
+
+          failed=0
+          for flake in $flakes; do
+            dir=$(dirname "$flake")
+            echo "========================================"
+            echo "📦 Checking flake in: $dir"
+            echo "========================================"
+
+            if (cd "$dir" && nix flake check --show-trace); then
+              echo "✅ $dir - PASSED"
+            else
+              echo "❌ $dir - FAILED"
+              failed=$((failed + 1))
+            fi
+            echo ""
+          done
+
+          echo "========================================"
+          echo "Summary: $failed flake(s) failed"
+          echo "========================================"
+
+          if [ $failed -gt 0 ]; then
+            exit 1
+          fi
