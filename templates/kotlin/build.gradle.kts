@@ -24,10 +24,17 @@ group = "com.ritzau.aoc"
 
 version = "1.0-SNAPSHOT"
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 dependencies {
     // Add your dependencies here if needed
 }
 
-tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "17" }
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "21"
+}
 
 application { mainClass.set("MainKt") }
