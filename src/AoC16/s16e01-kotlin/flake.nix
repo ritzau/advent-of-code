@@ -13,6 +13,10 @@
       let
         pkgs = import nixpkgs { inherit system; };
         updateLocks = pkgs.callPackage ./update-locks.nix { };
+        package = pkgs.callPackage ./build.nix {
+          jdk = pkgs.temurin-bin-21;
+        };
+        jdk = pkgs.temurin-bin-21;
       in {
         devShells.default = pkgs.mkShell {
           buildInputs = [
@@ -41,8 +45,34 @@
             echo "  just run               - Run verification"
           '';
         };
-        packages.default = pkgs.callPackage ./build.nix {
-          jdk = pkgs.temurin-bin-21;
+        packages.default = package;
+
+        apps = {
+          default = {
+            type = "app";
+            program = "${package}/bin/s16e01-kotlin";
+          };
+
+          part1 = {
+            type = "app";
+            program = toString (pkgs.writeShellScript "part1" ''
+              exec ${jdk}/bin/java -cp ${package}/lib/'*' Part1Kt
+            '');
+          };
+
+          part2 = {
+            type = "app";
+            program = toString (pkgs.writeShellScript "part2" ''
+              exec ${jdk}/bin/java -cp ${package}/lib/'*' Part2Kt
+            '');
+          };
+
+          format = {
+            type = "app";
+            program = toString (pkgs.writeShellScript "format" ''
+              exec ${pkgs.ktlint}/bin/ktlint -F "src/**/*.kt"
+            '');
+          };
         };
       });
 }
