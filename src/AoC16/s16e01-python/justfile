@@ -23,4 +23,4 @@ check:
 
 # Clean build artifacts
 clean:
-    rm -rf result .pytest_cache/ __pycache__/ aoc_solution/__pycache__/ tests/__pycache__/
+    rm -rf result .pytest_cache/ __pycache__/ s16e01/__pycache__/ tests/__pycache__/

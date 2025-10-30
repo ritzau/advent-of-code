@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code solution in Python";
+  description = "Advent of Code 2016 Day 1 solution in Python";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,7 +13,7 @@
 
         # Build the Python package using uv
         package = pkgs.python3Packages.buildPythonApplication {
-          pname = "aoc-solution";
+          pname = "s16e01";
           version = "0.1.0";
           src = ./.;
           format = "pyproject";
@@ -39,7 +39,7 @@
 
           # Run tests
           test = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-tests";
+            name = "s16e01-tests";
             src = ./.;
 
             nativeBuildInputs = [
@@ -62,7 +62,7 @@
 
           # Run linting with ruff
           lint = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-lint";
+            name = "s16e01-lint";
             src = ./.;
 
             nativeBuildInputs = [
@@ -71,7 +71,7 @@
             ];
 
             buildPhase = ''
-              ruff check aoc_solution/ tests/
+              ruff check s16e01/ tests/
             '';
 
             installPhase = ''
@@ -85,7 +85,7 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-solution";
+            program = "${package}/bin/s16e01";
           };
 
           # Run individual parts
@@ -104,7 +104,7 @@
             type = "app";
             program = toString (pkgs.writeShellScript "format" ''
               export PATH=${pkgs.ruff}/bin:$PATH
-              exec ${pkgs.ruff}/bin/ruff format aoc_solution/ tests/
+              exec ${pkgs.ruff}/bin/ruff format s16e01/ tests/
             '');
           };
         };

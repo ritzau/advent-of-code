@@ -1,0 +1,31 @@
+[project]
+name = "s16e01"
+version = "0.1.0"
+description = "Advent of Code 2016 Day 1 solution in Python"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+]
+
+[project.scripts]
+s16e01 = "s16e01.main:main"
+part1 = "s16e01.part1:main"
+part2 = "s16e01.part2:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP"]
