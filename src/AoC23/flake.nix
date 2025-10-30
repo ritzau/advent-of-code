@@ -52,19 +52,26 @@
           build = self.packages.${system}.default;
 
           # Verify TypeScript compiles without errors
-          typecheck = pkgs.stdenv.mkDerivation {
+          typecheck = pkgs.mkYarnPackage {
             name = "aoc23-typecheck";
             src = ./.;
-            nativeBuildInputs = [ nodejs pkgs.yarn ];
+
+            packageJSON = ./package.json;
+            yarnLock = ./yarn.lock;
+
             buildPhase = ''
-              export HOME=$TMPDIR
-              yarn install --frozen-lockfile
-              yarn tsc --noEmit
+              runHook preBuild
+              # Run tsc from the installed node_modules
+              yarn --offline tsc --noEmit
+              runHook postBuild
             '';
+
             installPhase = ''
               mkdir -p $out
               echo "Type check passed" > $out/result
             '';
+
+            doDist = false;
           };
 
           # Verify formatting is correct
@@ -117,7 +124,6 @@
             echo "  just build           - Build package"
             echo "  just run             - Run all solutions"
             echo "  just run 1           - Run day 1"
-            echo "  just run-part 1 1    - Run day 1 part 1"
             echo "  just check           - Run all checks"
             echo "  just typecheck       - Type check only"
             echo "  just format-check    - Check formatting"

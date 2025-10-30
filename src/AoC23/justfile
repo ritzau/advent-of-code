@@ -17,12 +17,6 @@ run DAY="":
         nix run . -- {{DAY}}
     fi
 
-# Run a specific day and part (e.g., just run-part 1 1)
-run-part DAY PART:
-    #!/usr/bin/env bash
-    day_padded=$(printf "%02d" {{DAY}})
-    ts-node "AoC23E${day_padded}.ts" {{PART}}
-
 # Run all checks (build + typecheck + format-check)
 check:
     nix flake check
