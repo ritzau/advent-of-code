@@ -23,6 +23,10 @@
           buildPhase = ''
             runHook preBuild
 
+            # Install dependencies (mainly @types/node)
+            export HOME=$TMPDIR
+            npm install --ignore-scripts
+
             # Compile TypeScript
             ${pkgs.typescript}/bin/tsc --outDir dist
 
@@ -97,6 +101,7 @@
             echo "🎄 TypeScript environment ready"
             echo ""
             echo "Local dev:"
+            echo "  npm install          - Install dependencies"
             echo "  tsc                  - Compile TypeScript"
             echo "  ts-node part1.ts     - Run part 1"
             echo "  ts-node part2.ts     - Run part 2"
