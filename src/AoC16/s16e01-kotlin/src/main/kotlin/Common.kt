@@ -1,26 +1,33 @@
 enum class Direction {
-    NORTH, EAST, SOUTH, WEST;
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST,
+    ;
 
-    fun turnRight(): Direction = when (this) {
-        NORTH -> EAST
-        EAST -> SOUTH
-        SOUTH -> WEST
-        WEST -> NORTH
-    }
+    fun turnRight(): Direction =
+        when (this) {
+            NORTH -> EAST
+            EAST -> SOUTH
+            SOUTH -> WEST
+            WEST -> NORTH
+        }
 
-    fun turnLeft(): Direction = when (this) {
-        NORTH -> WEST
-        WEST -> SOUTH
-        SOUTH -> EAST
-        EAST -> NORTH
-    }
+    fun turnLeft(): Direction =
+        when (this) {
+            NORTH -> WEST
+            WEST -> SOUTH
+            SOUTH -> EAST
+            EAST -> NORTH
+        }
 
-    fun delta(): Pair<Int, Int> = when (this) {
-        NORTH -> Pair(0, 1)
-        EAST -> Pair(1, 0)
-        SOUTH -> Pair(0, -1)
-        WEST -> Pair(-1, 0)
-    }
+    fun delta(): Pair<Int, Int> =
+        when (this) {
+            NORTH -> Pair(0, 1)
+            EAST -> Pair(1, 0)
+            SOUTH -> Pair(0, -1)
+            WEST -> Pair(-1, 0)
+        }
 }
 
 data class Instruction(val turn: Char, val blocks: Int)
@@ -43,11 +50,12 @@ fun solvePart1(input: String): Int {
     var direction = Direction.NORTH
 
     for (instruction in instructions) {
-        direction = when (instruction.turn) {
-            'R' -> direction.turnRight()
-            'L' -> direction.turnLeft()
-            else -> direction
-        }
+        direction =
+            when (instruction.turn) {
+                'R' -> direction.turnRight()
+                'L' -> direction.turnLeft()
+                else -> direction
+            }
 
         val (dx, dy) = direction.delta()
         x += dx * instruction.blocks
@@ -66,11 +74,12 @@ fun solvePart2(input: String): Int {
     visited.add(Pair(0, 0))
 
     for (instruction in instructions) {
-        direction = when (instruction.turn) {
-            'R' -> direction.turnRight()
-            'L' -> direction.turnLeft()
-            else -> direction
-        }
+        direction =
+            when (instruction.turn) {
+                'R' -> direction.turnRight()
+                'L' -> direction.turnLeft()
+                else -> direction
+            }
 
         val (dx, dy) = direction.delta()
 

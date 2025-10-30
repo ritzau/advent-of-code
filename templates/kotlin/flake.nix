@@ -1,122 +1,39 @@
 {
   description = "Advent of Code solution in Kotlin";
 
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
-  };
+  inputs = { nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable"; };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  inputs.systems.url = "github:nix-systems/default";
+
+  inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.flake-utils.inputs.systems.follows = "systems";
+
+  outputs = { self, systems, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
-
-        # Build with kotlinc (Gradle available for local dev)
-        package = pkgs.stdenv.mkDerivation {
-          pname = "aoc-solution";
-          version = "0.1.0";
-          src = ./.;
-
-          nativeBuildInputs = with pkgs; [
-            kotlin
-            jdk17
-          ];
-
-          buildPhase = ''
-            # Compile all Kotlin source files with kotlinc
-            kotlinc -include-runtime -d aoc-solution.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/main.kt
-
-            kotlinc -include-runtime -d part1.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/part1.kt
-
-            kotlinc -include-runtime -d part2.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/part2.kt
-          '';
-
-          installPhase = ''
-            mkdir -p $out/bin
-
-            # Install main verification binary
-            install -Dm644 aoc-solution.jar $out/share/aoc-solution.jar
-            cat > $out/bin/aoc-solution << EOF
-            #!/bin/sh
-            exec ${pkgs.jdk17}/bin/java -jar $out/share/aoc-solution.jar "\$@"
-            EOF
-            chmod +x $out/bin/aoc-solution
-
-            # Install part1 binary
-            install -Dm644 part1.jar $out/share/part1.jar
-            cat > $out/bin/part1 << EOF
-            #!/bin/sh
-            exec ${pkgs.jdk17}/bin/java -jar $out/share/part1.jar "\$@"
-            EOF
-            chmod +x $out/bin/part1
-
-            # Install part2 binary
-            install -Dm644 part2.jar $out/share/part2.jar
-            cat > $out/bin/part2 << EOF
-            #!/bin/sh
-            exec ${pkgs.jdk17}/bin/java -jar $out/share/part2.jar "\$@"
-            EOF
-            chmod +x $out/bin/part2
-          '';
+        pkgs = import nixpkgs { inherit system; };
+        updateLocks = pkgs.callPackage ./update-locks.nix { };
+        package = pkgs.callPackage ./build.nix {
+          jdk = pkgs.temurin-bin-21;
         };
-      in
-      {
-        packages = {
-          default = package;
-        };
-
-        checks = {
-          # Build succeeds = package is valid
-          build = package;
-        };
-
-        apps = {
-          # Default: run main verification binary
-          default = {
-            type = "app";
-            program = "${package}/bin/aoc-solution";
-          };
-
-          # Run individual parts
-          part1 = {
-            type = "app";
-            program = "${package}/bin/part1";
-          };
-
-          part2 = {
-            type = "app";
-            program = "${package}/bin/part2";
-          };
-
-          # Format code
-          format = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              exec ${pkgs.ktlint}/bin/ktlint -F "src/**/*.kt"
-            '');
-          };
-        };
-
+        jdk = pkgs.temurin-bin-21;
+      in {
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            jdk17
-            kotlin
-            kotlin-language-server
-            ktlint
+          buildInputs = [
+            pkgs.gradle_8
+            pkgs.temurin-bin-21
+            updateLocks
+            pkgs.ktlint
           ];
 
           shellHook = ''
             echo "🎄 Kotlin environment ready"
             echo ""
             echo "Local dev:"
-            echo "  kotlinc                - Kotlin compiler"
+            echo "  ./gradlew build        - Build with Gradle"
+            echo "  ./gradlew run          - Run application"
             echo "  ktlint -F src/**/*.kt  - Format code"
+            echo "  update-locks           - Update dependency locks"
             echo ""
             echo "Nix commands:"
             echo "  nix build              - Build package"
@@ -128,6 +45,34 @@
             echo "  just run               - Run verification"
           '';
         };
-      }
-    );
+        packages.default = package;
+
+        apps = {
+          default = {
+            type = "app";
+            program = "${package}/bin/aoc-solution";
+          };
+
+          part1 = {
+            type = "app";
+            program = toString (pkgs.writeShellScript "part1" ''
+              exec ${jdk}/bin/java -cp ${package}/lib/'*' Part1Kt
+            '');
+          };
+
+          part2 = {
+            type = "app";
+            program = toString (pkgs.writeShellScript "part2" ''
+              exec ${jdk}/bin/java -cp ${package}/lib/'*' Part2Kt
+            '');
+          };
+
+          format = {
+            type = "app";
+            program = toString (pkgs.writeShellScript "format" ''
+              exec ${pkgs.ktlint}/bin/ktlint -F "src/**/*.kt"
+            '');
+          };
+        };
+      });
 }
