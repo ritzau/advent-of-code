@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code solution in Kotlin";
+  description = "Advent of Code 2016 Day 1 solution in Kotlin";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,7 +13,7 @@
 
         # Build with kotlinc (Gradle available for local dev)
         package = pkgs.stdenv.mkDerivation {
-          pname = "aoc-solution";
+          pname = "s16e01-kotlin";
           version = "0.1.0";
           src = ./.;
 
@@ -24,29 +24,29 @@
 
           buildPhase = ''
             # Compile all Kotlin source files with kotlinc
-            kotlinc -include-runtime -d aoc-solution.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/main.kt
+            kotlinc -include-runtime -d s16e01.jar \
+              src/main/kotlin/Common.kt \
+              src/main/kotlin/Main.kt
 
             kotlinc -include-runtime -d part1.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/part1.kt
+              src/main/kotlin/Common.kt \
+              src/main/kotlin/Part1.kt
 
             kotlinc -include-runtime -d part2.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/part2.kt
+              src/main/kotlin/Common.kt \
+              src/main/kotlin/Part2.kt
           '';
 
           installPhase = ''
             mkdir -p $out/bin
 
             # Install main verification binary
-            install -Dm644 aoc-solution.jar $out/share/aoc-solution.jar
-            cat > $out/bin/aoc-solution << EOF
+            install -Dm644 s16e01.jar $out/share/s16e01.jar
+            cat > $out/bin/s16e01 << EOF
             #!/bin/sh
-            exec ${pkgs.jdk17}/bin/java -jar $out/share/aoc-solution.jar "\$@"
+            exec ${pkgs.jdk17}/bin/java -jar $out/share/s16e01.jar "\$@"
             EOF
-            chmod +x $out/bin/aoc-solution
+            chmod +x $out/bin/s16e01
 
             # Install part1 binary
             install -Dm644 part1.jar $out/share/part1.jar
@@ -80,7 +80,7 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-solution";
+            program = "${package}/bin/s16e01";
           };
 
           # Run individual parts
