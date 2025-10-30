@@ -11,9 +11,9 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # Use Zig 0.13.0 which is stable and works across platforms
+        # Use Zig 0.12.0 which is stable and works across platforms
         # Zig 0.15.x has known issues on Intel Macs
-        zig = pkgs.zig_0_13;
+        zig = pkgs.zig_0_12;
 
         # Build the Zig package
         package = pkgs.stdenv.mkDerivation {
@@ -25,6 +25,9 @@
 
           buildPhase = ''
             runHook preBuild
+
+            # Set cache dir to avoid read-only filesystem issues
+            export XDG_CACHE_HOME=$TMPDIR/zig-cache
 
             zig build-exe main.zig -O ReleaseSafe -femit-bin=s16e01
             zig build-exe part1.zig -O ReleaseSafe -femit-bin=part1
@@ -60,6 +63,7 @@
             src = ./.;
             nativeBuildInputs = [ zig ];
             buildPhase = ''
+              export XDG_CACHE_HOME=$TMPDIR/zig-cache
               zig test common.zig
             '';
             installPhase = ''
@@ -74,6 +78,7 @@
             src = ./.;
             nativeBuildInputs = [ zig ];
             buildPhase = ''
+              export XDG_CACHE_HOME=$TMPDIR/zig-cache
               zig fmt --check .
             '';
             installPhase = ''
