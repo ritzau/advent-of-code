@@ -16,9 +16,21 @@ run:
 run-part PART:
     nix run .#part{{PART}}
 
-# Run all checks (build + tests)
+# Run all checks (build + typecheck + format-check)
 check:
     nix flake check
+
+# Run type check only
+typecheck:
+    nix build .#checks.{{system}}.typecheck
+
+# Check formatting without modifying files
+format-check:
+    nix build .#checks.{{system}}.format-check
+
+# Format code (requires nix develop or prettier installed)
+format:
+    prettier --write "*.ts"
 
 # Clean build artifacts
 clean:

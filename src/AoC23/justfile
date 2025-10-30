@@ -1,16 +1,47 @@
 # Advent of Code 2023 - TypeScript Solutions
+# All commands use Nix for reproducible builds
+
+# Get current system (e.g., x86_64-linux, aarch64-darwin)
+system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
+
+# Build all solutions
+build:
+    nix build
+
+# Run all solutions or a specific day (e.g., just run 1)
+run DAY="":
+    #!/usr/bin/env bash
+    if [ -z "{{DAY}}" ]; then
+        nix run
+    else
+        nix run . -- {{DAY}}
+    fi
+
+# Run a specific day and part (e.g., just run-part 1 1)
+run-part DAY PART:
+    #!/usr/bin/env bash
+    day_padded=$(printf "%02d" {{DAY}})
+    ts-node "AoC23E${day_padded}.ts" {{PART}}
+
+# Run all checks (build + typecheck + format-check)
+check:
+    nix flake check
+
+# Run type check only
+typecheck:
+    nix build .#checks.{{system}}.typecheck
+
+# Check formatting without modifying files
+format-check:
+    nix build .#checks.{{system}}.format-check
+
+# Format code (requires nix develop or prettier installed)
+format:
+    prettier --write "*.ts"
 
 # Install dependencies
 install:
     yarn install
-
-# Run all solutions
-run:
-    yarn start
-
-# Run a specific episode (e.g., just run-episode 1)
-run-episode EPISODE:
-    ts-node index.ts {{EPISODE}}
 
 # Watch mode - auto-reload on changes
 watch:
@@ -18,8 +49,4 @@ watch:
 
 # Clean build artifacts and dependencies
 clean:
-    rm -rf node_modules dist
-
-# Format code (if formatter is added later)
-format:
-    @echo "No formatter configured"
+    rm -rf node_modules dist result

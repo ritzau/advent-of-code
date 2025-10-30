@@ -66,6 +66,36 @@
         checks = {
           # Build succeeds = package is valid
           build = package;
+
+          # Verify TypeScript compiles without errors
+          typecheck = pkgs.stdenv.mkDerivation {
+            name = "aoc-solution-typecheck";
+            src = ./.;
+            nativeBuildInputs = [ nodejs pkgs.typescript ];
+            buildPhase = ''
+              export HOME=$TMPDIR
+              npm install --ignore-scripts
+              npx tsc --noEmit
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Type check passed" > $out/result
+            '';
+          };
+
+          # Verify formatting is correct
+          format-check = pkgs.stdenv.mkDerivation {
+            name = "aoc-solution-format-check";
+            src = ./.;
+            nativeBuildInputs = [ nodejs pkgs.nodePackages.prettier ];
+            buildPhase = ''
+              ${pkgs.nodePackages.prettier}/bin/prettier --check "*.ts"
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
+            '';
+          };
         };
 
         apps = {
@@ -92,6 +122,7 @@
             nodejs_20
             typescript
             nodePackages.ts-node
+            nodePackages.prettier
           ];
 
           shellHook = ''
@@ -102,17 +133,21 @@
             echo "  tsc                  - Compile TypeScript"
             echo "  ts-node part1.ts     - Run part 1"
             echo "  ts-node part2.ts     - Run part 2"
+            echo "  prettier --write .   - Format code"
             echo ""
             echo "Nix commands:"
-            echo "  nix build       - Build package"
-            echo "  nix run         - Run verification"
-            echo "  nix flake check - Run all checks"
+            echo "  nix build            - Build package"
+            echo "  nix run              - Run verification"
+            echo "  nix flake check      - Run all checks"
             echo ""
             echo "Just shortcuts:"
-            echo "  just build       - Build package"
-            echo "  just run         - Run verification"
-            echo "  just run-part 1  - Run part 1"
-            echo "  just check       - Run all checks"
+            echo "  just build           - Build package"
+            echo "  just run             - Run verification"
+            echo "  just run-part 1      - Run part 1"
+            echo "  just check           - Run all checks"
+            echo "  just typecheck       - Type check only"
+            echo "  just format-check    - Check formatting"
+            echo "  just format          - Format code"
           '';
         };
       }

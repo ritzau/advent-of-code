@@ -18,7 +18,7 @@
             pname = "aoc23";
             version = "23.19.0";
             src = ./.;
-            
+
             packageJSON = ./package.json;
             yarnLock = ./yarn.lock;
 
@@ -32,7 +32,7 @@
               runHook preInstall
 
               mkdir -p $out/bin
-              
+
               # mkYarnPackage creates deps/aoc23 structure
               # Copy the entire structure to $out/lib
               mkdir -p $out/lib
@@ -53,16 +53,81 @@
           };
         };
 
+        checks = {
+          # Build succeeds = package is valid
+          build = self.packages.${system}.default;
+
+          # Verify TypeScript compiles without errors
+          typecheck = pkgs.stdenv.mkDerivation {
+            name = "aoc23-typecheck";
+            src = ./.;
+            nativeBuildInputs = [ nodejs pkgs.yarn ];
+            buildPhase = ''
+              export HOME=$TMPDIR
+              yarn install --frozen-lockfile
+              yarn tsc --noEmit
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Type check passed" > $out/result
+            '';
+          };
+
+          # Verify formatting is correct
+          format-check = pkgs.stdenv.mkDerivation {
+            name = "aoc23-format-check";
+            src = ./.;
+            nativeBuildInputs = [ nodejs pkgs.nodePackages.prettier ];
+            buildPhase = ''
+              ${pkgs.nodePackages.prettier}/bin/prettier --check "*.ts"
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
+            '';
+          };
+        };
+
+        apps = {
+          # Default: run all solutions
+          default = {
+            type = "app";
+            program = "${self.packages.${system}.default}/bin/aoc23";
+          };
+        };
+
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             nodejs_20
             yarn
+            nodePackages.ts-node
+            nodePackages.prettier
           ];
 
           shellHook = ''
-            echo "TypeScript environment ready for AoC 2023"
-            echo "Run 'yarn install' to install dependencies"
-            echo "Run 'yarn start' to run all solutions"
+            echo "🎄 TypeScript environment ready for AoC 2023"
+            echo ""
+            echo "Local dev:"
+            echo "  yarn install         - Install dependencies"
+            echo "  yarn start           - Run all solutions"
+            echo "  ts-node index.ts 1   - Run day 1"
+            echo "  prettier --write .   - Format code"
+            echo ""
+            echo "Nix commands:"
+            echo "  nix build            - Build package"
+            echo "  nix run              - Run all solutions"
+            echo "  nix run . -- 1       - Run day 1"
+            echo "  nix flake check      - Run all checks"
+            echo ""
+            echo "Just shortcuts:"
+            echo "  just build           - Build package"
+            echo "  just run             - Run all solutions"
+            echo "  just run 1           - Run day 1"
+            echo "  just run-part 1 1    - Run day 1 part 1"
+            echo "  just check           - Run all checks"
+            echo "  just typecheck       - Type check only"
+            echo "  just format-check    - Check formatting"
+            echo "  just format          - Format code"
           '';
         };
       }
