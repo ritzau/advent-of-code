@@ -47,8 +47,15 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
-    cp -r build/distributions/* $out
+    mkdir -p $out/bin
+    mkdir -p $out/lib
+
+    # Extract the distribution and install it
+    tar -xzf build/distributions/s16e01-kotlin.tar -C $out --strip-components=1
+
+    # Make sure the start script is executable
+    chmod +x $out/bin/s16e01-kotlin
+
     runHook postInstall
   '';
 
