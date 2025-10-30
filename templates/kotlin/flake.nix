@@ -11,53 +11,60 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # Build the Kotlin package using Gradle
-        package = pkgs.stdenv.mkDerivation (finalAttrs: {
+        # Build with kotlinc (Gradle available for local dev)
+        package = pkgs.stdenv.mkDerivation {
           pname = "aoc-solution";
           version = "0.1.0";
           src = ./.;
 
           nativeBuildInputs = with pkgs; [
-            gradle
+            kotlin
             jdk17
-            makeWrapper
           ];
 
-          # Gradle dependencies cache
-          mitmCache = pkgs.gradle.fetchDeps {
-            pkg = finalAttrs.finalPackage;
-            data = ./deps.json;
-          };
+          buildPhase = ''
+            # Compile all Kotlin source files with kotlinc
+            kotlinc -include-runtime -d aoc-solution.jar \
+              src/main/kotlin/common.kt \
+              src/main/kotlin/main.kt
 
-          # Required for mitm-cache on Darwin
-          __darwinAllowLocalNetworking = true;
+            kotlinc -include-runtime -d part1.jar \
+              src/main/kotlin/common.kt \
+              src/main/kotlin/part1.kt
 
-          gradleBuildTask = "buildAll";
+            kotlinc -include-runtime -d part2.jar \
+              src/main/kotlin/common.kt \
+              src/main/kotlin/part2.kt
+          '';
 
           installPhase = ''
             mkdir -p $out/bin
 
             # Install main verification binary
-            install -Dm644 build/libs/aoc-solution-*.jar $out/share/aoc-solution.jar
-            makeWrapper ${pkgs.jdk17}/bin/java $out/bin/aoc-solution \
-              --add-flags "-jar $out/share/aoc-solution.jar"
+            install -Dm644 aoc-solution.jar $out/share/aoc-solution.jar
+            cat > $out/bin/aoc-solution << EOF
+            #!/bin/sh
+            exec ${pkgs.jdk17}/bin/java -jar $out/share/aoc-solution.jar "\$@"
+            EOF
+            chmod +x $out/bin/aoc-solution
 
             # Install part1 binary
-            install -Dm644 build/libs/part1-*.jar $out/share/part1.jar
-            makeWrapper ${pkgs.jdk17}/bin/java $out/bin/part1 \
-              --add-flags "-jar $out/share/part1.jar"
+            install -Dm644 part1.jar $out/share/part1.jar
+            cat > $out/bin/part1 << EOF
+            #!/bin/sh
+            exec ${pkgs.jdk17}/bin/java -jar $out/share/part1.jar "\$@"
+            EOF
+            chmod +x $out/bin/part1
 
             # Install part2 binary
-            install -Dm644 build/libs/part2-*.jar $out/share/part2.jar
-            makeWrapper ${pkgs.jdk17}/bin/java $out/bin/part2 \
-              --add-flags "-jar $out/share/part2.jar"
+            install -Dm644 part2.jar $out/share/part2.jar
+            cat > $out/bin/part2 << EOF
+            #!/bin/sh
+            exec ${pkgs.jdk17}/bin/java -jar $out/share/part2.jar "\$@"
+            EOF
+            chmod +x $out/bin/part2
           '';
-
-          meta.sourceProvenance = with pkgs.lib.sourceTypes; [
-            fromSource
-            binaryBytecode  # mitm cache
-          ];
-        });
+        };
       in
       {
         packages = {
@@ -87,11 +94,10 @@
             program = "${package}/bin/part2";
           };
 
-          # Format code (app because it modifies files)
+          # Format code
           format = {
             type = "app";
             program = toString (pkgs.writeShellScript "format" ''
-              export PATH=${pkgs.ktlint}/bin:$PATH
               exec ${pkgs.ktlint}/bin/ktlint -F "src/**/*.kt"
             '');
           };
@@ -109,14 +115,14 @@
           shellHook = ''
             echo "🎄 Kotlin environment ready"
             echo ""
-            echo "Local dev:"
+            echo "Local dev (Gradle):"
             echo "  gradle build           - Build project"
             echo "  gradle test            - Run tests"
             echo "  gradle run             - Run verification"
             echo "  ktlint -F src/**/*.kt  - Format code"
             echo ""
             echo "Nix commands:"
-            echo "  nix build              - Build package"
+            echo "  nix build              - Build package (with kotlinc)"
             echo "  nix run                - Run verification"
             echo "  nix flake check        - Run all checks"
             echo ""
