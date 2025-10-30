@@ -13,22 +13,21 @@
         nodejs = pkgs.nodejs_20;
 
         # Build the TypeScript package
-        package = pkgs.stdenv.mkDerivation {
+        package = pkgs.buildNpmPackage {
           pname = "aoc-solution";
           version = "0.1.0";
           src = ./.;
 
-          nativeBuildInputs = [ nodejs pkgs.typescript ];
+          # Hash of npm dependencies
+          # This will be calculated by Nix on first build
+          # Update with the hash from the error message if it fails
+          npmDepsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 
           buildPhase = ''
             runHook preBuild
 
-            # Install dependencies (mainly @types/node)
-            export HOME=$TMPDIR
-            npm install --ignore-scripts
-
             # Compile TypeScript
-            ${pkgs.typescript}/bin/tsc --outDir dist
+            npx tsc --outDir dist
 
             runHook postBuild
           '';
