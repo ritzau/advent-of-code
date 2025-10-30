@@ -11,70 +11,36 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # Build with kotlinc directly for Nix
-        # (Bazel files are available for local development)
-        package = pkgs.stdenv.mkDerivation {
+        # Build with Bazel
+        package = pkgs.buildBazelPackage {
           pname = "aoc-solution";
           version = "0.1.0";
           src = ./.;
 
-          nativeBuildInputs = with pkgs; [
-            kotlin
-            jdk17
-          ];
+          bazel = pkgs.bazel_7;
+          bazelTargets = [ "//:main" "//:part1" "//:part2" ];
 
-          buildPhase = ''
-            # Compile all Kotlin source files
-            kotlinc -include-runtime -d aoc-solution.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/main.kt
+          removeRulesCC = false;
+          removeLocalConfigCc = false;
 
-            kotlinc -include-runtime -d part1.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/part1.kt
+          fetchAttrs = {
+            # TODO: Update this hash by running:
+            # nix-build -A aoc-solution 2>&1 | grep "got:" | awk '{print $2}'
+            # Or let it fail once and copy the hash from the error message
+            sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          };
 
-            kotlinc -include-runtime -d part2.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/part2.kt
-          '';
+          buildAttrs = {
+            installPhase = ''
+              mkdir -p $out/bin
 
-          installPhase = ''
-            mkdir -p $out/bin
-
-            # Install main verification binary
-            install -Dm644 aoc-solution.jar $out/share/aoc-solution.jar
-            cat > $out/bin/aoc-solution << EOF
-            #!/bin/sh
-            exec ${pkgs.jdk17}/bin/java -jar $out/share/aoc-solution.jar "\$@"
-            EOF
-            chmod +x $out/bin/aoc-solution
-
-            # Install part1 binary
-            install -Dm644 part1.jar $out/share/part1.jar
-            cat > $out/bin/part1 << EOF
-            #!/bin/sh
-            exec ${pkgs.jdk17}/bin/java -jar $out/share/part1.jar "\$@"
-            EOF
-            chmod +x $out/bin/part1
-
-            # Install part2 binary
-            install -Dm644 part2.jar $out/share/part2.jar
-            cat > $out/bin/part2 << EOF
-            #!/bin/sh
-            exec ${pkgs.jdk17}/bin/java -jar $out/share/part2.jar "\$@"
-            EOF
-            chmod +x $out/bin/part2
-          '';
+              # Install binaries (they are wrapper scripts created by kt_jvm_binary)
+              install -Dm755 bazel-bin/main $out/bin/aoc-solution
+              install -Dm755 bazel-bin/part1 $out/bin/part1
+              install -Dm755 bazel-bin/part2 $out/bin/part2
+            '';
+          };
         };
-
-        # For local development without building the full package
-        devBuild = pkgs.writeShellScriptBin "dev-build" ''
-          ${pkgs.bazel_7}/bin/bazel build //:main //:part1 //:part2
-        '';
-
-        devTest = pkgs.writeShellScriptBin "dev-test" ''
-          ${pkgs.bazel_7}/bin/bazel test //:test
-        '';
       in
       {
         packages = {
@@ -84,9 +50,6 @@
         checks = {
           # Build succeeds = package is valid
           build = package;
-
-          # Note: Bazel tests require network access for rules_kotlin dependencies
-          # Use 'bazel test //:test' locally in dev shell for testing
         };
 
         apps = {

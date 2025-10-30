@@ -11,61 +11,53 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # Build the Kotlin package using kotlinc directly
-        # (Gradle requires network access for plugins, which doesn't work in Nix sandbox)
-        package = pkgs.stdenv.mkDerivation {
+        # Build the Kotlin package using Gradle
+        package = pkgs.stdenv.mkDerivation (finalAttrs: {
           pname = "aoc-solution";
           version = "0.1.0";
           src = ./.;
 
           nativeBuildInputs = with pkgs; [
-            kotlin
+            gradle
             jdk17
+            makeWrapper
           ];
 
-          buildPhase = ''
-            # Compile all Kotlin source files
-            kotlinc -include-runtime -d aoc-solution.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/main.kt
+          # Gradle dependencies cache
+          mitmCache = pkgs.gradle.fetchDeps {
+            pkg = finalAttrs.finalPackage;
+            data = ./deps.json;
+          };
 
-            kotlinc -include-runtime -d part1.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/part1.kt
+          # Required for mitm-cache on Darwin
+          __darwinAllowLocalNetworking = true;
 
-            kotlinc -include-runtime -d part2.jar \
-              src/main/kotlin/common.kt \
-              src/main/kotlin/part2.kt
-          '';
+          gradleBuildTask = "buildAll";
 
           installPhase = ''
             mkdir -p $out/bin
 
             # Install main verification binary
-            install -Dm644 aoc-solution.jar $out/share/aoc-solution.jar
-            cat > $out/bin/aoc-solution << EOF
-            #!/bin/sh
-            exec ${pkgs.jdk17}/bin/java -jar $out/share/aoc-solution.jar "\$@"
-            EOF
-            chmod +x $out/bin/aoc-solution
+            install -Dm644 build/libs/aoc-solution-*.jar $out/share/aoc-solution.jar
+            makeWrapper ${pkgs.jdk17}/bin/java $out/bin/aoc-solution \
+              --add-flags "-jar $out/share/aoc-solution.jar"
 
             # Install part1 binary
-            install -Dm644 part1.jar $out/share/part1.jar
-            cat > $out/bin/part1 << EOF
-            #!/bin/sh
-            exec ${pkgs.jdk17}/bin/java -jar $out/share/part1.jar "\$@"
-            EOF
-            chmod +x $out/bin/part1
+            install -Dm644 build/libs/part1-*.jar $out/share/part1.jar
+            makeWrapper ${pkgs.jdk17}/bin/java $out/bin/part1 \
+              --add-flags "-jar $out/share/part1.jar"
 
             # Install part2 binary
-            install -Dm644 part2.jar $out/share/part2.jar
-            cat > $out/bin/part2 << EOF
-            #!/bin/sh
-            exec ${pkgs.jdk17}/bin/java -jar $out/share/part2.jar "\$@"
-            EOF
-            chmod +x $out/bin/part2
+            install -Dm644 build/libs/part2-*.jar $out/share/part2.jar
+            makeWrapper ${pkgs.jdk17}/bin/java $out/bin/part2 \
+              --add-flags "-jar $out/share/part2.jar"
           '';
-        };
+
+          meta.sourceProvenance = with pkgs.lib.sourceTypes; [
+            fromSource
+            binaryBytecode  # mitm cache
+          ];
+        });
       in
       {
         packages = {
@@ -75,9 +67,6 @@
         checks = {
           # Build succeeds = package is valid
           build = package;
-
-          # Note: JUnit tests require Gradle with internet access for dependencies
-          # Use 'gradle test' locally in dev shell for testing
         };
 
         apps = {
