@@ -105,7 +105,6 @@
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
-            gradle
             jdk17
             kotlin
             kotlin-language-server
@@ -115,14 +114,12 @@
           shellHook = ''
             echo "🎄 Kotlin environment ready"
             echo ""
-            echo "Local dev (Gradle):"
-            echo "  gradle build           - Build project"
-            echo "  gradle test            - Run tests"
-            echo "  gradle run             - Run verification"
+            echo "Local dev:"
+            echo "  kotlinc                - Kotlin compiler"
             echo "  ktlint -F src/**/*.kt  - Format code"
             echo ""
             echo "Nix commands:"
-            echo "  nix build              - Build package (with kotlinc)"
+            echo "  nix build              - Build package"
             echo "  nix run                - Run verification"
             echo "  nix flake check        - Run all checks"
             echo ""
