@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
     runHook preBuild
     export GRADLE_USER_HOME=$TMP/gradle-home
     export NIX_MAVEN_REPO=${mavenRepo}
-    gradle build -x test \
+    gradle distTar -x test \
       --offline --no-daemon \
       --warning-mode=all --parallel --console=plain \
       -PnixMavenRepo=${mavenRepo}
@@ -47,11 +47,10 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    mkdir -p $out/lib
+    mkdir -p $out
 
-    # Extract the distribution and install it
-    tar -xzf build/distributions/aoc-solution.tar -C $out --strip-components=1
+    # Extract the tar distribution created by distTar
+    tar -xf build/distributions/*.tar -C $out --strip-components=1
 
     # Make sure the start script is executable
     chmod +x $out/bin/aoc-solution
