@@ -38,7 +38,7 @@
     };
     template-zig = {
       url = "path:./templates/zig";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # Don't follow nixpkgs - Zig template uses its own pinned version (24.05) for zig_0_12
       inputs.flake-utils.follows = "flake-utils";
     };
   };

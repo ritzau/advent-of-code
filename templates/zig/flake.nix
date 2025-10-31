@@ -9,14 +9,10 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        # Allow broken packages (Zig 0.15.2 is marked broken on Darwin)
-        pkgs = import nixpkgs {
-          inherit system;
-          config.allowBroken = true;
-        };
+        pkgs = nixpkgs.legacyPackages.${system};
 
-        # Use default Zig version from nixpkgs
-        zig = pkgs.zig;
+        # Use Zig 0.12.x which is stable in nixos-24.05
+        zig = pkgs.zig_0_12;
 
         # Build the Zig package
         package = pkgs.stdenv.mkDerivation {
