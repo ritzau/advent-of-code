@@ -9,7 +9,11 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        # Allow broken packages (Zig 0.15.2 is marked broken on Darwin)
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowBroken = true;
+        };
 
         # Use default Zig version from nixpkgs
         zig = pkgs.zig;
