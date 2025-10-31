@@ -16,6 +16,7 @@ module Helpers
 where
 
 import Data.Char (toUpper)
+import Paths_aoc21 (getDataFileName)
 
 afterEmpty :: [String] -> [String]
 afterEmpty ("" : ls) = ls
@@ -71,7 +72,9 @@ printStrResult msg expected actual = do
   putStrLn (padEnd 42 ' ' (msg ++ ": ") ++ check ++ " \n" ++ actual)
 
 readData :: FilePath -> IO String
-readData file = readFile ("data/" ++ file)
+readData file = do
+  path <- getDataFileName file
+  readFile path
 
 sliding n a@(x : xs)
   | length xs >= n = take n a : sliding n xs
