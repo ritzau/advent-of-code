@@ -21,10 +21,7 @@
 
           nimbleFile = ./aoc_solution.nimble;
 
-          nimFlags = [
-            "-d:NimblePkgVersion=${finalAttrs.version}"
-            "--hint[XDeclaredButNotUsed]:off"
-          ];
+          nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
         });
       in
       {
@@ -43,7 +40,7 @@
             buildInputs = [ pkgs.nim ];
             buildPhase = ''
               export HOME=$TMPDIR
-              nim c -r --hint[XDeclaredButNotUsed]:off common.nim
+              nim c -r common.nim
             '';
             installPhase = ''
               mkdir -p $out
