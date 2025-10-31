@@ -45,16 +45,10 @@
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
     let
-      # List of all template names - single source of truth
-      templates = [
-        "template-go"
-        "template-kotlin"
-        "template-nim"
-        "template-python"
-        "template-rust"
-        "template-typescript"
-        "template-zig"
-      ];
+      # Derive template list from inputs - any input starting with "template-"
+      templates = builtins.filter
+        (name: nixpkgs.lib.hasPrefix "template-" name)
+        (builtins.attrNames inputs);
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
