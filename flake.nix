@@ -51,24 +51,28 @@
       {
         # Aggregate checks from all template flakes
         checks =
-          inputs.template-go.checks.${system} //
-          inputs.template-kotlin.checks.${system} //
-          inputs.template-nim.checks.${system} //
-          inputs.template-python.checks.${system} //
-          inputs.template-rust.checks.${system} //
-          inputs.template-typescript.checks.${system} //
-          inputs.template-zig.checks.${system};
+          (inputs.template-go.checks.${system} or {}) //
+          (inputs.template-kotlin.checks.${system} or {}) //
+          (inputs.template-nim.checks.${system} or {}) //
+          (inputs.template-python.checks.${system} or {}) //
+          (inputs.template-rust.checks.${system} or {}) //
+          (inputs.template-typescript.checks.${system} or {}) //
+          (inputs.template-zig.checks.${system} or {});
 
         # Aggregate packages from all template flakes
-        packages = {
-          template-go = inputs.template-go.packages.${system}.default;
-          template-kotlin = inputs.template-kotlin.packages.${system}.default;
-          template-nim = inputs.template-nim.packages.${system}.default;
-          template-python = inputs.template-python.packages.${system}.default;
-          template-rust = inputs.template-rust.packages.${system}.default;
-          template-typescript = inputs.template-typescript.packages.${system}.default;
-          template-zig = inputs.template-zig.packages.${system}.default;
-        };
+        packages =
+          let
+            mkPackage = name: inputs.${name}.packages.${system}.default or null;
+          in
+          pkgs.lib.filterAttrs (_: v: v != null) {
+            template-go = mkPackage "template-go";
+            template-kotlin = mkPackage "template-kotlin";
+            template-nim = mkPackage "template-nim";
+            template-python = mkPackage "template-python";
+            template-rust = mkPackage "template-rust";
+            template-typescript = mkPackage "template-typescript";
+            template-zig = mkPackage "template-zig";
+          };
 
         # Development shell for the whole repository
         devShells.default = pkgs.mkShell {
