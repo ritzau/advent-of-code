@@ -11,8 +11,7 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # Use Zig 0.12.0 which is stable and works across platforms
-        # Zig 0.15.x has known issues on Intel Macs
+        # Use Zig 0.12.x which is stable in nixos-24.05
         zig = pkgs.zig_0_12;
 
         # Build the Zig package
