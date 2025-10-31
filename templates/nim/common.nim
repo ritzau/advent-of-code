@@ -6,11 +6,13 @@ proc parseInput*(input: string): seq[string] =
 
 proc solvePart1*(input: string): int =
   let lines = parseInput(input)
+  discard lines.len  # Placeholder to avoid unused warning
   # TODO: Implement solution
   return 0
 
 proc solvePart2*(input: string): int =
   let lines = parseInput(input)
+  discard lines.len  # Placeholder to avoid unused warning
   # TODO: Implement solution
   return 0
 

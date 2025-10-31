@@ -1,21 +1,9 @@
 {
-  description = "Advent of Code Solutions - Multi-year, Multi-language";
+  description = "Advent of Code Templates";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-
-    # Year-level flakes
-    aoc16 = {
-      url = "path:./src/AoC16";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    aoc23 = {
-      url = "path:./src/AoC23";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
 
     # Template flakes
     template-go = {
@@ -61,10 +49,8 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in
       {
-        # Aggregate checks from all sub-flakes - just merge them all
+        # Aggregate checks from all template flakes
         checks =
-          inputs.aoc16.checks.${system} //
-          inputs.aoc23.checks.${system} //
           inputs.template-go.checks.${system} //
           inputs.template-kotlin.checks.${system} //
           inputs.template-nim.checks.${system} //
@@ -73,13 +59,8 @@
           inputs.template-typescript.checks.${system} //
           inputs.template-zig.checks.${system};
 
-        # Aggregate packages from all sub-flakes
+        # Aggregate packages from all template flakes
         packages = {
-          # Year packages
-          aoc16 = inputs.aoc16.packages.${system};
-          aoc23 = inputs.aoc23.packages.${system}.default;
-
-          # Template packages
           template-go = inputs.template-go.packages.${system}.default;
           template-kotlin = inputs.template-kotlin.packages.${system}.default;
           template-nim = inputs.template-nim.packages.${system}.default;
@@ -98,28 +79,17 @@
           ];
 
           shellHook = ''
-            echo "🎄 Advent of Code Solutions - Repository Root"
-            echo ""
-            echo "Available years:"
-            echo "  2016 (AoC16): Multiple languages - Day 1"
-            echo "  2023 (AoC23): TypeScript - Multiple days"
-            echo "  2021 (AoC21): Haskell - Day 1 (legacy, no flake)"
-            echo "  2022 (AoC22): Haskell - Multiple days (legacy, no flake)"
+            echo "🎄 Advent of Code Templates"
             echo ""
             echo "Available templates:"
             echo "  Go, Kotlin, Nim, Python, Rust, TypeScript, Zig"
             echo ""
             echo "Commands:"
-            echo "  nix flake check              - Run ALL checks (all years, all days, all languages)"
-            echo "  nix flake check .#aoc16-*    - Check specific year"
-            echo "  nix flake check .#template-* - Check specific template"
-            echo ""
-            echo "  cd src/AoC16 && nix flake check  - Check all 2016 solutions"
-            echo "  cd src/AoC23 && nix flake check  - Check all 2023 solutions"
+            echo "  nix flake check              - Check all templates"
+            echo "  cd templates/<lang>          - Work on specific template"
             echo ""
             echo "Just commands:"
-            echo "  just test      - Run tests for current directory"
-            echo "  just run       - Run solution for current directory"
+            echo "  just new <year> <day> <lang> - Create new solution from template"
             echo ""
           '';
         };
