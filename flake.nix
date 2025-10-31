@@ -44,37 +44,41 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+    let
+      # List of all template names - single source of truth
+      templates = [
+        "template-go"
+        "template-kotlin"
+        "template-nim"
+        "template-python"
+        "template-rust"
+        "template-typescript"
+        "template-zig"
+      ];
+    in
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+
+        # Aggregate checks from all templates
+        allChecks = pkgs.lib.foldl'
+          (acc: name: acc // (inputs.${name}.checks.${system} or {}))
+          {}
+          templates;
+
+        # Aggregate packages from all templates
+        allPackages = pkgs.lib.foldl'
+          (acc: name:
+            let pkg = inputs.${name}.packages.${system}.default or null;
+            in if pkg != null then acc // { ${name} = pkg; } else acc
+          )
+          {}
+          templates;
       in
       {
-        # Aggregate checks from all template flakes
-        checks =
-          (inputs.template-go.checks.${system} or {}) //
-          (inputs.template-kotlin.checks.${system} or {}) //
-          (inputs.template-nim.checks.${system} or {}) //
-          (inputs.template-python.checks.${system} or {}) //
-          (inputs.template-rust.checks.${system} or {}) //
-          (inputs.template-typescript.checks.${system} or {}) //
-          (inputs.template-zig.checks.${system} or {});
+        checks = allChecks;
+        packages = allPackages;
 
-        # Aggregate packages from all template flakes
-        packages =
-          let
-            mkPackage = name: inputs.${name}.packages.${system}.default or null;
-          in
-          pkgs.lib.filterAttrs (_: v: v != null) {
-            template-go = mkPackage "template-go";
-            template-kotlin = mkPackage "template-kotlin";
-            template-nim = mkPackage "template-nim";
-            template-python = mkPackage "template-python";
-            template-rust = mkPackage "template-rust";
-            template-typescript = mkPackage "template-typescript";
-            template-zig = mkPackage "template-zig";
-          };
-
-        # Development shell for the whole repository
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             git
