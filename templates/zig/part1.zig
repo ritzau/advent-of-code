@@ -1,6 +1,7 @@
 const std = @import("std");
 const common = @import("common.zig");
 
+// Zig 0.15.x API
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
