@@ -11,6 +11,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    template-haskell = {
+      url = "path:./templates/haskell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
     template-kotlin = {
       url = "path:./templates/kotlin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -41,6 +46,18 @@
       # Don't follow nixpkgs - Zig template uses its own pinned version (24.05) for zig_0_12
       inputs.flake-utils.follows = "flake-utils";
     };
+
+    # Legacy Haskell solutions
+    aoc21 = {
+      url = "path:./src/AoC21";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    aoc22 = {
+      url = "path:./src/AoC22";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
@@ -49,25 +66,31 @@
       templates = builtins.filter
         (name: nixpkgs.lib.hasPrefix "template-" name)
         (builtins.attrNames inputs);
+
+      # Legacy Haskell solutions
+      legacySolutions = [ "aoc21" "aoc22" ];
+
+      # All flakes to check
+      allFlakes = templates ++ legacySolutions;
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # Aggregate checks from all templates
+        # Aggregate checks from all templates and legacy solutions
         allChecks = pkgs.lib.foldl'
           (acc: name: acc // (inputs.${name}.checks.${system} or {}))
           {}
-          templates;
+          allFlakes;
 
-        # Aggregate packages from all templates
+        # Aggregate packages from all templates and legacy solutions
         allPackages = pkgs.lib.foldl'
           (acc: name:
             let pkg = inputs.${name}.packages.${system}.default or null;
             in if pkg != null then acc // { ${name} = pkg; } else acc
           )
           {}
-          templates;
+          allFlakes;
       in
       {
         checks = allChecks;
@@ -84,11 +107,13 @@
             echo "🎄 Advent of Code Templates"
             echo ""
             echo "Available templates:"
-            echo "  Go, Kotlin, Nim, Python, Rust, TypeScript, Zig"
+            echo "  Go, Haskell, Kotlin, Nim, Python, Rust, TypeScript, Zig"
             echo ""
             echo "Commands:"
-            echo "  nix flake check              - Check all templates"
+            echo "  nix flake check              - Check all templates and legacy solutions"
             echo "  cd templates/<lang>          - Work on specific template"
+            echo "  cd src/AoC21               - Legacy Haskell 2021 solutions"
+            echo "  cd src/AoC22               - Legacy Haskell 2022 solutions"
             echo ""
             echo "Just commands:"
             echo "  just new <year> <day> <lang> - Create new solution from template"

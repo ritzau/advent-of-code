@@ -1,0 +1,21 @@
+# Advent of Code 2022 Solutions
+
+# Build the project
+build:
+    nix build
+
+# Run all 15 days
+run:
+    nix run
+
+# Format code
+format:
+    ormolu -i *.hs
+
+# Lint code
+lint:
+    hlint .
+
+# Clean build artifacts
+clean:
+    rm -rf dist-newstyle/ result .ghc.environment.*
