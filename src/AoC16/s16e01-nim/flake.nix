@@ -47,6 +47,30 @@
               echo "Tests passed" > $out/result
             '';
           };
+
+          # Verify formatting is correct
+          format-check = pkgs.stdenv.mkDerivation {
+            name = "s16e01-format-check";
+            src = ./.;
+            buildInputs = [ pkgs.nim pkgs.diffutils ];
+            buildPhase = ''
+              # Copy nim files to temp location to check formatting
+              cp *.nim $TMPDIR/
+              cd $TMPDIR
+              nimpretty *.nim
+              # Compare formatted files with originals
+              for file in *.nim; do
+                if ! diff -q "$file" "$src/$file" > /dev/null; then
+                  echo "Format check failed for $file. Run 'just format' to fix."
+                  exit 1
+                fi
+              done
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
+            '';
+          };
         };
 
         apps = {

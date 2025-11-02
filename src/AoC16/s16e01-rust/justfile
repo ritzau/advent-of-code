@@ -1,6 +1,9 @@
 # Advent of Code Solution
 # All commands use Nix for reproducible builds
 
+# Get current system (e.g., x86_64-linux, aarch64-darwin)
+system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
+
 # Build the solution
 build:
     nix build
@@ -15,11 +18,23 @@ run-part PART:
 
 # Format code
 format:
-    nix run .#format
+    nix develop --command cargo fmt
 
 # Run all checks (build + tests + lint)
-check:
+check-all:
     nix flake check
+
+# Run tests only
+check-test:
+    nix build .#checks.{{system}}.test
+
+# Run clippy lint only
+check-lint:
+    nix build .#checks.{{system}}.lint
+
+# Check formatting without modifying files
+check-format:
+    nix build .#checks.{{system}}.format-check
 
 # Clean build artifacts
 clean:

@@ -1,8 +1,8 @@
 """Tests for AoC solution."""
 
-from aoc_solution import solve_part1, solve_part2
-
 import pytest
+
+from aoc_solution import solve_part1, solve_part2
 
 # Keep pytest available for potential fixtures/parametrize decorators
 _ = pytest

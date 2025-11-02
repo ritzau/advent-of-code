@@ -58,6 +58,22 @@
               echo "Lint passed" > $out/result
             '';
           };
+
+          # Verify formatting is correct
+          format-check = pkgs.rustPlatform.buildRustPackage {
+            pname = "aoc-template-format-check";
+            version = "0.1.0";
+            src = ./.;
+            cargoLock.lockFile = ./Cargo.lock;
+            nativeBuildInputs = [ pkgs.rustfmt ];
+            buildPhase = ''
+              cargo fmt --check || (echo "Format check failed. Run 'just format' to fix." && exit 1)
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
+            '';
+          };
         };
 
         apps = {

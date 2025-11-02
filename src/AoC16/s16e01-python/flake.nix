@@ -79,6 +79,26 @@
               echo "Lint passed" > $out/result
             '';
           };
+
+          # Verify formatting is correct
+          format-check = pkgs.stdenv.mkDerivation {
+            name = "s16e01-format-check";
+            src = ./.;
+
+            nativeBuildInputs = [
+              pkgs.python3
+              pkgs.ruff
+            ];
+
+            buildPhase = ''
+              ruff format --check s16e01/ tests/ || (echo "Format check failed. Run 'just format' to fix." && exit 1)
+            '';
+
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
+            '';
+          };
         };
 
         apps = {

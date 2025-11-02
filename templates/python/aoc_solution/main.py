@@ -22,7 +22,7 @@ def main():
 
     print(
         f"Part 1: {'✅' if pass1 else '❌'} {result1} (expected: {expected_part1}) "
-        f"[{duration1*1000:.2f}ms]"
+        f"[{duration1 * 1000:.2f}ms]"
     )
 
     # Part 2
@@ -34,10 +34,10 @@ def main():
 
     print(
         f"Part 2: {'✅' if pass2 else '❌'} {result2} (expected: {expected_part2}) "
-        f"[{duration2*1000:.2f}ms]"
+        f"[{duration2 * 1000:.2f}ms]"
     )
 
-    print(f"Total: {(duration1 + duration2)*1000:.2f}ms")
+    print(f"Total: {(duration1 + duration2) * 1000:.2f}ms")
 
     if pass1 and pass2:
         print("\n🌟🌟 All tests passed!")

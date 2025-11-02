@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code 2016 Day 1 solution in Rust";
+  description = "Advent of Code solution in Rust";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -56,6 +56,22 @@
             installPhase = ''
               mkdir -p $out
               echo "Lint passed" > $out/result
+            '';
+          };
+
+          # Verify formatting is correct
+          format-check = pkgs.rustPlatform.buildRustPackage {
+            pname = "s16e01-format-check";
+            version = "0.1.0";
+            src = ./.;
+            cargoLock.lockFile = ./Cargo.lock;
+            nativeBuildInputs = [ pkgs.rustfmt ];
+            buildPhase = ''
+              cargo fmt --check || (echo "Format check failed. Run 'just format' to fix." && exit 1)
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
             '';
           };
         };
