@@ -62,35 +62,29 @@
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
     let
-      # Derive template list from inputs - any input starting with "template-"
-      templates = builtins.filter
-        (name: nixpkgs.lib.hasPrefix "template-" name)
+      # All project flakes - everything except system inputs
+      projectFlakes = builtins.filter
+        (name: name != "nixpkgs" && name != "flake-utils")
         (builtins.attrNames inputs);
-
-      # Legacy Haskell solutions
-      legacySolutions = [ "aoc21" "aoc22" ];
-
-      # All flakes to check
-      allFlakes = templates ++ legacySolutions;
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # Aggregate checks from all templates and legacy solutions
+        # Aggregate checks from all project flakes
         allChecks = pkgs.lib.foldl'
           (acc: name: acc // (inputs.${name}.checks.${system} or {}))
           {}
-          allFlakes;
+          projectFlakes;
 
-        # Aggregate packages from all templates and legacy solutions
+        # Aggregate packages from all project flakes
         allPackages = pkgs.lib.foldl'
           (acc: name:
             let pkg = inputs.${name}.packages.${system}.default or null;
             in if pkg != null then acc // { ${name} = pkg; } else acc
           )
           {}
-          allFlakes;
+          projectFlakes;
       in
       {
         checks = allChecks;
