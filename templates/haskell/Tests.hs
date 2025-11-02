@@ -15,7 +15,9 @@ allTests :: Test
 allTests =
   TestList
     [ TestLabel "part1_sample_1" $
-        TestCase $ assertEqual "Sample test" 0 (solvePart1 "sample input"),
+        TestCase $
+          assertEqual "Sample test" 0 (solvePart1 "sample input"),
       TestLabel "part2_sample_1" $
-        TestCase $ assertEqual "Sample test" 0 (solvePart2 "sample input")
+        TestCase $
+          assertEqual "Sample test" 0 (solvePart2 "sample input")
     ]

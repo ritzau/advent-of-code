@@ -43,7 +43,4 @@ class Instruction:
 
 def parse_input(input_text: str) -> list[Instruction]:
     """Parse the input into a list of instructions."""
-    return [
-        Instruction(turn=s[0], blocks=int(s[1:]))
-        for s in input_text.strip().split(", ")
-    ]
+    return [Instruction(turn=s[0], blocks=int(s[1:])) for s in input_text.strip().split(", ")]
