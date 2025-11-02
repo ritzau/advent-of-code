@@ -77,7 +77,7 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-solution";
+            program = "${package}/bin/aoc_solution";
           };
 
           # Run individual parts
