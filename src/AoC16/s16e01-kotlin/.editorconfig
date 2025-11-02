@@ -1,0 +1,3 @@
+[*.{kt,kts}]
+# Disable filename rule for files with top-level functions
+ktlint_standard_filename = disabled
