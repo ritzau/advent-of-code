@@ -14,7 +14,13 @@
         # Build the Haskell package using Cabal
         haskellPackages = pkgs.haskellPackages;
 
+        # Build package without tests (for faster dev iteration)
         package = haskellPackages.callCabal2nix "aoc-solution" ./. { };
+
+        # Build package with tests enabled (for checks)
+        packageWithTests = pkgs.haskell.lib.compose.doCheck (
+          haskellPackages.callCabal2nix "aoc-solution" ./. { }
+        );
 
       in
       {
@@ -26,24 +32,9 @@
           # Build succeeds = package is valid
           build = package;
 
-          # Run tests
-          test = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-tests";
-            src = ./.;
-            nativeBuildInputs = [
-              haskellPackages.ghc
-              haskellPackages.cabal-install
-            ];
-            buildPhase = ''
-              export HOME=$TMPDIR
-              cabal update
-              cabal test --test-show-details=direct
-            '';
-            installPhase = ''
-              mkdir -p $out
-              echo "Tests passed" > $out/result
-            '';
-          };
+          # Run tests through Nix's Haskell infrastructure
+          # This properly handles test dependencies without network access
+          test = packageWithTests;
 
           # Check formatting with ormolu
           format-check = pkgs.stdenv.mkDerivation {
