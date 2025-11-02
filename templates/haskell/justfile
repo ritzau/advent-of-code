@@ -16,25 +16,25 @@ run:
 run-part PART:
     nix run .#part{{PART}}
 
-# Run all checks (build + tests + format-check)
-check:
+# Run all checks (build + tests + format)
+check-all:
     nix flake check
 
 # Run tests only
-test:
+check-test:
     nix build .#checks.{{system}}.test
 
 # Check formatting without modifying files
-format-check:
+check-format:
     nix build .#checks.{{system}}.format-check
 
-# Format code (requires nix develop or ormolu installed)
+# Format code
 format:
-    ormolu -i *.hs
+    nix develop --command ormolu -i *.hs
 
-# Lint code (requires hlint)
+# Lint code
 lint:
-    hlint .
+    nix develop --command hlint .
 
 # Clean build artifacts
 clean:
