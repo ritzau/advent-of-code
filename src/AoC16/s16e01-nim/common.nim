@@ -94,11 +94,13 @@ when isMainModule:
 
   suite "AoC 2016 Day 1":
     test "part1_sample_1":
-      # Following R2, L3 leaves you 2 blocks East and 3 blocks North, or 5 blocks away
+      # Following R2, L3 leaves you 2 blocks East and 3 blocks North,
+      # or 5 blocks away
       check solvePart1("R2, L3") == 5
 
     test "part1_sample_2":
-      # R2, R2, R2 leaves you 2 blocks due South of your starting position, which is 2 blocks away
+      # R2, R2, R2 leaves you 2 blocks due South of your starting
+      # position, which is 2 blocks away
       check solvePart1("R2, R2, R2") == 2
 
     test "part1_sample_3":

@@ -1,6 +1,5 @@
 """Tests for AoC 2016 Day 1 solution."""
 
-import pytest
 from s16e01 import solve_part1, solve_part2
 
 
@@ -12,7 +11,7 @@ class TestPart1:
         assert solve_part1("R2, L3") == 5
 
     def test_sample_2(self):
-        """R2, R2, R2 leaves you 2 blocks due South of your starting position, which is 2 blocks away."""
+        """R2, R2, R2 leaves you 2 blocks due South, which is 2 blocks away."""
         assert solve_part1("R2, R2, R2") == 2
 
     def test_sample_3(self):
