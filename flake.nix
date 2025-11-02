@@ -113,25 +113,34 @@
       projectFlakes = builtins.filter
         (name: name != "self" && name != "nixpkgs" && name != "flake-utils")
         (builtins.attrNames inputs);
+
+      # Check if a string starts with a prefix
+      hasPrefix = prefix: str:
+        builtins.substring 0 (builtins.stringLength prefix) str == prefix;
+
+      # Solution flakes only - exclude templates (templates are for scaffolding, not building)
+      solutionFlakes = builtins.filter
+        (name: !(hasPrefix "template-" name))
+        projectFlakes;
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # Aggregate checks from all project flakes
+        # Aggregate checks from all project flakes (including templates)
         allChecks = pkgs.lib.foldl'
           (acc: name: acc // (inputs.${name}.checks.${system} or {}))
           {}
           projectFlakes;
 
-        # Aggregate packages from all project flakes
+        # Aggregate packages from solution flakes only (exclude templates)
         allPackages = pkgs.lib.foldl'
           (acc: name:
             let pkg = inputs.${name}.packages.${system}.default or null;
             in if pkg != null then acc // { ${name} = pkg; } else acc
           )
           {}
-          projectFlakes;
+          solutionFlakes;
       in
       {
         checks = allChecks;
