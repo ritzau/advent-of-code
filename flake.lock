@@ -38,6 +38,25 @@
       },
       "parent": []
     },
+    "aoc23": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "./src/AoC23",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/AoC23",
+        "type": "path"
+      },
+      "parent": []
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -88,12 +107,53 @@
         "type": "github"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1735563628,
+        "narHash": "sha256-OnSAY7XDSx7CtDoqNh8jwVwh4xNL/2HaJxGjryLWzX8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b134951a4c9f3c995fd7be05f3243f8ecd65d798",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_4": {
+      "locked": {
+        "lastModified": 1735563628,
+        "narHash": "sha256-OnSAY7XDSx7CtDoqNh8jwVwh4xNL/2HaJxGjryLWzX8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b134951a4c9f3c995fd7be05f3243f8ecd65d798",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "aoc21": "aoc21",
         "aoc22": "aoc22",
+        "aoc23": "aoc23",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
+        "s16e01-go": "s16e01-go",
+        "s16e01-haskell": "s16e01-haskell",
+        "s16e01-kotlin": "s16e01-kotlin",
+        "s16e01-nim": "s16e01-nim",
+        "s16e01-python": "s16e01-python",
+        "s16e01-rust": "s16e01-rust",
+        "s16e01-typescript": "s16e01-typescript",
+        "s16e01-zig": "s16e01-zig",
         "template-go": "template-go",
         "template-haskell": "template-haskell",
         "template-kotlin": "template-kotlin",
@@ -103,6 +163,155 @@
         "template-typescript": "template-typescript",
         "template-zig": "template-zig"
       }
+    },
+    "s16e01-go": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "./src/AoC16/s16e01-go",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/AoC16/s16e01-go",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "s16e01-haskell": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "path": "./src/AoC16/s16e01-haskell",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/AoC16/s16e01-haskell",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "s16e01-kotlin": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems_2"
+      },
+      "locked": {
+        "path": "./src/AoC16/s16e01-kotlin",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/AoC16/s16e01-kotlin",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "s16e01-nim": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "./src/AoC16/s16e01-nim",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/AoC16/s16e01-nim",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "s16e01-python": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "./src/AoC16/s16e01-python",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/AoC16/s16e01-python",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "s16e01-rust": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "./src/AoC16/s16e01-rust",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/AoC16/s16e01-rust",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "s16e01-typescript": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "./src/AoC16/s16e01-typescript",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/AoC16/s16e01-typescript",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "s16e01-zig": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "path": "./src/AoC16/s16e01-zig",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/AoC16/s16e01-zig",
+        "type": "path"
+      },
+      "parent": []
     },
     "systems": {
       "locked": {
@@ -120,6 +329,21 @@
       }
     },
     "systems_2": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_3": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
@@ -180,7 +404,7 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "systems": "systems_2"
+        "systems": "systems_3"
       },
       "locked": {
         "path": "./templates/kotlin",
@@ -273,7 +497,7 @@
         "flake-utils": [
           "flake-utils"
         ],
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_4"
       },
       "locked": {
         "path": "./templates/zig",

@@ -58,6 +58,53 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    aoc23 = {
+      url = "path:./src/AoC23";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
+    # 2016 Day 1 Solutions (multi-language implementations)
+    s16e01-go = {
+      url = "path:./src/AoC16/s16e01-go";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-haskell = {
+      url = "path:./src/AoC16/s16e01-haskell";
+      # Don't follow root nixpkgs - this solution uses nixos-24.05 for GHC 9.6.5
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-kotlin = {
+      url = "path:./src/AoC16/s16e01-kotlin";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-nim = {
+      url = "path:./src/AoC16/s16e01-nim";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-python = {
+      url = "path:./src/AoC16/s16e01-python";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-rust = {
+      url = "path:./src/AoC16/s16e01-rust";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-typescript = {
+      url = "path:./src/AoC16/s16e01-typescript";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-zig = {
+      url = "path:./src/AoC16/s16e01-zig";
+      # Don't follow nixpkgs - Zig uses its own pinned version for zig_0_12
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
@@ -66,18 +113,80 @@
       projectFlakes = builtins.filter
         (name: name != "self" && name != "nixpkgs" && name != "flake-utils")
         (builtins.attrNames inputs);
+
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # Aggregate checks from all project flakes
+        # Aggregate checks from all project flakes (including templates)
+        # Namespace each flake's checks to avoid name collisions
         allChecks = pkgs.lib.foldl'
-          (acc: name: acc // (inputs.${name}.checks.${system} or {}))
+          (acc: name:
+            let
+              flakeChecks = inputs.${name}.checks.${system} or {};
+              # Prefix each check with the flake name
+              namespacedChecks = pkgs.lib.mapAttrs'
+                (checkName: checkValue: pkgs.lib.nameValuePair "${name}-${checkName}" checkValue)
+                flakeChecks;
+            in
+              acc // namespacedChecks
+          )
           {}
           projectFlakes;
 
-        # Aggregate packages from all project flakes
+        # Helper to determine binary prefix for a flake
+        getBinaryPrefix = name:
+          if pkgs.lib.hasPrefix "template-" name then
+            name  # template-rust -> template-rust
+          else if pkgs.lib.hasPrefix "s" name && pkgs.lib.hasInfix "e" name then
+            name  # s16e01-rust -> s16e01-rust
+          else if name == "aoc21" then
+            "aoc21"
+          else if name == "aoc22" then
+            "aoc22"
+          else if name == "aoc23" then
+            "aoc23"
+          else
+            name;
+
+        # Wrap a package to rename its binaries with proper prefix
+        wrapWithPrefix = name: pkg:
+          let
+            prefix = getBinaryPrefix name;
+            # Determine if we need to rename binaries
+            needsRenaming = (pkgs.lib.hasPrefix "template-" name) ||
+                           (pkgs.lib.hasPrefix "s" name && pkgs.lib.hasInfix "e" name);
+          in
+            if needsRenaming then
+              pkgs.symlinkJoin {
+                name = "${name}-wrapped";
+                paths = [ pkg ];
+                postBuild = ''
+                  # Rename binaries with prefix
+                  if [ -d $out/bin ]; then
+                    cd $out/bin
+                    # Rename main binary if it exists (various names: aoc-template, s16e01, etc.)
+                    for main in aoc-template aoc-solution ${name} s16e01; do
+                      if [ -f "$main" ] || [ -L "$main" ]; then
+                        ln -sf "$main" "${prefix}-main"
+                      fi
+                    done
+                    # Rename part1 and part2
+                    if [ -f "part1" ] || [ -L "part1" ]; then
+                      ln -sf "part1" "${prefix}-part1"
+                    fi
+                    if [ -f "part2" ] || [ -L "part2" ]; then
+                      ln -sf "part2" "${prefix}-part2"
+                    fi
+                  fi
+                '';
+              }
+            else
+              pkg;
+
+        # Aggregate packages from all project flakes (including templates)
+        # Don't wrap them here to avoid IFD issues with nix flake show
         allPackages = pkgs.lib.foldl'
           (acc: name:
             let pkg = inputs.${name}.packages.${system}.default or null;
@@ -88,7 +197,15 @@
       in
       {
         checks = allChecks;
-        packages = allPackages;
+
+        packages = allPackages // {
+          # Default package that builds all solution packages with renamed binaries
+          default = pkgs.symlinkJoin {
+            name = "advent-of-code-all";
+            paths = pkgs.lib.mapAttrsToList (name: pkg: wrapWithPrefix name pkg) allPackages;
+            meta.description = "All Advent of Code solution packages with properly named binaries";
+          };
+        };
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
@@ -103,11 +220,27 @@
             echo "Available templates:"
             echo "  Go, Haskell, Kotlin, Nim, Python, Rust, TypeScript, Zig"
             echo ""
+            echo "Solutions:"
+            echo "  src/AoC16/s16e01-*         - 2016 Day 1 (all 8 languages)"
+            echo "  src/AoC21                 - 2021 solutions (Haskell)"
+            echo "  src/AoC22                 - 2022 solutions (Haskell)"
+            echo "  src/AoC23                 - 2023 solutions (TypeScript)"
+            echo ""
             echo "Commands:"
-            echo "  nix flake check              - Check all templates and legacy solutions"
+            echo "  nix flake check --verbose    - Check all templates and solutions (shows what's running)"
+            echo "  nix flake check --print-build-logs - Show full build output for failing checks"
+            echo "  nix build                    - Build all solution packages (default)"
+            echo "  nix build .#aoc23            - Build specific solution package"
             echo "  cd templates/<lang>          - Work on specific template"
-            echo "  cd src/AoC21               - Legacy Haskell 2021 solutions"
-            echo "  cd src/AoC22               - Legacy Haskell 2022 solutions"
+            echo ""
+            echo "Verify what checks are included:"
+            echo "  nix eval .#checks.x86_64-darwin --apply builtins.attrNames  # List all checks (macOS)"
+            echo "  nix eval .#checks.x86_64-linux --apply builtins.attrNames   # List all checks (Linux)"
+            echo "  nix flake metadata           # Show flake inputs without evaluating"
+            echo ""
+            echo "Helper scripts:"
+            echo "  scripts/show-flake-info.sh   - Show flake structure (replaces nix flake show)"
+            echo "  scripts/check-fresh.sh       - Run checks with fresh rebuild (no cache)"
             echo ""
             echo "Just commands:"
             echo "  just new <year> <day> <lang> - Create new solution from template"

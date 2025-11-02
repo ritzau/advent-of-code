@@ -25,9 +25,10 @@ in stdenv.mkDerivation {
     runHook preBuild
     export GRADLE_USER_HOME=$TMP/gradle-home
     export NIX_MAVEN_REPO=${mavenRepo}
+    unset GRADLE_OPTS
     gradle distTar -x test \
       --offline --no-daemon \
-      --warning-mode=all --parallel --console=plain \
+      --warning-mode=all --parallel \
       -PnixMavenRepo=${mavenRepo}
     runHook postBuild
   '';
@@ -38,9 +39,10 @@ in stdenv.mkDerivation {
     ktlint src/**/*.kt
     export GRADLE_USER_HOME=$TMP/gradle-home
     export NIX_MAVEN_REPO=${mavenRepo}
+    unset GRADLE_OPTS
     gradle check \
       --offline --no-daemon \
-      --warning-mode=all --parallel --console=plain \
+      --warning-mode=all --parallel \
       -PnixMavenRepo=${mavenRepo}
     runHook postCheck
   '';
