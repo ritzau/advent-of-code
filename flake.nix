@@ -62,9 +62,9 @@
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
     let
-      # All project flakes - everything except system inputs
+      # All project flakes - everything except self and system inputs
       projectFlakes = builtins.filter
-        (name: name != "nixpkgs" && name != "flake-utils")
+        (name: name != "self" && name != "nixpkgs" && name != "flake-utils")
         (builtins.attrNames inputs);
     in
     flake-utils.lib.eachDefaultSystem (system:
