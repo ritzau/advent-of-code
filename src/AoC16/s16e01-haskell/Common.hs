@@ -9,9 +9,9 @@ module Common
   )
 where
 
-import qualified Data.Set as Set
 import Data.List (foldl')
 import Data.List.Split (splitOn)
+import qualified Data.Set as Set
 
 -- | Cardinal directions
 data Direction = North | East | South | West
