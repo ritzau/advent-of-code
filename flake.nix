@@ -58,6 +58,53 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    aoc23 = {
+      url = "path:./src/AoC23";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
+    # 2016 Day 1 Solutions (multi-language implementations)
+    s16e01-go = {
+      url = "path:./src/AoC16/s16e01-go";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-haskell = {
+      url = "path:./src/AoC16/s16e01-haskell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-kotlin = {
+      url = "path:./src/AoC16/s16e01-kotlin";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-nim = {
+      url = "path:./src/AoC16/s16e01-nim";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-python = {
+      url = "path:./src/AoC16/s16e01-python";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-rust = {
+      url = "path:./src/AoC16/s16e01-rust";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-typescript = {
+      url = "path:./src/AoC16/s16e01-typescript";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-zig = {
+      url = "path:./src/AoC16/s16e01-zig";
+      # Don't follow nixpkgs - Zig uses its own pinned version for zig_0_12
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
@@ -103,11 +150,16 @@
             echo "Available templates:"
             echo "  Go, Haskell, Kotlin, Nim, Python, Rust, TypeScript, Zig"
             echo ""
+            echo "Solutions:"
+            echo "  src/AoC16/s16e01-*         - 2016 Day 1 (all 8 languages)"
+            echo "  src/AoC21                 - 2021 solutions (Haskell)"
+            echo "  src/AoC22                 - 2022 solutions (Haskell)"
+            echo "  src/AoC23                 - 2023 solutions (TypeScript)"
+            echo ""
             echo "Commands:"
-            echo "  nix flake check              - Check all templates and legacy solutions"
+            echo "  nix flake check              - Check all templates and solutions"
+            echo "  nix build                    - Build all solution packages"
             echo "  cd templates/<lang>          - Work on specific template"
-            echo "  cd src/AoC21               - Legacy Haskell 2021 solutions"
-            echo "  cd src/AoC22               - Legacy Haskell 2022 solutions"
             echo ""
             echo "Just commands:"
             echo "  just new <year> <day> <lang> - Create new solution from template"
