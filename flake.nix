@@ -135,7 +135,15 @@
       in
       {
         checks = allChecks;
-        packages = allPackages;
+
+        packages = allPackages // {
+          # Default package that builds all solution packages
+          default = pkgs.symlinkJoin {
+            name = "advent-of-code-all";
+            paths = builtins.attrValues allPackages;
+            meta.description = "All Advent of Code solution packages";
+          };
+        };
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
@@ -157,9 +165,16 @@
             echo "  src/AoC23                 - 2023 solutions (TypeScript)"
             echo ""
             echo "Commands:"
-            echo "  nix flake check              - Check all templates and solutions"
-            echo "  nix build                    - Build all solution packages"
+            echo "  nix flake check --verbose    - Check all templates and solutions (shows details)"
+            echo "  nix flake check --no-update-lock-file - Check without updating lock file"
+            echo "  nix flake show               - Show all exposed packages and checks"
+            echo "  nix build                    - Build all solution packages (default)"
+            echo "  nix build .#aoc23            - Build specific solution package"
             echo "  cd templates/<lang>          - Work on specific template"
+            echo ""
+            echo "Verification:"
+            echo "  nix eval .#checks.x86_64-darwin --apply builtins.attrNames  - List all checks (macOS)"
+            echo "  nix eval .#checks.x86_64-linux --apply builtins.attrNames   - List all checks (Linux)"
             echo ""
             echo "Just commands:"
             echo "  just new <year> <day> <lang> - Create new solution from template"
