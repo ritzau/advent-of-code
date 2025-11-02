@@ -15,10 +15,10 @@ run-part PART:
 
 # Format code
 format:
-    nix run .#format
+    nix develop --command cargo fmt
 
 # Run all checks (build + tests + lint)
-check:
+check-all:
     nix flake check
 
 # Clean build artifacts

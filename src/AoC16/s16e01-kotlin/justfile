@@ -15,10 +15,10 @@ run-part PART:
 
 # Format code
 format:
-    nix run .#format
+    nix develop --command ktlint -F "src/**/*.kt"
 
 # Run all checks (build + tests)
-check:
+check-all:
     nix flake check
 
 # Clean build artifacts
