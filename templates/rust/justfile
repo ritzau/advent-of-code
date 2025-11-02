@@ -1,6 +1,9 @@
 # Advent of Code Solution
 # All commands use Nix for reproducible builds
 
+# Get current system (e.g., x86_64-linux, aarch64-darwin)
+system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
+
 # Build the solution
 build:
     nix build
@@ -20,6 +23,14 @@ format:
 # Run all checks (build + tests + lint)
 check-all:
     nix flake check
+
+# Run tests only
+check-test:
+    nix build .#checks.{{system}}.test
+
+# Run clippy lint only
+check-lint:
+    nix build .#checks.{{system}}.lint
 
 # Clean build artifacts
 clean:
