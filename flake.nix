@@ -72,7 +72,7 @@
     };
     s16e01-haskell = {
       url = "path:./src/AoC16/s16e01-haskell";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # Don't follow root nixpkgs - this solution uses nixos-24.05 for GHC 9.6.5
       inputs.flake-utils.follows = "flake-utils";
     };
     s16e01-kotlin = {
@@ -114,43 +114,96 @@
         (name: name != "self" && name != "nixpkgs" && name != "flake-utils")
         (builtins.attrNames inputs);
 
-      # Check if a string starts with a prefix
-      hasPrefix = prefix: str:
-        builtins.substring 0 (builtins.stringLength prefix) str == prefix;
-
-      # Solution flakes only - exclude templates (templates are for scaffolding, not building)
-      solutionFlakes = builtins.filter
-        (name: !(hasPrefix "template-" name))
-        projectFlakes;
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
         # Aggregate checks from all project flakes (including templates)
+        # Namespace each flake's checks to avoid name collisions
         allChecks = pkgs.lib.foldl'
-          (acc: name: acc // (inputs.${name}.checks.${system} or {}))
+          (acc: name:
+            let
+              flakeChecks = inputs.${name}.checks.${system} or {};
+              # Prefix each check with the flake name
+              namespacedChecks = pkgs.lib.mapAttrs'
+                (checkName: checkValue: pkgs.lib.nameValuePair "${name}-${checkName}" checkValue)
+                flakeChecks;
+            in
+              acc // namespacedChecks
+          )
           {}
           projectFlakes;
 
-        # Aggregate packages from solution flakes only (exclude templates)
+        # Helper to determine binary prefix for a flake
+        getBinaryPrefix = name:
+          if pkgs.lib.hasPrefix "template-" name then
+            name  # template-rust -> template-rust
+          else if pkgs.lib.hasPrefix "s" name && pkgs.lib.hasInfix "e" name then
+            name  # s16e01-rust -> s16e01-rust
+          else if name == "aoc21" then
+            "aoc21"
+          else if name == "aoc22" then
+            "aoc22"
+          else if name == "aoc23" then
+            "aoc23"
+          else
+            name;
+
+        # Wrap a package to rename its binaries with proper prefix
+        wrapWithPrefix = name: pkg:
+          let
+            prefix = getBinaryPrefix name;
+            # Determine if we need to rename binaries
+            needsRenaming = (pkgs.lib.hasPrefix "template-" name) ||
+                           (pkgs.lib.hasPrefix "s" name && pkgs.lib.hasInfix "e" name);
+          in
+            if needsRenaming then
+              pkgs.symlinkJoin {
+                name = "${name}-wrapped";
+                paths = [ pkg ];
+                postBuild = ''
+                  # Rename binaries with prefix
+                  if [ -d $out/bin ]; then
+                    cd $out/bin
+                    # Rename main binary if it exists (various names: aoc-template, s16e01, etc.)
+                    for main in aoc-template aoc-solution ${name} s16e01; do
+                      if [ -f "$main" ] || [ -L "$main" ]; then
+                        ln -sf "$main" "${prefix}-main"
+                      fi
+                    done
+                    # Rename part1 and part2
+                    if [ -f "part1" ] || [ -L "part1" ]; then
+                      ln -sf "part1" "${prefix}-part1"
+                    fi
+                    if [ -f "part2" ] || [ -L "part2" ]; then
+                      ln -sf "part2" "${prefix}-part2"
+                    fi
+                  fi
+                '';
+              }
+            else
+              pkg;
+
+        # Aggregate packages from all project flakes (including templates)
+        # Don't wrap them here to avoid IFD issues with nix flake show
         allPackages = pkgs.lib.foldl'
           (acc: name:
             let pkg = inputs.${name}.packages.${system}.default or null;
             in if pkg != null then acc // { ${name} = pkg; } else acc
           )
           {}
-          solutionFlakes;
+          projectFlakes;
       in
       {
         checks = allChecks;
 
         packages = allPackages // {
-          # Default package that builds all solution packages
+          # Default package that builds all solution packages with renamed binaries
           default = pkgs.symlinkJoin {
             name = "advent-of-code-all";
-            paths = builtins.attrValues allPackages;
-            meta.description = "All Advent of Code solution packages";
+            paths = pkgs.lib.mapAttrsToList (name: pkg: wrapWithPrefix name pkg) allPackages;
+            meta.description = "All Advent of Code solution packages with properly named binaries";
           };
         };
 

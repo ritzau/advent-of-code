@@ -1,5 +1,22 @@
 # Helper Scripts
 
+## verify-flake.sh
+
+Shows what packages and checks are included in the flake. Use this to verify that all solutions and templates are being built and tested.
+
+```bash
+./scripts/verify-flake.sh
+
+# Or for a specific system
+./scripts/verify-flake.sh aarch64-darwin
+```
+
+**Output:**
+- Lists all packages that `nix build` will build
+- Lists all checks that `nix flake check` will run
+- Shows breakdown of template vs solution checks
+- Provides quick command reference
+
 ## show-flake-info.sh
 
 Shows flake structure information (replacement for `nix flake show` which doesn't work with IFD).

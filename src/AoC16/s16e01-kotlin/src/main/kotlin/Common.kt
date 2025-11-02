@@ -30,10 +30,14 @@ enum class Direction {
         }
 }
 
-data class Instruction(val turn: Char, val blocks: Int)
+data class Instruction(
+    val turn: Char,
+    val blocks: Int,
+)
 
-fun parseInput(input: String): List<Instruction> {
-    return input.trim()
+fun parseInput(input: String): List<Instruction> =
+    input
+        .trim()
         .split(", ")
         .filter { it.isNotEmpty() }
         .map { part ->
@@ -41,7 +45,6 @@ fun parseInput(input: String): List<Instruction> {
             val blocks = part.substring(1).toInt()
             Instruction(turn, blocks)
         }
-}
 
 fun solvePart1(input: String): Int {
     val instructions = parseInput(input)

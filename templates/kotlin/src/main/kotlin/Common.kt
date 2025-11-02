@@ -1,8 +1,6 @@
 // Common utilities and solution functions
 
-fun parseInput(input: String): List<String> {
-    return input.trim().lines()
-}
+fun parseInput(input: String): List<String> = input.trim().lines()
 
 fun solvePart1(input: String): Int {
     val lines = parseInput(input)
