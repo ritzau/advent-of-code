@@ -1,0 +1,34 @@
+cabal-version:      3.0
+name:               aoc-solution
+version:            0.1.0.0
+synopsis:           Advent of Code solution
+author:             AoC Solver
+build-type:         Simple
+
+common shared-properties
+    default-language: Haskell2010
+    ghc-options:      -Wall -O2
+    build-depends:    base >= 4.14 && < 5
+                    , containers
+
+library
+    import:           shared-properties
+    hs-source-dirs:   .
+    exposed-modules:  Common
+
+executable part1
+    import:           shared-properties
+    main-is:          Part1.hs
+    build-depends:    aoc-solution
+
+executable part2
+    import:           shared-properties
+    main-is:          Part2.hs
+    build-depends:    aoc-solution
+
+test-suite aoc-tests
+    import:           shared-properties
+    type:             exitcode-stdio-1.0
+    main-is:          Tests.hs
+    build-depends:    aoc-solution
+                    , HUnit

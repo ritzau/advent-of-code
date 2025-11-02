@@ -47,6 +47,7 @@ Multi-year, multi-language solutions for [Advent of Code](https://adventofcode.c
 - `typescript` - TypeScript with Node.js
 - `rust` - Rust with Cargo
 - `go` - Go
+- `haskell` - Haskell with Cabal
 - `kotlin` - Kotlin scripting
 - `nim` - Nim
 - `zig` - Zig
@@ -117,8 +118,42 @@ The flake uses Node.js 20 (matching upstream) and manages dependencies via yarn.
 
 ### AoC 2022 (Haskell)
 
+AoC 2022 has 15 days completed in Haskell with a Nix flake for reproducible builds:
+
 ```bash
-cabal run
+cd src/AoC22
+
+# Using Nix (recommended)
+nix build          # Build the project
+nix run            # Run all 15 days
+
+# Using Cabal
+cabal build
+cabal run aoc22
+
+# Using Just
+just run           # Run all solutions
+just format        # Format code with ormolu
+just lint          # Lint with hlint
+```
+
+### AoC 2021 (Haskell)
+
+AoC 2021 has 1 day completed in Haskell with a Nix flake:
+
+```bash
+cd src/AoC21
+
+# Using Nix (recommended)
+nix build          # Build the project
+nix run            # Run day 1
+
+# Using Cabal
+cabal build
+cabal run aoc21
+
+# Using Just
+just run
 ```
 
 ## 📝 Notes

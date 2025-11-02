@@ -16,7 +16,7 @@ module Helpers
 where
 
 import Data.Char (toUpper)
-import Paths_AdventOfCode (getDataFileName)
+import Paths_aoc21 (getDataFileName)
 
 afterEmpty :: [String] -> [String]
 afterEmpty ("" : ls) = ls
