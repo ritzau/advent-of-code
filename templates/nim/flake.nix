@@ -52,17 +52,19 @@
           format-check = pkgs.stdenv.mkDerivation {
             name = "aoc-solution-format-check";
             src = ./.;
-            buildInputs = [ pkgs.nim ];
+            buildInputs = [ pkgs.nim pkgs.diffutils ];
             buildPhase = ''
-              # Copy files to temp location to check formatting
-              cp -r . $TMPDIR/check
-              cd $TMPDIR/check
+              # Copy nim files to temp location to check formatting
+              cp *.nim $TMPDIR/
+              cd $TMPDIR
               nimpretty *.nim
-              # Compare with original
-              if ! diff -r . $src > /dev/null; then
-                echo "Format check failed. Run 'just format' to fix."
-                exit 1
-              fi
+              # Compare formatted files with originals
+              for file in *.nim; do
+                if ! diff -q "$file" "$src/$file" > /dev/null; then
+                  echo "Format check failed for $file. Run 'just format' to fix."
+                  exit 1
+                fi
+              done
             '';
             installPhase = ''
               mkdir -p $out
