@@ -32,6 +32,10 @@ check-test:
 check-lint:
     nix build .#checks.{{system}}.lint
 
+# Check formatting without modifying files
+check-format:
+    nix build .#checks.{{system}}.format-check
+
 # Clean build artifacts
 clean:
     rm -rf target/ result

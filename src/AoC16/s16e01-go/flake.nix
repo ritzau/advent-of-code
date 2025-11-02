@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code 2016 Day 1 solution in Go";
+  description = "Advent of Code solution in Go";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,7 +13,7 @@
 
         # Build the Go package
         package = pkgs.buildGoModule {
-          pname = "s16e01";
+          pname = "aoc-solution";
           version = "0.1.0";
           src = ./.;
 
@@ -33,7 +33,7 @@
 
           # Run tests with proper Go setup
           test = pkgs.stdenv.mkDerivation {
-            name = "s16e01-tests";
+            name = "aoc-solution-tests";
             src = ./.;
             buildInputs = [ pkgs.go ];
             buildPhase = ''
@@ -45,13 +45,34 @@
               echo "Tests passed" > $out/result
             '';
           };
+
+          # Verify formatting is correct
+          format-check = pkgs.stdenv.mkDerivation {
+            name = "aoc-solution-format-check";
+            src = ./.;
+            buildInputs = [ pkgs.go ];
+            buildPhase = ''
+              # gofmt returns non-zero if files need formatting
+              unformatted=$(gofmt -l .)
+              if [ -n "$unformatted" ]; then
+                echo "The following files need formatting:"
+                echo "$unformatted"
+                echo "Run 'just format' to fix."
+                exit 1
+              fi
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
+            '';
+          };
         };
 
         apps = {
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/s16e01";
+            program = "${package}/bin/aoc-solution";
           };
 
           # Run individual parts

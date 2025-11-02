@@ -28,6 +28,10 @@ check-all:
 check-test:
     nix build .#checks.{{system}}.test
 
+# Check formatting without modifying files
+check-format:
+    nix build .#checks.{{system}}.format-check
+
 # Clean build artifacts
 clean:
     rm -rf result

@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code 2016 Day 1 solution in Rust";
+  description = "Advent of Code solution in Rust";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,7 +13,7 @@
 
         # Build the Rust package
         package = pkgs.rustPlatform.buildRustPackage {
-          pname = "s16e01";
+          pname = "aoc-template";
           version = "0.1.0";
           src = ./.;
           cargoLock.lockFile = ./Cargo.lock;
@@ -30,7 +30,7 @@
 
           # Run tests with proper Rust setup
           test = pkgs.rustPlatform.buildRustPackage {
-            pname = "s16e01-tests";
+            pname = "aoc-template-tests";
             version = "0.1.0";
             src = ./.;
             cargoLock.lockFile = ./Cargo.lock;
@@ -45,7 +45,7 @@
 
           # Run clippy with proper Rust setup
           lint = pkgs.rustPlatform.buildRustPackage {
-            pname = "s16e01-lint";
+            pname = "aoc-template-lint";
             version = "0.1.0";
             src = ./.;
             cargoLock.lockFile = ./Cargo.lock;
@@ -58,13 +58,29 @@
               echo "Lint passed" > $out/result
             '';
           };
+
+          # Verify formatting is correct
+          format-check = pkgs.rustPlatform.buildRustPackage {
+            pname = "aoc-template-format-check";
+            version = "0.1.0";
+            src = ./.;
+            cargoLock.lockFile = ./Cargo.lock;
+            nativeBuildInputs = [ pkgs.rustfmt ];
+            buildPhase = ''
+              cargo fmt --check || (echo "Format check failed. Run 'just format' to fix." && exit 1)
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
+            '';
+          };
         };
 
         apps = {
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/s16e01";
+            program = "${package}/bin/aoc-template";
           };
 
           # Run individual parts

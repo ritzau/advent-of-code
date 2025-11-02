@@ -47,6 +47,28 @@
               echo "Tests passed" > $out/result
             '';
           };
+
+          # Verify formatting is correct
+          format-check = pkgs.stdenv.mkDerivation {
+            name = "aoc-solution-format-check";
+            src = ./.;
+            buildInputs = [ pkgs.nim ];
+            buildPhase = ''
+              # Copy files to temp location to check formatting
+              cp -r . $TMPDIR/check
+              cd $TMPDIR/check
+              nimpretty *.nim
+              # Compare with original
+              if ! diff -r . $src > /dev/null; then
+                echo "Format check failed. Run 'just format' to fix."
+                exit 1
+              fi
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
+            '';
+          };
         };
 
         apps = {

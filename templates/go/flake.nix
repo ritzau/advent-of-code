@@ -45,6 +45,27 @@
               echo "Tests passed" > $out/result
             '';
           };
+
+          # Verify formatting is correct
+          format-check = pkgs.stdenv.mkDerivation {
+            name = "aoc-solution-format-check";
+            src = ./.;
+            buildInputs = [ pkgs.go ];
+            buildPhase = ''
+              # gofmt returns non-zero if files need formatting
+              unformatted=$(gofmt -l .)
+              if [ -n "$unformatted" ]; then
+                echo "The following files need formatting:"
+                echo "$unformatted"
+                echo "Run 'just format' to fix."
+                exit 1
+              fi
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
+            '';
+          };
         };
 
         apps = {

@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code 2016 Day 1 solution in Nim";
+  description = "Advent of Code solution in Nim";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,13 +13,13 @@
 
         # Build the Nim package
         package = pkgs.buildNimPackage (finalAttrs: {
-          pname = "s16e01";
+          pname = "aoc-solution";
           version = "0.1.0";
           src = ./.;
 
           lockFile = ./lock.json;
 
-          nimbleFile = ./s16e01.nimble;
+          nimbleFile = ./aoc_solution.nimble;
 
           nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
         });
@@ -35,7 +35,7 @@
 
           # Run tests with proper Nim setup
           test = pkgs.stdenv.mkDerivation {
-            name = "s16e01-tests";
+            name = "aoc-solution-tests";
             src = ./.;
             buildInputs = [ pkgs.nim ];
             buildPhase = ''
@@ -47,13 +47,35 @@
               echo "Tests passed" > $out/result
             '';
           };
+
+          # Verify formatting is correct
+          format-check = pkgs.stdenv.mkDerivation {
+            name = "aoc-solution-format-check";
+            src = ./.;
+            buildInputs = [ pkgs.nim ];
+            buildPhase = ''
+              # Copy files to temp location to check formatting
+              cp -r . $TMPDIR/check
+              cd $TMPDIR/check
+              nimpretty *.nim
+              # Compare with original
+              if ! diff -r . $src > /dev/null; then
+                echo "Format check failed. Run 'just format' to fix."
+                exit 1
+              fi
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Format check passed" > $out/result
+            '';
+          };
         };
 
         apps = {
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/s16e01";
+            program = "${package}/bin/aoc-solution";
           };
 
           # Run individual parts
@@ -88,7 +110,7 @@
             echo ""
             echo "Local dev:"
             echo "  nim c -r common.nim  - Run tests"
-            echo "  nim c s16e01.nim     - Build main"
+            echo "  nim c part1.nim      - Build part1"
             echo "  nimpretty *.nim      - Format code"
             echo ""
             echo "Nix commands:"
