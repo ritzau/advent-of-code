@@ -10,39 +10,45 @@ Shows flake structure information (replacement for `nix flake show` which doesn'
 
 ## check-fresh.sh
 
-Runs checks with all caches invalidated - guarantees a fresh rebuild.
+Runs checks with caches invalidated - forces fresh evaluation and rebuild.
 
 ```bash
 ./scripts/check-fresh.sh
 ```
 
 This script:
-1. Updates the flake lock file (invalidates input hashes)
-2. Runs checks with `--rebuild` (bypass check cache)
-3. Uses `--option eval-cache false` (bypass evaluation cache)
-4. Shows full build logs with `--print-build-logs`
+1. Updates the flake lock file (invalidates input hashes, forces re-evaluation)
+2. Uses `--option eval-cache false` (bypass evaluation cache)
+3. Shows full build logs with `--print-build-logs`
 
 ## Cache Invalidation Strategies
 
-### Quick: Rebuild checks only
+### Method 1: Update flake inputs (Most Reliable)
 ```bash
-nix flake check --rebuild
+nix flake update          # Updates lock file, invalidates input hashes
+nix flake check           # Re-evaluates and rebuilds
 ```
 
-### Medium: Bypass evaluation cache
+### Method 2: Bypass evaluation cache
 ```bash
 nix flake check --option eval-cache false
 ```
 
-### Complete: Update inputs + rebuild
+### Method 3: Clear Nix store (Nuclear)
 ```bash
-nix flake update && nix flake check --rebuild
+nix-collect-garbage -d   # Delete all unreferenced store paths
+nix flake check          # Everything rebuilds from scratch
 ```
 
-### Nuclear: Clear store + rebuild
+### Method 4: Commit changes (Git-based cache)
 ```bash
-nix-collect-garbage -d
-nix flake check --rebuild --option eval-cache false
+git add -A && git commit -m "Invalidate cache"
+nix flake check          # Flakes cache based on git tree hash
+```
+
+### Method 5: Combined approach (Strongest)
+```bash
+nix flake update && nix flake check --option eval-cache false --print-build-logs
 ```
 
 ## Why Multiple Caches?
@@ -50,8 +56,15 @@ nix flake check --rebuild --option eval-cache false
 Nix has several levels of caching:
 
 1. **Evaluation cache** - Caches the result of evaluating Nix expressions
-2. **Check cache** - Remembers which checks passed
-3. **Build cache** - Stores built derivations in the Nix store
-4. **Flake lock** - Pins input versions (changing this invalidates downstream)
+   - Bypassed with: `--option eval-cache false`
 
-Different flags target different cache levels!
+2. **Git tree cache** - Flakes are cached by git commit hash
+   - Invalidated by: Committing changes or `nix flake update`
+
+3. **Build cache** - Stores built derivations in `/nix/store`
+   - Invalidated by: `nix-collect-garbage` or changing inputs
+
+4. **Flake lock** - Pins input versions
+   - Invalidated by: `nix flake update`
+
+**Note:** `nix flake check` doesn't have a `--rebuild` flag (that's only for `nix build`)!
