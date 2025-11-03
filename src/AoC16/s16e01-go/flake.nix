@@ -19,15 +19,7 @@
 
           vendorHash = null; # No external dependencies
 
-          subPackages = [ "." "cmd/part1" "cmd/part2" ];
-
-          # Rename binaries to follow naming convention
-          postInstall = ''
-            mv $out/bin/s16e01-go $out/bin/s16e01-go.tmp || true
-            mv $out/bin/part1 $out/bin/s16e01-go-part1 || true
-            mv $out/bin/part2 $out/bin/s16e01-go-part2 || true
-            mv $out/bin/s16e01-go.tmp $out/bin/s16e01-go || true
-          '';
+          subPackages = [ "." "cmd/s16e01-go-part1" "cmd/s16e01-go-part2" ];
         };
       in
       {

@@ -1,10 +1,16 @@
 [package]
-name = "s16e01"
+name = "s16e01-rust"
 version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "part1"
+name = "s16e01-rust"
+path = "src/main.rs"
 
 [[bin]]
-name = "part2"
+name = "s16e01-rust-part1"
+path = "src/bin/part1.rs"
+
+[[bin]]
+name = "s16e01-rust-part2"
+path = "src/bin/part2.rs"
