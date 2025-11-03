@@ -13,7 +13,7 @@
 
         # Build the Go package
         package = pkgs.buildGoModule {
-          pname = "aoc-runner";
+          pname = "aoc";
           version = "0.1.0";
           src = ./.;
 
@@ -30,7 +30,7 @@
         apps = {
           default = {
             type = "app";
-            program = "${package}/bin/aoc-runner";
+            program = "${package}/bin/aoc";
           };
         };
 
@@ -38,7 +38,6 @@
           buildInputs = with pkgs; [
             go
             gopls
-            python3
             nix
           ];
 

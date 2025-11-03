@@ -1,6 +1,6 @@
 # Build the runner
 build:
-    go build -o aoc-runner .
+    go build -o aoc .
 
 # Build with Nix
 build-nix:
@@ -32,7 +32,7 @@ check:
 
 # Clean build artifacts
 clean:
-    rm -f aoc-runner
+    rm -f aoc
     rm -rf result
 
 # Show help

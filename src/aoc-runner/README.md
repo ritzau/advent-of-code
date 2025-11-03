@@ -16,16 +16,16 @@ Test infrastructure for Advent of Code solutions - pure Go implementation.
 
 ```bash
 # Run a specific day
-aoc-runner -year 2016 -day 1
+aoc -year 2016 -day 1
 
 # Run all days in a year
-aoc-runner -year 2016
+aoc -year 2016
 
 # Run all available solutions
-aoc-runner -all
+aoc -all
 
 # Use a custom results file
-aoc-runner -year 2016 -day 1 -results path/to/results.yaml
+aoc -year 2016 -day 1 -results path/to/results.yaml
 ```
 
 ## Results Configuration

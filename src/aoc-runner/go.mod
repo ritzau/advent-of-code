@@ -1,4 +1,4 @@
-module aoc-runner
+module aoc
 
 go 1.21
 

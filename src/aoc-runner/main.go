@@ -6,10 +6,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"aoc-runner/builder"
-	"aoc-runner/config"
-	"aoc-runner/downloader"
-	"aoc-runner/runner"
+	"aoc/builder"
+	"aoc/config"
+	"aoc/downloader"
+	"aoc/runner"
 )
 
 func main() {

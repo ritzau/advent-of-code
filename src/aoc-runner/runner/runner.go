@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"aoc-runner/builder"
+	"aoc/builder"
 )
 
 // Result represents the result of running a solution part

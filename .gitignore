@@ -30,7 +30,7 @@ zig-cache/
 zig-out/
 
 # AoC runner binary
-/src/aoc-runner/aoc-runner
+/src/aoc-runner/aoc
 
 # IDE
 .vscode/
