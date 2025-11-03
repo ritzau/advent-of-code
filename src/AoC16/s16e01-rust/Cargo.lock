@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "s16e01"
+name = "s16e01-rust"
 version = "0.1.0"

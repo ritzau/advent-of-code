@@ -1,0 +1,41 @@
+# Build the runner
+build:
+    go build -o aoc .
+
+# Build with Nix
+build-nix:
+    nix build
+
+# Run tests
+test:
+    go test ./...
+
+# Format code
+format:
+    go fmt ./...
+
+# Run a specific day
+run-day year day:
+    go run . -year {{year}} -day {{day}}
+
+# Run all days in a year
+run-year year:
+    go run . -year {{year}}
+
+# Run all available solutions
+run-all:
+    go run . -all
+
+# Check everything
+check:
+    nix flake check
+
+# Clean build artifacts
+clean:
+    rm -f aoc
+    rm -rf result
+
+# Show help
+help:
+    @echo "Available commands:"
+    @just --list

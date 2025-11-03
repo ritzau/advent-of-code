@@ -13,13 +13,13 @@
 
         # Build the Go package
         package = pkgs.buildGoModule {
-          pname = "s16e01";
+          pname = "s16e01-go";
           version = "0.1.0";
           src = ./.;
 
           vendorHash = null; # No external dependencies
 
-          subPackages = [ "." "cmd/part1" "cmd/part2" ];
+          subPackages = [ "." "cmd/s16e01-go-part1" "cmd/s16e01-go-part2" ];
         };
       in
       {
@@ -72,18 +72,18 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/s16e01";
+            program = "${package}/bin/s16e01-go";
           };
 
           # Run individual parts
           part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/s16e01-go-part1";
           };
 
           part2 = {
             type = "app";
-            program = "${package}/bin/part2";
+            program = "${package}/bin/s16e01-go-part2";
           };
 
           # Format code (app because it modifies files)

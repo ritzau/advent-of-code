@@ -1,4 +1,4 @@
-use s16e01::solve_part1;
+use s16e01_rust::solve_part1;
 use std::io::{self, Read};
 
 fn main() {

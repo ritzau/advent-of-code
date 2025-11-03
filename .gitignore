@@ -17,6 +17,7 @@ result-*
 node_modules/
 target/
 build/
+.build/
 *.pyc
 __pycache__/
 .pytest_cache/
@@ -27,6 +28,9 @@ __pycache__/
 nimcache/
 zig-cache/
 zig-out/
+
+# AoC CLI binary
+/src/aoc-cli/aoc
 
 # IDE
 .vscode/
