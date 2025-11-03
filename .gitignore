@@ -29,8 +29,8 @@ nimcache/
 zig-cache/
 zig-out/
 
-# AoC runner binary
-/src/aoc-runner/aoc
+# AoC CLI binary
+/src/aoc-cli/aoc
 
 # IDE
 .vscode/

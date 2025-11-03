@@ -50,20 +50,23 @@ func (b *Builder) Build(year, day int) (*SolutionPaths, error) {
 
 	fmt.Printf("Building solution at %s...\n", solutionPath)
 
+	// Extract solution name from path (e.g., "s16e01-go")
+	solutionName := filepath.Base(solutionPath)
+
 	// Check if nix is available
 	_, err = exec.LookPath("nix")
 	if err == nil {
 		// Try building with nix
-		return b.buildWithNix(solutionPath)
+		return b.buildWithNix(solutionPath, solutionName)
 	}
 
 	// Fallback to Go build
 	fmt.Printf("Nix not found, falling back to Go build...\n")
-	return b.buildWithGo(solutionPath)
+	return b.buildWithGo(solutionPath, solutionName)
 }
 
 // buildWithNix builds using Nix
-func (b *Builder) buildWithNix(solutionPath string) (*SolutionPaths, error) {
+func (b *Builder) buildWithNix(solutionPath, solutionName string) (*SolutionPaths, error) {
 	cmd := exec.Command("nix", "build", "--no-link", "--print-out-paths")
 	cmd.Dir = solutionPath
 	output, err := cmd.Output()
@@ -77,8 +80,8 @@ func (b *Builder) buildWithNix(solutionPath string) (*SolutionPaths, error) {
 	}
 
 	paths := &SolutionPaths{
-		Part1: filepath.Join(outPath, "bin", "part1"),
-		Part2: filepath.Join(outPath, "bin", "part2"),
+		Part1: filepath.Join(outPath, "bin", fmt.Sprintf("%s-part1", solutionName)),
+		Part2: filepath.Join(outPath, "bin", fmt.Sprintf("%s-part2", solutionName)),
 	}
 
 	// Verify binaries exist
@@ -93,7 +96,7 @@ func (b *Builder) buildWithNix(solutionPath string) (*SolutionPaths, error) {
 }
 
 // buildWithGo builds using Go directly
-func (b *Builder) buildWithGo(solutionPath string) (*SolutionPaths, error) {
+func (b *Builder) buildWithGo(solutionPath, solutionName string) (*SolutionPaths, error) {
 	// Create build directory
 	buildDir := filepath.Join(solutionPath, ".build")
 	if err := os.MkdirAll(buildDir, 0755); err != nil {
@@ -101,8 +104,8 @@ func (b *Builder) buildWithGo(solutionPath string) (*SolutionPaths, error) {
 	}
 
 	paths := &SolutionPaths{
-		Part1: filepath.Join(buildDir, "part1"),
-		Part2: filepath.Join(buildDir, "part2"),
+		Part1: filepath.Join(buildDir, fmt.Sprintf("%s-part1", solutionName)),
+		Part2: filepath.Join(buildDir, fmt.Sprintf("%s-part2", solutionName)),
 	}
 
 	// Build part1
