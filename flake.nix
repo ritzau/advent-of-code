@@ -211,6 +211,23 @@
             paths = pkgs.lib.mapAttrsToList (name: pkg: wrapWithPrefix name pkg) allPackages;
             meta.description = "All Advent of Code solution packages with properly named binaries";
           };
+
+          # Explicit alias for aoc CLI for easy access
+          aoc = inputs.aoc-cli.packages.${system}.default;
+        };
+
+        # Apps for easy running
+        apps = {
+          # Run the aoc test runner
+          aoc = {
+            type = "app";
+            program = "${inputs.aoc-cli.packages.${system}.default}/bin/aoc";
+          };
+
+          default = {
+            type = "app";
+            program = "${inputs.aoc-cli.packages.${system}.default}/bin/aoc";
+          };
         };
 
         devShells.default = pkgs.mkShell {
@@ -239,6 +256,10 @@
             echo "  aoc -y 2016 -d 1           - Same, with short flags"
             echo "  aoc --year 2016            - Run all days in a year"
             echo "  aoc --all                  - Run all available solutions"
+            echo ""
+            echo "  nix build .#aoc            - Build the aoc CLI"
+            echo "  nix run .#aoc -- -y 2016 -d 1  - Run the aoc CLI via Nix"
+            echo "  nix run . -- -y 2016 -d 1  - Same (aoc is default app)"
             echo ""
             echo "Commands:"
             echo "  nix flake check --verbose    - Check all templates and solutions (shows what's running)"
