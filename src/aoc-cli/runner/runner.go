@@ -38,10 +38,26 @@ func New(rootDir string) *Runner {
 }
 
 // RunPart runs a single part of a solution
-func (r *Runner) RunPart(binaryPath string, input string, part int) Result {
+func (r *Runner) RunPart(paths *builder.SolutionPaths, part int, input string) Result {
 	start := time.Now()
 
-	cmd := exec.Command(binaryPath)
+	var cmd *exec.Cmd
+	if paths.UseNixRun {
+		// Use nix run
+		appName := paths.Part1
+		if part == 2 {
+			appName = paths.Part2
+		}
+		cmd = exec.Command("nix", "run", paths.SolutionDir+"#"+appName)
+	} else {
+		// Use binary path
+		binaryPath := paths.Part1
+		if part == 2 {
+			binaryPath = paths.Part2
+		}
+		cmd = exec.Command(binaryPath)
+	}
+
 	cmd.Stdin = strings.NewReader(input)
 
 	var stdout, stderr bytes.Buffer
@@ -80,13 +96,13 @@ func (r *Runner) RunDay(year, day int, paths *builder.SolutionPaths, input strin
 	}
 
 	// Run part 1
-	result.Part1 = r.RunPart(paths.Part1, input, 1)
+	result.Part1 = r.RunPart(paths, 1, input)
 	if result.Part1.Error != nil {
 		result.Success = false
 	}
 
 	// Run part 2
-	result.Part2 = r.RunPart(paths.Part2, input, 2)
+	result.Part2 = r.RunPart(paths, 2, input)
 	if result.Part2.Error != nil {
 		result.Success = false
 	}

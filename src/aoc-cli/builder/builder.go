@@ -17,11 +17,13 @@ func New(rootDir string) *Builder {
 	return &Builder{rootDir: rootDir}
 }
 
-// SolutionPaths contains the paths to the built binaries
+// SolutionPaths contains the paths to the built binaries or nix run info
 type SolutionPaths struct {
-	Language string
-	Part1    string
-	Part2    string
+	Language    string
+	Part1       string // Binary path or "nix-run"
+	Part2       string // Binary path or "nix-run"
+	SolutionDir string // Directory containing flake.nix for nix run
+	UseNixRun   bool   // If true, use nix run instead of binaries
 }
 
 // FindSolutions finds all solution directories for the given year and day
@@ -134,31 +136,23 @@ func (b *Builder) Build(year, day int) (*SolutionPaths, error) {
 	return b.BuildSolution(solutionPath)
 }
 
-// buildWithNix builds using Nix
+// buildWithNix prepares for running via nix run
 func (b *Builder) buildWithNix(solutionPath, solutionName string) (*SolutionPaths, error) {
-	cmd := exec.Command("nix", "build", "--no-link", "--print-out-paths")
+	// Test that the flake is valid by checking if we can evaluate it
+	cmd := exec.Command("nix", "flake", "metadata", "--json")
 	cmd.Dir = solutionPath
-	output, err := cmd.Output()
-	if err != nil {
-		return nil, fmt.Errorf("failed to build solution with nix: %w", err)
+	if err := cmd.Run(); err != nil {
+		return nil, fmt.Errorf("failed to evaluate flake: %w", err)
 	}
 
-	outPath := string(output)
-	if len(outPath) > 0 && outPath[len(outPath)-1] == '\n' {
-		outPath = outPath[:len(outPath)-1]
-	}
+	fmt.Printf("Solution has valid flake, will use nix run\n")
 
+	// Return paths configured for nix run
 	paths := &SolutionPaths{
-		Part1: filepath.Join(outPath, "bin", fmt.Sprintf("%s-part1", solutionName)),
-		Part2: filepath.Join(outPath, "bin", fmt.Sprintf("%s-part2", solutionName)),
-	}
-
-	// Verify binaries exist
-	if _, err := os.Stat(paths.Part1); err != nil {
-		return nil, fmt.Errorf("part1 binary not found: %w", err)
-	}
-	if _, err := os.Stat(paths.Part2); err != nil {
-		return nil, fmt.Errorf("part2 binary not found: %w", err)
+		Part1:       "part1", // App name in the flake
+		Part2:       "part2", // App name in the flake
+		SolutionDir: solutionPath,
+		UseNixRun:   true,
 	}
 
 	return paths, nil
