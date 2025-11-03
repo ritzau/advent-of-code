@@ -200,6 +200,28 @@
           )
           {}
           projectFlakes;
+
+        # Aggregate apps from all project flakes
+        # Namespace each flake's apps to avoid name collisions
+        allApps = pkgs.lib.foldl'
+          (acc: name:
+            let
+              flakeApps = inputs.${name}.apps.${system} or {};
+              # For the default app, use the flake name directly
+              # For other apps, prefix with flake name (e.g., s16e01-go-part1)
+              namespacedApps = pkgs.lib.mapAttrs'
+                (appName: appValue:
+                  if appName == "default" then
+                    pkgs.lib.nameValuePair name appValue
+                  else
+                    pkgs.lib.nameValuePair "${name}-${appName}" appValue
+                )
+                flakeApps;
+            in
+              acc // namespacedApps
+          )
+          {}
+          projectFlakes;
       in
       {
         checks = allChecks;
@@ -217,8 +239,8 @@
         };
 
         # Apps for easy running
-        apps = {
-          # Run the aoc test runner
+        apps = allApps // {
+          # Run the aoc test runner (override default to be aoc)
           aoc = {
             type = "app";
             program = "${inputs.aoc-cli.packages.${system}.default}/bin/aoc";
@@ -251,13 +273,23 @@
             echo "  src/AoC22                 - 2022 solutions (Haskell)"
             echo "  src/AoC23                 - 2023 solutions (TypeScript)"
             echo ""
-            echo "AoC Test Runner:"
+            echo "AoC Test Runner (runs all languages):"
             echo "  aoc --year 2016 --day 1    - Run all language implementations for a day"
             echo "  aoc -y 2016 -d 1           - Same, with short flags"
             echo "  aoc --year 2016            - Run all days in a year"
             echo "  aoc --all                  - Run all available solutions"
             echo ""
+            echo "Run specific solutions:"
+            echo "  nix run .#s16e01-go        - Run Go solution (with pretty output)"
+            echo "  nix run .#s16e01-go-part1  - Run Go part1 only (raw output)"
+            echo "  nix run .#s16e01-rust      - Run Rust solution"
+            echo "  cat inputs/2016/day01.txt | nix run .#s16e01-go-part1  - Pipe input"
+            echo ""
+            echo "Build specific solutions:"
             echo "  nix build .#aoc            - Build the aoc CLI"
+            echo "  nix build .#s16e01-go      - Build specific solution"
+            echo ""
+            echo "Or use aoc CLI via Nix:"
             echo "  nix run .#aoc -- -y 2016 -d 1  - Run the aoc CLI via Nix"
             echo "  nix run . -- -y 2016 -d 1  - Same (aoc is default app)"
             echo ""
