@@ -17,6 +17,7 @@ result-*
 node_modules/
 target/
 build/
+.build/
 *.pyc
 __pycache__/
 .pytest_cache/

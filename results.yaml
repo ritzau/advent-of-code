@@ -1,0 +1,24 @@
+# Advent of Code Expected Results
+# This file contains expected results for AoC solutions
+# Format:
+#   <year>:
+#     <day>:
+#       skip: true/false (optional, defaults to false)
+#       part1: expected result (string or number)
+#       part2: expected result (string or number)
+
+2016:
+  1:
+    part1: 300
+    part2: 159
+
+# Example of skipping a day:
+# 2016:
+#   2:
+#     skip: true
+#
+# Example with no results yet (will run but not verify):
+# 2016:
+#   3:
+#     part1: null
+#     part2: null
