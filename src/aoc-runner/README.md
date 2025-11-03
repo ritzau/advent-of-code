@@ -1,15 +1,16 @@
 # AoC Runner
 
-Test infrastructure for Advent of Code solutions.
+Test infrastructure for Advent of Code solutions - pure Go implementation.
 
 ## Features
 
-- Downloads and caches puzzle inputs automatically
-- Builds solutions using Nix
+- Downloads and caches puzzle inputs automatically (pure Go HTTP client)
+- Builds solutions using Nix (with fallback to `go build`)
 - Runs solutions and captures output
 - Verifies results against expected values
 - Supports running individual days, entire years, or all solutions
 - YAML-based configuration for expected results
+- No Python dependencies - entirely self-contained Go binary
 
 ## Usage
 
@@ -45,9 +46,9 @@ Create a `results.yaml` file in the repository root:
 
 ## Requirements
 
-- Nix with flakes enabled
-- Python 3 (for input downloading)
+- Go 1.21 or later
 - `.aoc-session` file with your Advent of Code session cookie
+- (Optional) Nix with flakes enabled for reproducible builds
 
 ## Solution Structure
 
