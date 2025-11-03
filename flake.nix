@@ -218,6 +218,8 @@
             git
             just
             nixpkgs-fmt
+          ] ++ [
+            inputs.aoc-cli.packages.${system}.default
           ];
 
           shellHook = ''
@@ -231,6 +233,12 @@
             echo "  src/AoC21                 - 2021 solutions (Haskell)"
             echo "  src/AoC22                 - 2022 solutions (Haskell)"
             echo "  src/AoC23                 - 2023 solutions (TypeScript)"
+            echo ""
+            echo "AoC Test Runner:"
+            echo "  aoc --year 2016 --day 1    - Run all language implementations for a day"
+            echo "  aoc -y 2016 -d 1           - Same, with short flags"
+            echo "  aoc --year 2016            - Run all days in a year"
+            echo "  aoc --all                  - Run all available solutions"
             echo ""
             echo "Commands:"
             echo "  nix flake check --verbose    - Check all templates and solutions (shows what's running)"
