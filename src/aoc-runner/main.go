@@ -1,10 +1,11 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/spf13/pflag"
 
 	"aoc/builder"
 	"aoc/config"
@@ -14,13 +15,13 @@ import (
 
 func main() {
 	var (
-		year       = flag.Int("year", 0, "Year to run (e.g., 2016)")
-		day        = flag.Int("day", 0, "Day to run (1-25)")
-		all        = flag.Bool("all", false, "Run all available solutions")
-		resultsFile = flag.String("results", "results.yaml", "Path to results.yaml file")
+		year       = pflag.IntP("year", "y", 0, "Year to run (e.g., 2016)")
+		day        = pflag.IntP("day", "d", 0, "Day to run (1-25)")
+		all        = pflag.BoolP("all", "a", false, "Run all available solutions")
+		resultsFile = pflag.StringP("results", "r", "results.yaml", "Path to results.yaml file")
 	)
 
-	flag.Parse()
+	pflag.Parse()
 
 	// Get root directory (assume we're running from the root)
 	rootDir, err := os.Getwd()
@@ -55,7 +56,7 @@ func main() {
 	} else if *year != 0 {
 		runYear(*year, results, dl, b, r)
 	} else {
-		flag.Usage()
+		pflag.Usage()
 		os.Exit(1)
 	}
 }
@@ -262,14 +263,16 @@ func printDayResult(result runner.DayResult, results *config.Results) {
 }
 
 func init() {
-	flag.Usage = func() {
+	pflag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [OPTIONS]\n\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "Run Advent of Code solutions and verify results.\n\n")
 		fmt.Fprintf(os.Stderr, "Options:\n")
-		flag.PrintDefaults()
+		pflag.PrintDefaults()
 		fmt.Fprintf(os.Stderr, "\nExamples:\n")
-		fmt.Fprintf(os.Stderr, "  %s -year 2016 -day 1    # Run a specific day\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "  %s -year 2016           # Run all days in 2016\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "  %s -all                 # Run all available solutions\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  %s --year 2016 --day 1    # Run a specific day (long form)\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  %s -y 2016 -d 1           # Run a specific day (short form)\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  %s --year 2016            # Run all days in 2016\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  %s --all                  # Run all available solutions\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  %s -a                     # Run all (short form)\n", filepath.Base(os.Args[0]))
 	}
 }

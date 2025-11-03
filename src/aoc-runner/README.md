@@ -15,17 +15,22 @@ Test infrastructure for Advent of Code solutions - pure Go implementation.
 ## Usage
 
 ```bash
-# Run a specific day
-aoc -year 2016 -day 1
+# Run a specific day (long form)
+aoc --year 2016 --day 1
+
+# Run a specific day (short form)
+aoc -y 2016 -d 1
 
 # Run all days in a year
-aoc -year 2016
+aoc --year 2016
 
 # Run all available solutions
-aoc -all
+aoc --all
+aoc -a
 
 # Use a custom results file
-aoc -year 2016 -day 1 -results path/to/results.yaml
+aoc --year 2016 --day 1 --results path/to/results.yaml
+aoc -y 2016 -d 1 -r path/to/results.yaml
 ```
 
 ## Results Configuration
