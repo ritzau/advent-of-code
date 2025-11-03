@@ -1,5 +1,24 @@
 {
   "nodes": {
+    "aoc-cli": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "./src/aoc-cli",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/aoc-cli",
+        "type": "path"
+      },
+      "parent": []
+    },
     "aoc21": {
       "inputs": {
         "flake-utils": [
@@ -141,6 +160,7 @@
     },
     "root": {
       "inputs": {
+        "aoc-cli": "aoc-cli",
         "aoc21": "aoc21",
         "aoc22": "aoc22",
         "aoc23": "aoc23",

@@ -64,6 +64,12 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
+    aoc-cli = {
+      url = "path:./src/aoc-cli";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
     # 2016 Day 1 Solutions (multi-language implementations)
     s16e01-go = {
       url = "path:./src/AoC16/s16e01-go";
