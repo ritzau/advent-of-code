@@ -70,13 +70,12 @@ func runDay(year, day int, results *config.Results, dl *downloader.Downloader, b
 		return
 	}
 
-	// Find solution
-	solutionPath, err := b.FindSolution(year, day)
+	// Find all solutions
+	solutions, err := b.FindSolutions(year, day)
 	if err != nil {
-		fmt.Printf("⏭️  Skipped (no solution found)\n")
+		fmt.Printf("⏭️  Skipped (no solutions found)\n")
 		return
 	}
-	fmt.Printf("Found solution: %s\n", solutionPath)
 
 	// Get input
 	fmt.Printf("Getting input...\n")
@@ -85,22 +84,37 @@ func runDay(year, day int, results *config.Results, dl *downloader.Downloader, b
 		fmt.Fprintf(os.Stderr, "❌ Failed to get input: %v\n", err)
 		os.Exit(1)
 	}
+	fmt.Println()
 
-	// Build solution
-	paths, err := b.Build(year, day)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "❌ Failed to build: %v\n", err)
-		os.Exit(1)
+	allSuccess := true
+
+	// Run each language implementation
+	for _, solutionPath := range solutions {
+		lang := b.ExtractLanguage(solutionPath)
+		fmt.Printf("--- %s ---\n", lang)
+
+		// Build solution
+		paths, err := b.BuildSolution(solutionPath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "❌ Failed to build: %v\n\n", err)
+			allSuccess = false
+			continue
+		}
+		fmt.Printf("Built successfully\n\n")
+
+		// Run solution
+		result := r.RunDay(year, day, paths, input)
+
+		// Display results
+		printDayResult(result, results)
+		fmt.Println()
+
+		if !result.Success {
+			allSuccess = false
+		}
 	}
-	fmt.Printf("Built successfully\n\n")
 
-	// Run solution
-	result := r.RunDay(year, day, paths, input)
-
-	// Display results
-	printDayResult(result, results)
-
-	if !result.Success {
+	if !allSuccess {
 		os.Exit(1)
 	}
 }
@@ -114,8 +128,8 @@ func runYear(year int, results *config.Results, dl *downloader.Downloader, b *bu
 		return
 	}
 
-	totalDays := 0
-	passedDays := 0
+	totalTests := 0
+	passedTests := 0
 
 	for day := 1; day <= 25; day++ {
 		// Check if skipped
@@ -123,17 +137,16 @@ func runYear(year int, results *config.Results, dl *downloader.Downloader, b *bu
 			continue
 		}
 
-		// Check if day exists in config or has a solution
+		// Check if day exists in config or has solutions
 		_, hasConfig := yearData[day]
-		_, err := b.FindSolution(year, day)
-		hasSolution := err == nil
+		solutions, err := b.FindSolutions(year, day)
+		hasSolutions := err == nil && len(solutions) > 0
 
-		if !hasConfig && !hasSolution {
+		if !hasConfig && !hasSolutions {
 			continue
 		}
 
-		fmt.Printf("--- Day %d ---\n", day)
-		totalDays++
+		fmt.Printf("=== Day %d ===\n", day)
 
 		// Get input
 		input, err := dl.ReadInput(year, day)
@@ -142,26 +155,33 @@ func runYear(year int, results *config.Results, dl *downloader.Downloader, b *bu
 			continue
 		}
 
-		// Build solution
-		paths, err := b.Build(year, day)
-		if err != nil {
-			fmt.Printf("❌ Failed to build: %v\n\n", err)
-			continue
-		}
+		// Run each language implementation
+		for _, solutionPath := range solutions {
+			lang := b.ExtractLanguage(solutionPath)
+			fmt.Printf("  --- %s ---\n", lang)
+			totalTests++
 
-		// Run solution
-		result := r.RunDay(year, day, paths, input)
-		printDayResult(result, results)
+			// Build solution
+			paths, err := b.BuildSolution(solutionPath)
+			if err != nil {
+				fmt.Printf("  ❌ Failed to build: %v\n\n", err)
+				continue
+			}
 
-		if result.Success {
-			passedDays++
+			// Run solution
+			result := r.RunDay(year, day, paths, input)
+			printDayResult(result, results)
+
+			if result.Success {
+				passedTests++
+			}
+			fmt.Println()
 		}
-		fmt.Println()
 	}
 
-	fmt.Printf("=== Summary: %d/%d days passed ===\n", passedDays, totalDays)
+	fmt.Printf("=== Summary: %d/%d tests passed ===\n", passedTests, totalTests)
 
-	if passedDays < totalDays {
+	if passedTests < totalTests {
 		os.Exit(1)
 	}
 }
@@ -181,14 +201,13 @@ func runAll(results *config.Results, dl *downloader.Downloader, b *builder.Build
 				continue
 			}
 
-			// Check if solution exists
-			_, err := b.FindSolution(year, day)
+			// Check if solutions exist
+			solutions, err := b.FindSolutions(year, day)
 			if err != nil {
 				continue
 			}
 
-			fmt.Printf("--- Day %d ---\n", day)
-			totalTests++
+			fmt.Printf("=== Day %d ===\n", day)
 
 			// Get input
 			input, err := dl.ReadInput(year, day)
@@ -197,21 +216,28 @@ func runAll(results *config.Results, dl *downloader.Downloader, b *builder.Build
 				continue
 			}
 
-			// Build solution
-			paths, err := b.Build(year, day)
-			if err != nil {
-				fmt.Printf("❌ Failed to build: %v\n\n", err)
-				continue
-			}
+			// Run each language implementation
+			for _, solutionPath := range solutions {
+				lang := b.ExtractLanguage(solutionPath)
+				fmt.Printf("  --- %s ---\n", lang)
+				totalTests++
 
-			// Run solution
-			result := r.RunDay(year, day, paths, input)
-			printDayResult(result, results)
+				// Build solution
+				paths, err := b.BuildSolution(solutionPath)
+				if err != nil {
+					fmt.Printf("  ❌ Failed to build: %v\n\n", err)
+					continue
+				}
 
-			if result.Success {
-				passedTests++
+				// Run solution
+				result := r.RunDay(year, day, paths, input)
+				printDayResult(result, results)
+
+				if result.Success {
+					passedTests++
+				}
+				fmt.Println()
 			}
-			fmt.Println()
 		}
 	}
 
