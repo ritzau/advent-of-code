@@ -28,7 +28,7 @@ type SolutionPaths struct {
 
 // FindSolutions finds all solution directories for the given year and day
 func (b *Builder) FindSolutions(year, day int) ([]string, error) {
-	// Pattern: src/AoC{YY}/s{YY}e{DD}-{LANG}
+	// Pattern: src/AoC{YY}/s{YY}e{DD} (default) or s{YY}e{DD}-{LANG}
 	yearDir := filepath.Join(b.rootDir, fmt.Sprintf("src/AoC%02d", year%100))
 
 	// Check if year directory exists
@@ -36,8 +36,10 @@ func (b *Builder) FindSolutions(year, day int) ([]string, error) {
 		return nil, fmt.Errorf("year directory not found: %s", yearDir)
 	}
 
-	// Pattern for day solutions
-	pattern := fmt.Sprintf("s%02de%02d-*", year%100, day)
+	// Pattern for day solutions (with language suffix)
+	patternWithLang := fmt.Sprintf("s%02de%02d-*", year%100, day)
+	// Exact name for default solution (no language suffix)
+	defaultName := fmt.Sprintf("s%02de%02d", year%100, day)
 
 	// Find all matching directories
 	entries, err := os.ReadDir(yearDir)
@@ -48,7 +50,13 @@ func (b *Builder) FindSolutions(year, day int) ([]string, error) {
 	var solutions []string
 	for _, entry := range entries {
 		if entry.IsDir() {
-			matched, _ := filepath.Match(pattern, entry.Name())
+			// Check for default implementation (exact match)
+			if entry.Name() == defaultName {
+				solutions = append(solutions, filepath.Join(yearDir, entry.Name()))
+				continue
+			}
+			// Check for language-specific implementation (pattern match)
+			matched, _ := filepath.Match(patternWithLang, entry.Name())
 			if matched {
 				solutions = append(solutions, filepath.Join(yearDir, entry.Name()))
 			}
@@ -73,27 +81,24 @@ func (b *Builder) FindSolution(year, day int) (string, error) {
 }
 
 // ExtractLanguage extracts the language from a solution path
+// Returns "default" if no language suffix is present (e.g., "s16e01" -> "default")
+// Returns the language name if present (e.g., "s16e01-go" -> "go")
 func (b *Builder) ExtractLanguage(solutionPath string) string {
-	// Extract from path like "s16e01-go" -> "go"
 	baseName := filepath.Base(solutionPath)
-	parts := filepath.SplitList(baseName)
-	if len(parts) > 0 {
-		lastPart := parts[len(parts)-1]
-		// Split by hyphen and take last part
-		langParts := filepath.SplitList(lastPart)
-		if len(langParts) > 1 {
-			return langParts[len(langParts)-1]
-		}
-	}
-	// Fallback: just get everything after last hyphen
+
+	// Check if there's a hyphen in the name
 	idx := len(baseName) - 1
 	for idx >= 0 && baseName[idx] != '-' {
 		idx--
 	}
-	if idx >= 0 {
-		return baseName[idx+1:]
+
+	// No hyphen found, this is a default implementation
+	if idx < 0 {
+		return "default"
 	}
-	return "unknown"
+
+	// Return everything after the hyphen
+	return baseName[idx+1:]
 }
 
 // BuildSolution builds a specific solution at the given path

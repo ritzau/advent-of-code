@@ -6,6 +6,11 @@
 #       skip: true/false (optional, defaults to false)
 #       part1: expected result (string or number)
 #       part2: expected result (string or number)
+#       languages:
+#         <language>:
+#           skip: true/false (optional)
+#           part1: expected result (optional, overrides day-level result)
+#           part2: expected result (optional, overrides day-level result)
 
 2016:
   1:
@@ -22,3 +27,16 @@
 #   3:
 #     part1: null
 #     part2: null
+#
+# Example of language-specific configuration:
+# 2016:
+#   4:
+#     part1: 123
+#     part2: 456
+#     languages:
+#       go:
+#         skip: true  # Skip Go implementation for this day
+#       rust:
+#         part1: 124  # Rust has different output format
+#       default:
+#         skip: false  # Explicitly enable default implementation
