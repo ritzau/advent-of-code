@@ -141,69 +141,6 @@
           {}
           projectFlakes;
 
-        # Helper to determine binary prefix for a flake
-        getBinaryPrefix = name:
-          if pkgs.lib.hasPrefix "template-" name then
-            name  # template-rust -> template-rust
-          else if pkgs.lib.hasPrefix "s" name && pkgs.lib.hasInfix "e" name then
-            name  # s16e01-rust -> s16e01-rust
-          else if name == "aoc21" then
-            "aoc21"
-          else if name == "aoc22" then
-            "aoc22"
-          else if name == "aoc23" then
-            "aoc23"
-          else
-            name;
-
-        # Wrap a package to rename its binaries with proper prefix
-        wrapWithPrefix = name: pkg:
-          let
-            prefix = getBinaryPrefix name;
-            # Determine if we need to rename binaries
-            needsRenaming = (pkgs.lib.hasPrefix "template-" name) ||
-                           (pkgs.lib.hasPrefix "s" name && pkgs.lib.hasInfix "e" name);
-          in
-            if needsRenaming then
-              pkgs.symlinkJoin {
-                name = "${name}-wrapped";
-                paths = [ pkg ];
-                postBuild = ''
-                  # Rename binaries with prefix
-                  if [ -d $out/bin ]; then
-                    cd $out/bin
-                    # Rename main binary if it exists (various names: aoc-template, s16e01, etc.)
-                    # First check if binary already has the correct name
-                    if [ -f "${prefix}" ] || [ -L "${prefix}" ]; then
-                      # Binary already has correct name (e.g., s16e01-nim, s16e01-zig, s16e01-python), create -main symlink
-                      ln -sf "${prefix}" "${prefix}-main"
-                    else
-                      # Look for binary with old naming
-                      for main in aoc-template aoc-solution ${name} s16e01; do
-                        if [ -f "$main" ] || [ -L "$main" ]; then
-                          ln -sf "$main" "${prefix}-main"
-                        fi
-                      done
-                    fi
-                    # Rename part1 and part2 - check both old names and new prefixed names
-                    if [ -f "${prefix}-part1" ] || [ -L "${prefix}-part1" ]; then
-                      # Binary already has correct name, no additional symlink needed
-                      true
-                    elif [ -f "part1" ] || [ -L "part1" ]; then
-                      ln -sf "part1" "${prefix}-part1"
-                    fi
-                    if [ -f "${prefix}-part2" ] || [ -L "${prefix}-part2" ]; then
-                      # Binary already has correct name, no additional symlink needed
-                      true
-                    elif [ -f "part2" ] || [ -L "part2" ]; then
-                      ln -sf "part2" "${prefix}-part2"
-                    fi
-                  fi
-                '';
-              }
-            else
-              pkg;
-
         # Aggregate packages from all project flakes (including templates)
         # Don't wrap them here to avoid IFD issues with nix flake show
         allPackages = pkgs.lib.foldl'
@@ -240,11 +177,11 @@
         checks = allChecks;
 
         packages = allPackages // {
-          # Default package that builds all solution packages with renamed binaries
+          # Default package that builds all solution packages
           default = pkgs.symlinkJoin {
             name = "advent-of-code-all";
-            paths = pkgs.lib.mapAttrsToList (name: pkg: wrapWithPrefix name pkg) allPackages;
-            meta.description = "All Advent of Code solution packages with properly named binaries";
+            paths = pkgs.lib.attrValues allPackages;
+            meta.description = "All Advent of Code solution packages";
           };
 
           # Explicit alias for aoc CLI for easy access
