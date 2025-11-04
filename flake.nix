@@ -175,7 +175,7 @@
                     # Rename main binary if it exists (various names: aoc-template, s16e01, etc.)
                     # First check if binary already has the correct name
                     if [ -f "${prefix}" ] || [ -L "${prefix}" ]; then
-                      # Binary already has correct name (e.g., s16e01-nim, s16e01-zig), create -main symlink
+                      # Binary already has correct name (e.g., s16e01-nim, s16e01-zig, s16e01-python), create -main symlink
                       ln -sf "${prefix}" "${prefix}-main"
                     else
                       # Look for binary with old naming
