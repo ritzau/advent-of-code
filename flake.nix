@@ -173,17 +173,30 @@
                   if [ -d $out/bin ]; then
                     cd $out/bin
                     # Rename main binary if it exists (various names: aoc-template, s16e01, etc.)
-                    for main in aoc-template aoc-solution ${name} s16e01; do
-                      if [ -f "$main" ] || [ -L "$main" ]; then
-                        ln -sf "$main" "${prefix}-main"
-                      fi
-                    done
-                    # Rename part1 and part2
+                    # First check if binary already has the correct name
+                    if [ -f "${prefix}" ] || [ -L "${prefix}" ]; then
+                      # Binary already has correct name (e.g., s16e01-nim), create -main symlink
+                      ln -sf "${prefix}" "${prefix}-main"
+                    else
+                      # Look for binary with old naming
+                      for main in aoc-template aoc-solution ${name} s16e01; do
+                        if [ -f "$main" ] || [ -L "$main" ]; then
+                          ln -sf "$main" "${prefix}-main"
+                        fi
+                      done
+                    fi
+                    # Rename part1 and part2 - check both old names and new prefixed names
                     if [ -f "part1" ] || [ -L "part1" ]; then
                       ln -sf "part1" "${prefix}-part1"
+                    elif [ -f "${prefix}-part1" ] || [ -L "${prefix}-part1" ]; then
+                      # Binary already has correct name, no symlink needed
+                      true
                     fi
                     if [ -f "part2" ] || [ -L "part2" ]; then
                       ln -sf "part2" "${prefix}-part2"
+                    elif [ -f "${prefix}-part2" ] || [ -L "${prefix}-part2" ]; then
+                      # Binary already has correct name, no symlink needed
+                      true
                     fi
                   fi
                 '';

@@ -5,7 +5,9 @@ author        = "Advent of Code"
 description   = "Advent of Code 2016 Day 1 solution in Nim"
 license       = "MIT"
 srcDir        = "."
-bin           = @["s16e01", "part1", "part2"]
+
+# Build binaries with underscores (will be renamed to dashes in Nix)
+bin = @["s16e01_nim", "s16e01_nim_part1", "s16e01_nim_part2"]
 
 # Dependencies
 

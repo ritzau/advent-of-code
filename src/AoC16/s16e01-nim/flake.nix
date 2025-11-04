@@ -22,6 +22,13 @@
           nimbleFile = ./s16e01.nimble;
 
           nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
+
+          # Rename binaries from underscores to dashes
+          postInstall = ''
+            mv $out/bin/s16e01_nim $out/bin/s16e01-nim
+            mv $out/bin/s16e01_nim_part1 $out/bin/s16e01-nim-part1
+            mv $out/bin/s16e01_nim_part2 $out/bin/s16e01-nim-part2
+          '';
         });
       in
       {
@@ -77,18 +84,18 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/s16e01";
+            program = "${package}/bin/s16e01-nim";
           };
 
           # Run individual parts
           part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/s16e01-nim-part1";
           };
 
           part2 = {
             type = "app";
-            program = "${package}/bin/part2";
+            program = "${package}/bin/s16e01-nim-part2";
           };
 
           # Format code (app because it modifies files)
