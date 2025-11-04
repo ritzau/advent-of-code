@@ -105,18 +105,18 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/s16e01";
+            program = "${package}/bin/s16e01-python";
           };
 
           # Run individual parts
           part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/s16e01-python-part1";
           };
 
           part2 = {
             type = "app";
-            program = "${package}/bin/part2";
+            program = "${package}/bin/s16e01-python-part2";
           };
 
           # Format code (app because it modifies files)

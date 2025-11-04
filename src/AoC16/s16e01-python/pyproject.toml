@@ -11,9 +11,9 @@ dev = [
 ]
 
 [project.scripts]
-s16e01 = "s16e01.main:main"
-part1 = "s16e01.part1:main"
-part2 = "s16e01.part2:main"
+s16e01-python = "s16e01.main:main"
+s16e01-python-part1 = "s16e01.part1:main"
+s16e01-python-part2 = "s16e01.part2:main"
 
 [build-system]
 requires = ["hatchling"]
