@@ -23,28 +23,11 @@
 
           nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
 
-          # Debug: show what's in the build directory
-          preBuild = ''
-            echo "=== Files in build directory ==="
-            ls -la
-            echo "=== Nimble file contents ==="
-            cat s16e01.nimble
-            echo "=== Running nimble tasks ==="
-            nimble tasks || true
-          '';
-
           # Rename binaries from underscores to dashes
           postInstall = ''
-            echo "=== Checking $out/bin ==="
-            ls -la $out/bin/ || echo "No bin directory found"
-            if [ -f $out/bin/s16e01_nim ]; then
-              mv $out/bin/s16e01_nim $out/bin/s16e01-nim
-              mv $out/bin/s16e01_nim_part1 $out/bin/s16e01-nim-part1
-              mv $out/bin/s16e01_nim_part2 $out/bin/s16e01-nim-part2
-            else
-              echo "ERROR: Expected binaries not found in $out/bin"
-              exit 1
-            fi
+            mv $out/bin/s16e01_nim $out/bin/s16e01-nim
+            mv $out/bin/s16e01_nim_part1 $out/bin/s16e01-nim-part1
+            mv $out/bin/s16e01_nim_part2 $out/bin/s16e01-nim-part2
           '';
         });
       in
