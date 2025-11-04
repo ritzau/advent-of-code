@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.jvm.application.tasks.CreateStartScripts
 
 allprojects {
     repositories {
@@ -43,4 +44,37 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "21"
 }
 
-application { mainClass.set("MainKt") }
+application {
+    mainClass.set("MainKt")
+    applicationName = "s16e01-kotlin"
+}
+
+// Create start script for Part 1
+val createPart1StartScripts = tasks.register<CreateStartScripts>("createPart1StartScripts") {
+    applicationName = "s16e01-kotlin-part1"
+    mainClass.set("Part1Kt")
+    outputDir = file("build/scripts-part1")
+    classpath = tasks.named<Jar>("jar").get().outputs.files + configurations.runtimeClasspath.get()
+}
+
+// Create start script for Part 2
+val createPart2StartScripts = tasks.register<CreateStartScripts>("createPart2StartScripts") {
+    applicationName = "s16e01-kotlin-part2"
+    mainClass.set("Part2Kt")
+    outputDir = file("build/scripts-part2")
+    classpath = tasks.named<Jar>("jar").get().outputs.files + configurations.runtimeClasspath.get()
+}
+
+// Include additional start scripts in distributions
+distributions {
+    main {
+        contents {
+            from(createPart1StartScripts) {
+                into("bin")
+            }
+            from(createPart2StartScripts) {
+                into("bin")
+            }
+        }
+    }
+}
