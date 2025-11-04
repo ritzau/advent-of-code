@@ -54,8 +54,16 @@ in stdenv.mkDerivation {
     # Extract the tar distribution created by distTar
     tar -xf build/distributions/*.tar -C $out --strip-components=1
 
-    # Wrap the start script to use the correct JDK
+    # Wrap all start scripts to use the correct JDK
     wrapProgram $out/bin/s16e01-kotlin \
+      --set JAVA_HOME "${jdk.home}" \
+      --prefix PATH : "${jdk}/bin"
+
+    wrapProgram $out/bin/s16e01-kotlin-part1 \
+      --set JAVA_HOME "${jdk.home}" \
+      --prefix PATH : "${jdk}/bin"
+
+    wrapProgram $out/bin/s16e01-kotlin-part2 \
       --set JAVA_HOME "${jdk.home}" \
       --prefix PATH : "${jdk}/bin"
 
