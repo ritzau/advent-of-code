@@ -29,9 +29,9 @@
             # Set cache dir to avoid read-only filesystem issues
             export XDG_CACHE_HOME=$TMPDIR/zig-cache
 
-            zig build-exe main.zig -O ReleaseSafe -femit-bin=s16e01
-            zig build-exe part1.zig -O ReleaseSafe -femit-bin=part1
-            zig build-exe part2.zig -O ReleaseSafe -femit-bin=part2
+            zig build-exe main.zig -O ReleaseSafe -femit-bin=s16e01-zig
+            zig build-exe part1.zig -O ReleaseSafe -femit-bin=s16e01-zig-part1
+            zig build-exe part2.zig -O ReleaseSafe -femit-bin=s16e01-zig-part2
 
             runHook postBuild
           '';
@@ -40,9 +40,9 @@
             runHook preInstall
 
             mkdir -p $out/bin
-            cp s16e01 $out/bin/
-            cp part1 $out/bin/
-            cp part2 $out/bin/
+            cp s16e01-zig $out/bin/
+            cp s16e01-zig-part1 $out/bin/
+            cp s16e01-zig-part2 $out/bin/
 
             runHook postInstall
           '';
@@ -92,18 +92,18 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/s16e01";
+            program = "${package}/bin/s16e01-zig";
           };
 
           # Run individual parts
           part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/s16e01-zig-part1";
           };
 
           part2 = {
             type = "app";
-            program = "${package}/bin/part2";
+            program = "${package}/bin/s16e01-zig-part2";
           };
         };
 
