@@ -22,6 +22,13 @@
           nimbleFile = ./s16e01.nimble;
 
           nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
+
+          # Rename binaries from underscores to dashes
+          postInstall = ''
+            mv $out/bin/s16e01_nim $out/bin/s16e01-nim
+            mv $out/bin/s16e01_nim_part1 $out/bin/s16e01-nim-part1
+            mv $out/bin/s16e01_nim_part2 $out/bin/s16e01-nim-part2
+          '';
         });
       in
       {
