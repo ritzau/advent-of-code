@@ -39,22 +39,22 @@
             cp -r dist/* $out/lib/
 
             # Create wrapper scripts
-            cat > $out/bin/s16e01 <<EOF
+            cat > $out/bin/s16e01-typescript <<EOF
             #!/bin/sh
             exec ${nodejs}/bin/node $out/lib/main.js "\$@"
             EOF
 
-            cat > $out/bin/part1 <<EOF
+            cat > $out/bin/s16e01-typescript-part1 <<EOF
             #!/bin/sh
             exec ${nodejs}/bin/node $out/lib/part1.js "\$@"
             EOF
 
-            cat > $out/bin/part2 <<EOF
+            cat > $out/bin/s16e01-typescript-part2 <<EOF
             #!/bin/sh
             exec ${nodejs}/bin/node $out/lib/part2.js "\$@"
             EOF
 
-            chmod +x $out/bin/s16e01 $out/bin/part1 $out/bin/part2
+            chmod +x $out/bin/s16e01-typescript $out/bin/s16e01-typescript-part1 $out/bin/s16e01-typescript-part2
 
             runHook postInstall
           '';
@@ -107,18 +107,18 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/s16e01";
+            program = "${package}/bin/s16e01-typescript";
           };
 
           # Run individual parts
           part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/s16e01-typescript-part1";
           };
 
           part2 = {
             type = "app";
-            program = "${package}/bin/part2";
+            program = "${package}/bin/s16e01-typescript-part2";
           };
         };
 
