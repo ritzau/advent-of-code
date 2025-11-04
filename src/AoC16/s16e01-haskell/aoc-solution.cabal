@@ -17,14 +17,19 @@ library
     hs-source-dirs:   .
     exposed-modules:  Common
 
-executable part1
+executable s16e01-haskell
     import:           shared-properties
-    main-is:          Part1.hs
+    main-is:          Main.hs
     build-depends:    aoc-solution
 
-executable part2
+executable s16e01-haskell-part1
     import:           shared-properties
-    main-is:          Part2.hs
+    main-is:          Part1Main.hs
+    build-depends:    aoc-solution
+
+executable s16e01-haskell-part2
+    import:           shared-properties
+    main-is:          Part2Main.hs
     build-depends:    aoc-solution
 
 test-suite aoc-tests

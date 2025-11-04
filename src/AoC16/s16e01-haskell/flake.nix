@@ -52,21 +52,21 @@
         };
 
         apps = {
-          # Default: run part1
+          # Default: run main executable
           default = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/s16e01-haskell";
           };
 
           # Run individual parts
           part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/s16e01-haskell-part1";
           };
 
           part2 = {
             type = "app";
-            program = "${package}/bin/part2";
+            program = "${package}/bin/s16e01-haskell-part2";
           };
         };
 
@@ -83,14 +83,16 @@
             echo "🎄 Haskell environment ready"
             echo ""
             echo "Local dev:"
-            echo "  cabal build         - Build all executables"
-            echo "  cabal run part1     - Run part1"
-            echo "  cabal test          - Run tests"
-            echo "  ormolu -i *.hs      - Format code"
-            echo "  hlint .             - Lint code"
+            echo "  cabal build                    - Build all executables"
+            echo "  cabal run s16e01-haskell       - Run main executable"
+            echo "  cabal run s16e01-haskell-part1 - Run part1"
+            echo "  cabal test                     - Run tests"
+            echo "  ormolu -i *.hs                 - Format code"
+            echo "  hlint .                        - Lint code"
             echo ""
             echo "Nix commands:"
             echo "  nix build           - Build package"
+            echo "  nix run             - Run main executable"
             echo "  nix run .#part1     - Run part1"
             echo "  nix run .#part2     - Run part2"
             echo "  nix flake check     - Run all checks"
