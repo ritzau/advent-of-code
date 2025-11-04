@@ -39,22 +39,22 @@
             cp -r dist/* $out/lib/
 
             # Create wrapper scripts
-            cat > $out/bin/s16e01 <<EOF
+            cat > $out/bin/s16e01-typescript <<EOF
             #!/bin/sh
-            exec ${nodejs}/bin/node $out/lib/main.js "\$@"
+            exec ${nodejs}/bin/node $out/lib/s16e01-typescript.js "\$@"
             EOF
 
-            cat > $out/bin/part1 <<EOF
+            cat > $out/bin/s16e01-typescript-part1 <<EOF
             #!/bin/sh
-            exec ${nodejs}/bin/node $out/lib/part1.js "\$@"
+            exec ${nodejs}/bin/node $out/lib/s16e01-typescript-part1.js "\$@"
             EOF
 
-            cat > $out/bin/part2 <<EOF
+            cat > $out/bin/s16e01-typescript-part2 <<EOF
             #!/bin/sh
-            exec ${nodejs}/bin/node $out/lib/part2.js "\$@"
+            exec ${nodejs}/bin/node $out/lib/s16e01-typescript-part2.js "\$@"
             EOF
 
-            chmod +x $out/bin/s16e01 $out/bin/part1 $out/bin/part2
+            chmod +x $out/bin/s16e01-typescript $out/bin/s16e01-typescript-part1 $out/bin/s16e01-typescript-part2
 
             runHook postInstall
           '';
@@ -107,18 +107,18 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/s16e01";
+            program = "${package}/bin/s16e01-typescript";
           };
 
           # Run individual parts
           part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/s16e01-typescript-part1";
           };
 
           part2 = {
             type = "app";
-            program = "${package}/bin/part2";
+            program = "${package}/bin/s16e01-typescript-part2";
           };
         };
 
@@ -134,11 +134,11 @@
             echo "🎄 TypeScript environment ready"
             echo ""
             echo "Local dev:"
-            echo "  npm install          - Install dependencies"
-            echo "  tsc                  - Compile TypeScript"
-            echo "  ts-node part1.ts     - Run part 1"
-            echo "  ts-node part2.ts     - Run part 2"
-            echo "  prettier --write .   - Format code"
+            echo "  npm install                         - Install dependencies"
+            echo "  tsc                                 - Compile TypeScript"
+            echo "  ts-node s16e01-typescript-part1.ts  - Run part 1"
+            echo "  ts-node s16e01-typescript-part2.ts  - Run part 2"
+            echo "  prettier --write .                  - Format code"
             echo ""
             echo "Nix commands:"
             echo "  nix build            - Build package"
