@@ -1,6 +1,6 @@
-use template_rust::{solve_part1, solve_part2};
 use std::io::{self, Read};
 use std::time::Instant;
+use template_rust::{solve_part1, solve_part2};
 
 fn main() {
     let mut input = String::new();

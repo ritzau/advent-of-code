@@ -1,5 +1,5 @@
-use template_rust::solve_part2;
 use std::io::{self, Read};
+use template_rust::solve_part2;
 
 fn main() {
     let mut input = String::new();
