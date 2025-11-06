@@ -80,6 +80,16 @@ clean-inputs:
     rm -rf inputs/
     @echo "✓ Cleaned all cached inputs"
 
+# Generate static Nix expressions (generated.nix) for Haskell flakes using cabal2nix.
+# This will create `generated.nix` beside each `flake.nix` that uses callCabal2nix.
+generate-haskell-nix:
+    @bash scripts/generate-haskell-nix.sh
+
+# Generate static Nix expressions (generated.nix) for Haskell flakes using cabal2nix.
+# This will create `generated.nix` beside each `flake.nix` that uses callCabal2nix.
+generate-haskell-nix:
+    @bash scripts/generate-haskell-nix.sh
+
 # Internal: Ensure input is downloaded
 _ensure-input YEAR DAY:
     #!/usr/bin/env bash

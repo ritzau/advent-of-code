@@ -15,7 +15,10 @@
         haskellPackages = pkgs.haskellPackages;
 
         # Build package without tests (for faster dev iteration)
-        package = haskellPackages.callCabal2nix "aoc-solution" ./. { };
+        # Prefer generated.nix if present (offline-generated expression)
+        package = if builtins.pathExists ./generated.nix
+          then haskellPackages.callPackage ./generated.nix {}
+          else haskellPackages.callCabal2nix "aoc-solution" ./. { };
 
         # Build package with tests enabled (for checks)
         packageWithTests = pkgs.haskell.lib.compose.doCheck (

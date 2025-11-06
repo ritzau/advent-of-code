@@ -254,15 +254,11 @@
         # Apps for easy running
         apps = allApps // {
           # Run the aoc test runner (override default to be aoc)
-          aoc = {
-            type = "app";
-            program = "${inputs.aoc-cli.packages.${system}.default}/bin/aoc";
-          };
+          # Reference the app or package directly to avoid string-interpolating
+          # derivation output paths at evaluation time (which forces builds / IFD).
+          aoc = inputs.aoc-cli.apps.${system}.default or inputs.aoc-cli.packages.${system}.default;
 
-          default = {
-            type = "app";
-            program = "${inputs.aoc-cli.packages.${system}.default}/bin/aoc";
-          };
+          default = inputs.aoc-cli.apps.${system}.default or inputs.aoc-cli.packages.${system}.default;
         };
 
         devShells.default = pkgs.mkShell {

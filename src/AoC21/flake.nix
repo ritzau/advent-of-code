@@ -12,7 +12,10 @@
         pkgs = nixpkgs.legacyPackages.${system};
         haskellPackages = pkgs.haskellPackages;
 
-        package = haskellPackages.callCabal2nix "aoc21" ./. { };
+        # Prefer a generated static expression when available
+        package = if builtins.pathExists ./generated.nix
+          then haskellPackages.callPackage ./generated.nix {}
+          else haskellPackages.callCabal2nix "aoc21" ./. { };
 
       in
       {
