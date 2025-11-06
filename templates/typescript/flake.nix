@@ -17,7 +17,7 @@
 
         # Build the TypeScript package
         package = pkgs.buildNpmPackage {
-          pname = "aoc-solution";
+          pname = "template-typescript";
           version = "0.1.0";
           src = ./.;
 
@@ -39,22 +39,22 @@
             cp -r dist/* $out/lib/
 
             # Create wrapper scripts
-            cat > $out/bin/aoc-solution <<EOF
+            cat > $out/bin/template-typescript <<EOF
             #!/bin/sh
             exec ${nodejs}/bin/node $out/lib/main.js "\$@"
             EOF
 
-            cat > $out/bin/part1 <<EOF
+            cat > $out/bin/template-typescript-part1 <<EOF
             #!/bin/sh
             exec ${nodejs}/bin/node $out/lib/part1.js "\$@"
             EOF
 
-            cat > $out/bin/part2 <<EOF
+            cat > $out/bin/template-typescript-part2 <<EOF
             #!/bin/sh
             exec ${nodejs}/bin/node $out/lib/part2.js "\$@"
             EOF
 
-            chmod +x $out/bin/aoc-solution $out/bin/part1 $out/bin/part2
+            chmod +x $out/bin/template-typescript $out/bin/template-typescript-part1 $out/bin/template-typescript-part2
 
             runHook postInstall
           '';
@@ -71,7 +71,7 @@
 
           # Verify TypeScript compiles without errors
           typecheck = pkgs.buildNpmPackage {
-            name = "aoc-solution-typecheck";
+            name = "template-typescript-typecheck";
             src = ./.;
 
             inherit npmDepsHash;
@@ -90,7 +90,7 @@
 
           # Verify formatting is correct
           format-check = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-format-check";
+            name = "template-typescript-format-check";
             src = ./.;
             nativeBuildInputs = [ pkgs.nodePackages.prettier ];
             buildPhase = ''
@@ -107,18 +107,18 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-solution";
+            program = "${package}/bin/template-typescript";
           };
 
           # Run individual parts
-          part1 = {
+          template-typescript-part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/template-typescript-part1";
           };
 
-          part2 = {
+          template-typescript-part2 = {
             type = "app";
-            program = "${package}/bin/part2";
+            program = "${package}/bin/template-typescript-part2";
           };
         };
 

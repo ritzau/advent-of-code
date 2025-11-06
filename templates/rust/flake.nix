@@ -84,12 +84,12 @@
           };
 
           # Run individual parts
-          part1 = {
+          template-rust-part1 = {
             type = "app";
             program = "${package}/bin/template-rust-part1";
           };
 
-          part2 = {
+          template-rust-part2 = {
             type = "app";
             program = "${package}/bin/template-rust-part2";
           };

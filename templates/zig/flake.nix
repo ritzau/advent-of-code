@@ -16,7 +16,7 @@
 
         # Build the Zig package
         package = pkgs.stdenv.mkDerivation {
-          pname = "aoc-solution";
+          pname = "template-zig";
           version = "0.1.0";
           src = ./.;
 
@@ -28,8 +28,8 @@
             # Set cache dir to avoid read-only filesystem issues
             export XDG_CACHE_HOME=$TMPDIR/zig-cache
 
-            zig build-exe part1.zig -O ReleaseSafe -femit-bin=part1
-            zig build-exe part2.zig -O ReleaseSafe -femit-bin=part2
+            zig build-exe part1.zig -O ReleaseSafe -femit-bin=template-zig-part1
+            zig build-exe part2.zig -O ReleaseSafe -femit-bin=template-zig-part2
 
             runHook postBuild
           '';
@@ -38,8 +38,8 @@
             runHook preInstall
 
             mkdir -p $out/bin
-            cp part1 $out/bin/
-            cp part2 $out/bin/
+            cp template-zig-part1 $out/bin/
+            cp template-zig-part2 $out/bin/
 
             runHook postInstall
           '';
@@ -56,7 +56,7 @@
 
           # Run tests with proper Zig setup
           test = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-tests";
+            name = "template-zig-tests";
             src = ./.;
             nativeBuildInputs = [ zig ];
             buildPhase = ''
@@ -71,7 +71,7 @@
 
           # Verify formatting is correct
           format-check = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-format-check";
+            name = "template-zig-format-check";
             src = ./.;
             nativeBuildInputs = [ zig ];
             buildPhase = ''
@@ -89,18 +89,18 @@
           # Default: run part1
           default = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/template-zig-part1";
           };
 
           # Run individual parts
-          part1 = {
+          template-zig-part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/template-zig-part1";
           };
 
-          part2 = {
+          template-zig-part2 = {
             type = "app";
-            program = "${package}/bin/part2";
+            program = "${package}/bin/template-zig-part2";
           };
         };
 
