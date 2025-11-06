@@ -72,7 +72,10 @@ export function solvePart1(input: string): number {
   return allDistances(expanded);
 }
 
-export function solvePart2(input: string, multiplier: number = 1000000): number {
+export function solvePart2(
+  input: string,
+  multiplier: number = 1000000,
+): number {
   const map = parseMap(input);
   const expanded = expandMap(map, multiplier);
   return allDistances(expanded);

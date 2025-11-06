@@ -41,29 +41,65 @@ function parseMap(input: string): TileMap {
 
 function toTileType(ch: string): TileType {
   switch (ch) {
-    case "|": return TileType.VERTICAL;
-    case "-": return TileType.HORIZONTAL;
-    case "L": return TileType.NORTH_EAST;
-    case "J": return TileType.NORTH_WEST;
-    case "7": return TileType.SOUTH_WEST;
-    case "F": return TileType.SOUTH_EAST;
-    case ".": return TileType.GROUND;
-    case "S": return TileType.START;
-    default: throw new Error("Parse error");
+    case "|":
+      return TileType.VERTICAL;
+    case "-":
+      return TileType.HORIZONTAL;
+    case "L":
+      return TileType.NORTH_EAST;
+    case "J":
+      return TileType.NORTH_WEST;
+    case "7":
+      return TileType.SOUTH_WEST;
+    case "F":
+      return TileType.SOUTH_EAST;
+    case ".":
+      return TileType.GROUND;
+    case "S":
+      return TileType.START;
+    default:
+      throw new Error("Parse error");
   }
 }
 
 function paths(type: TileType): number[][] {
   switch (type) {
-    case TileType.START: return [];
-    case TileType.VERTICAL: return [[-1, 0], [1, 0]];
-    case TileType.HORIZONTAL: return [[0, -1], [0, 1]];
-    case TileType.NORTH_EAST: return [[-1, 0], [0, 1]];
-    case TileType.NORTH_WEST: return [[-1, 0], [0, -1]];
-    case TileType.SOUTH_WEST: return [[1, 0], [0, -1]];
-    case TileType.SOUTH_EAST: return [[1, 0], [0, 1]];
-    case TileType.GROUND: return [];
-    default: throw new Error("Unknown tile");
+    case TileType.START:
+      return [];
+    case TileType.VERTICAL:
+      return [
+        [-1, 0],
+        [1, 0],
+      ];
+    case TileType.HORIZONTAL:
+      return [
+        [0, -1],
+        [0, 1],
+      ];
+    case TileType.NORTH_EAST:
+      return [
+        [-1, 0],
+        [0, 1],
+      ];
+    case TileType.NORTH_WEST:
+      return [
+        [-1, 0],
+        [0, -1],
+      ];
+    case TileType.SOUTH_WEST:
+      return [
+        [1, 0],
+        [0, -1],
+      ];
+    case TileType.SOUTH_EAST:
+      return [
+        [1, 0],
+        [0, 1],
+      ];
+    case TileType.GROUND:
+      return [];
+    default:
+      throw new Error("Unknown tile");
   }
 }
 
@@ -99,10 +135,18 @@ function walkMap(map: TileMap): TileMap {
       const westTile = mapGet(map, row, col - 1);
       const eastTile = mapGet(map, row, col + 1);
 
-      let north = northTile !== undefined && paths(northTile.type).some(([dr]) => dr === 1);
-      let south = southTile !== undefined && paths(southTile.type).some(([dr]) => dr === -1);
-      let west = westTile !== undefined && paths(westTile.type).some(([, dc]) => dc === 1);
-      let east = eastTile !== undefined && paths(eastTile.type).some(([, dc]) => dc === -1);
+      let north =
+        northTile !== undefined &&
+        paths(northTile.type).some(([dr]) => dr === 1);
+      let south =
+        southTile !== undefined &&
+        paths(southTile.type).some(([dr]) => dr === -1);
+      let west =
+        westTile !== undefined &&
+        paths(westTile.type).some(([, dc]) => dc === 1);
+      let east =
+        eastTile !== undefined &&
+        paths(eastTile.type).some(([, dc]) => dc === -1);
 
       if (north && south) tile.type = TileType.VERTICAL;
       else if (west && east) tile.type = TileType.HORIZONTAL;
@@ -140,11 +184,23 @@ function expandMap(map: TileMap): TileMap {
     for (const tile of tileRow) {
       newRow.push(tile);
       if (Number.isNaN(tile.distance)) {
-        newRow.push({ type: TileType.GROUND, distance: Number.NaN, position: undefined });
+        newRow.push({
+          type: TileType.GROUND,
+          distance: Number.NaN,
+          position: undefined,
+        });
       } else if (paths(tile.type).some(([, dc]) => dc === 1)) {
-        newRow.push({ type: TileType.HORIZONTAL, distance: tile.distance, position: TilePosition.PIPE });
+        newRow.push({
+          type: TileType.HORIZONTAL,
+          distance: tile.distance,
+          position: TilePosition.PIPE,
+        });
       } else {
-        newRow.push({ type: TileType.GROUND, distance: Number.NaN, position: undefined });
+        newRow.push({
+          type: TileType.GROUND,
+          distance: Number.NaN,
+          position: undefined,
+        });
       }
     }
     newMap.push(newRow);
@@ -152,11 +208,23 @@ function expandMap(map: TileMap): TileMap {
     const nextRow: Tile[] = [];
     for (const tile of newRow) {
       if (Number.isNaN(tile.distance)) {
-        nextRow.push({ type: TileType.GROUND, distance: Number.NaN, position: undefined });
+        nextRow.push({
+          type: TileType.GROUND,
+          distance: Number.NaN,
+          position: undefined,
+        });
       } else if (paths(tile.type).some(([dr]) => dr === 1)) {
-        nextRow.push({ type: TileType.VERTICAL, distance: tile.distance, position: TilePosition.PIPE });
+        nextRow.push({
+          type: TileType.VERTICAL,
+          distance: tile.distance,
+          position: TilePosition.PIPE,
+        });
       } else {
-        nextRow.push({ type: TileType.GROUND, distance: Number.NaN, position: undefined });
+        nextRow.push({
+          type: TileType.GROUND,
+          distance: Number.NaN,
+          position: undefined,
+        });
       }
     }
     newMap.push(nextRow);
@@ -165,7 +233,12 @@ function expandMap(map: TileMap): TileMap {
   return newMap;
 }
 
-function floodFill(map: TileMap, row: number, col: number, position: TilePosition) {
+function floodFill(
+  map: TileMap,
+  row: number,
+  col: number,
+  position: TilePosition,
+) {
   const queue: number[][] = [];
   enqueue(row, col);
 
@@ -222,7 +295,12 @@ export function solvePart2(input: string): number {
 
   for (let row = 0; row < expandedMap.length; ++row) {
     floodFill(expandedMap, row, 0, TilePosition.OUTSIDE);
-    floodFill(expandedMap, row, expandedMap[row].length - 1, TilePosition.OUTSIDE);
+    floodFill(
+      expandedMap,
+      row,
+      expandedMap[row].length - 1,
+      TilePosition.OUTSIDE,
+    );
   }
 
   for (let i = 0; i < expandedMap[0].length; ++i) {
@@ -237,5 +315,6 @@ export function solvePart2(input: string): number {
     }
   }
 
-  return map.flatMap((r) => r.filter((t) => t.position === TilePosition.INSIDE)).length;
+  return map.flatMap((r) => r.filter((t) => t.position === TilePosition.INSIDE))
+    .length;
 }

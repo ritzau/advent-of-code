@@ -38,15 +38,11 @@ function focusPower(id: number, box: Lens[]): number {
 }
 
 export function solvePart1(input: string): number {
-  return input
-    .split(",")
-    .reduce((a, b) => a + hash(b), 0);
+  return input.split(",").reduce((a, b) => a + hash(b), 0);
 }
 
 export function solvePart2(input: string): number {
   const boxes: Boxes = Array.from({ length: 256 }, () => []);
-  input
-    .split(",")
-    .forEach((op) => execute(boxes, op));
+  input.split(",").forEach((op) => execute(boxes, op));
   return boxes.map((b, s) => focusPower(s, b)).reduce((a, b) => a + b);
 }

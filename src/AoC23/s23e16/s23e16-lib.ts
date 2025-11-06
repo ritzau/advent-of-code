@@ -70,19 +70,27 @@ function stepBeam(map: string[][], startStep: Step): number {
 
   function slashReflection(d: Direction): Direction {
     switch (d) {
-      case Direction.UP: return Direction.RIGHT;
-      case Direction.DOWN: return Direction.LEFT;
-      case Direction.LEFT: return Direction.DOWN;
-      case Direction.RIGHT: return Direction.UP;
+      case Direction.UP:
+        return Direction.RIGHT;
+      case Direction.DOWN:
+        return Direction.LEFT;
+      case Direction.LEFT:
+        return Direction.DOWN;
+      case Direction.RIGHT:
+        return Direction.UP;
     }
   }
 
   function backslashReflection(d: Direction): Direction {
     switch (d) {
-      case Direction.UP: return Direction.LEFT;
-      case Direction.DOWN: return Direction.RIGHT;
-      case Direction.LEFT: return Direction.UP;
-      case Direction.RIGHT: return Direction.DOWN;
+      case Direction.UP:
+        return Direction.LEFT;
+      case Direction.DOWN:
+        return Direction.RIGHT;
+      case Direction.LEFT:
+        return Direction.UP;
+      case Direction.RIGHT:
+        return Direction.DOWN;
     }
   }
 
@@ -93,10 +101,14 @@ function stepBeam(map: string[][], startStep: Step): number {
 
   function deltas(d: Direction) {
     switch (d) {
-      case Direction.UP: return { dr: -1, dc: 0 };
-      case Direction.DOWN: return { dr: 1, dc: 0 };
-      case Direction.LEFT: return { dr: 0, dc: -1 };
-      case Direction.RIGHT: return { dr: 0, dc: 1 };
+      case Direction.UP:
+        return { dr: -1, dc: 0 };
+      case Direction.DOWN:
+        return { dr: 1, dc: 0 };
+      case Direction.LEFT:
+        return { dr: 0, dc: -1 };
+      case Direction.RIGHT:
+        return { dr: 0, dc: 1 };
     }
   }
 }
