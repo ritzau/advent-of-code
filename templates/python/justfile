@@ -18,7 +18,7 @@ run-part PART:
 
 # Format code
 format:
-    nix develop --command ruff format aoc_solution/ tests/
+    nix develop --command ruff format template_python/ tests/
 
 # Run all checks (build + tests + lint)
 check-all:
@@ -38,4 +38,4 @@ check-format:
 
 # Clean build artifacts
 clean:
-    rm -rf result .pytest_cache/ __pycache__/ aoc_solution/__pycache__/ tests/__pycache__/
+    rm -rf result .pytest_cache/ __pycache__/ template_python/__pycache__/ tests/__pycache__/

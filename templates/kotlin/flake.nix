@@ -53,24 +53,17 @@
             program = "${package}/bin/aoc-solution";
           };
 
-          part1 = {
+          template-kotlin-part1 = {
             type = "app";
-            program = toString (pkgs.writeShellScript "part1" ''
+            program = toString (pkgs.writeShellScript "template-kotlin-part1" ''
               exec ${jdk}/bin/java -cp ${package}/lib/'*' Part1Kt
             '');
           };
 
-          part2 = {
+          template-kotlin-part2 = {
             type = "app";
-            program = toString (pkgs.writeShellScript "part2" ''
+            program = toString (pkgs.writeShellScript "template-kotlin-part2" ''
               exec ${jdk}/bin/java -cp ${package}/lib/'*' Part2Kt
-            '');
-          };
-
-          format = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              exec ${pkgs.ktlint}/bin/ktlint -F "src/**/*.kt"
             '');
           };
         };

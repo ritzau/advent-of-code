@@ -5,7 +5,7 @@ author        = "Advent of Code"
 description   = "Advent of Code solution in Nim"
 license       = "MIT"
 srcDir        = "."
-bin           = @["aoc_solution", "part1", "part2"]
+bin           = @["template_nim", "template_nim_part1", "template_nim_part2"]
 
 # Dependencies
 

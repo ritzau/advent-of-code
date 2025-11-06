@@ -215,23 +215,15 @@
           projectFlakes;
 
         # Aggregate apps from all project flakes
-        # Namespace each flake's apps to avoid name collisions
+        # Simplified: merge each flake's apps directly, but skip formatter
+        # apps and the `default` app, since those are handled elsewhere.
         allApps = pkgs.lib.foldl'
           (acc: name:
             let
               flakeApps = inputs.${name}.apps.${system} or {};
-              # For the default app, use the flake name directly
-              # For other apps, prefix with flake name (e.g., s16e01-go-part1)
-              namespacedApps = pkgs.lib.mapAttrs'
-                (appName: appValue:
-                  if appName == "default" then
-                    pkgs.lib.nameValuePair name appValue
-                  else
-                    pkgs.lib.nameValuePair "${name}-${appName}" appValue
-                )
-                flakeApps;
+              filteredApps = pkgs.lib.filterAttrs (appName: appValue: appName != "default") flakeApps;
             in
-              acc // namespacedApps
+              acc // filteredApps
           )
           {}
           projectFlakes;

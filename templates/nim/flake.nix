@@ -13,15 +13,22 @@
 
         # Build the Nim package
         package = pkgs.buildNimPackage (finalAttrs: {
-          pname = "aoc-solution";
+          pname = "template-nim";
           version = "0.1.0";
           src = ./.;
 
           lockFile = ./lock.json;
 
-          nimbleFile = ./aoc_solution.nimble;
+          nimbleFile = ./template_nim.nimble;
 
           nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
+
+                    # Rename binaries from underscores to dashes
+          postInstall = ''
+            mv $out/bin/template_nim $out/bin/template-nim
+            mv $out/bin/template_nim_part1 $out/bin/template-nim-part1
+            mv $out/bin/template_nim_part2 $out/bin/template-nim-part2
+          '';
         });
       in
       {
@@ -35,7 +42,7 @@
 
           # Run tests with proper Nim setup
           test = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-tests";
+            name = "template_nim_tests";
             src = ./.;
             buildInputs = [ pkgs.nim ];
             buildPhase = ''
@@ -50,7 +57,7 @@
 
           # Verify formatting is correct
           format-check = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-format-check";
+            name = "template-nim-format-check";
             src = ./.;
             buildInputs = [ pkgs.nim pkgs.diffutils ];
             buildPhase = ''
@@ -77,27 +84,18 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc_solution";
+            program = "${package}/bin/template-nim";
           };
 
           # Run individual parts
-          part1 = {
+          template-nim-part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/template-nim-part1";
           };
 
-          part2 = {
+          template-nim-part2 = {
             type = "app";
-            program = "${package}/bin/part2";
-          };
-
-          # Format code (app because it modifies files)
-          format = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              export PATH=${pkgs.nim}/bin:$PATH
-              exec ${pkgs.nim}/bin/nimpretty *.nim
-            '');
+            program = "${package}/bin/template-nim-part2";
           };
         };
 

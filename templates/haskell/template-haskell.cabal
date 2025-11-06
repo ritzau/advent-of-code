@@ -1,5 +1,5 @@
 cabal-version:      3.0
-name:               aoc-solution
+name:               template-haskell
 version:            0.1.0.0
 synopsis:           Advent of Code solution
 author:             AoC Solver
@@ -16,19 +16,19 @@ library
     hs-source-dirs:   .
     exposed-modules:  Common
 
-executable part1
+executable template-haskell-part1
     import:           shared-properties
     main-is:          Part1.hs
-    build-depends:    aoc-solution
+    build-depends:    template-haskell
 
-executable part2
+executable template-haskell-part2
     import:           shared-properties
     main-is:          Part2.hs
-    build-depends:    aoc-solution
+    build-depends:    template-haskell
 
 test-suite aoc-tests
     import:           shared-properties
     type:             exitcode-stdio-1.0
     main-is:          Tests.hs
-    build-depends:    aoc-solution
+    build-depends:    template-haskell
                     , HUnit

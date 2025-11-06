@@ -1,6 +1,6 @@
 { mkDerivation, base, containers, HUnit, lib }:
 mkDerivation {
-  pname = "aoc-solution";
+  pname = "template-haskell";
   version = "0.1.0.0";
   src = ./.;
   isLibrary = true;

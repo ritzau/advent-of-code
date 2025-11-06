@@ -97,15 +97,6 @@
             type = "app";
             program = "${package}/bin/s16e01-nim-part2";
           };
-
-          # Format code (app because it modifies files)
-          format = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              export PATH=${pkgs.nim}/bin:$PATH
-              exec ${pkgs.nim}/bin/nimpretty *.nim
-            '');
-          };
         };
 
         devShells.default = pkgs.mkShell {

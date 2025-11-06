@@ -118,15 +118,6 @@
             type = "app";
             program = "${package}/bin/s16e01-python-part2";
           };
-
-          # Format code (app because it modifies files)
-          format = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              export PATH=${pkgs.ruff}/bin:$PATH
-              exec ${pkgs.ruff}/bin/ruff format s16e01/ tests/
-            '');
-          };
         };
 
         devShells.default = pkgs.mkShell {

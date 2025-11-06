@@ -13,13 +13,13 @@
 
         # Build the Go package
         package = pkgs.buildGoModule {
-          pname = "aoc-solution";
+          pname = "template-go";
           version = "0.1.0";
           src = ./.;
 
           vendorHash = null; # No external dependencies
 
-          subPackages = [ "." "cmd/part1" "cmd/part2" ];
+          subPackages = [ "." "cmd/template-go-part1" "cmd/template-go-part2" ];
         };
       in
       {
@@ -72,27 +72,18 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-solution";
+            program = "${package}/bin/template-go";
           };
 
           # Run individual parts
-          part1 = {
+          template-go-part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/template-go-part1";
           };
 
-          part2 = {
+          template-go-part2 = {
             type = "app";
-            program = "${package}/bin/part2";
-          };
-
-          # Format code (app because it modifies files)
-          format = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              export PATH=${pkgs.go}/bin:$PATH
-              exec ${pkgs.go}/bin/gofmt -w .
-            '');
+            program = "${package}/bin/template-go-part2";
           };
         };
 

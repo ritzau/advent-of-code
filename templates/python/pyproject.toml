@@ -1,5 +1,5 @@
 [project]
-name = "aoc-solution"
+name = "template_python"
 version = "0.1.0"
 description = "Advent of Code solution in Python"
 requires-python = ">=3.11"
@@ -11,9 +11,9 @@ dev = [
 ]
 
 [project.scripts]
-aoc-solution = "aoc_solution.main:main"
-part1 = "aoc_solution.part1:main"
-part2 = "aoc_solution.part2:main"
+template-python = "template_python.main:main"
+template-python-part1 = "template_python.part1:main"
+template-python-part2 = "template_python.part2:main"
 
 [build-system]
 requires = ["hatchling"]

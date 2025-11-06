@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "aoc-template"
+name = "template-rust"
 version = "0.1.0"

@@ -1,10 +1,12 @@
 [package]
-name = "aoc-template"
+name = "template-rust"
 version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "part1"
+name = "template-rust-part1"
+path = "src/bin/part1.rs"
 
 [[bin]]
-name = "part2"
+name = "template-rust-part2"
+path = "src/bin/part2.rs"

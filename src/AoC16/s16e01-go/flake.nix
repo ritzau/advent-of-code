@@ -85,15 +85,6 @@
             type = "app";
             program = "${package}/bin/s16e01-go-part2";
           };
-
-          # Format code (app because it modifies files)
-          format = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              export PATH=${pkgs.go}/bin:$PATH
-              exec ${pkgs.go}/bin/gofmt -w .
-            '');
-          };
         };
 
         devShells.default = pkgs.mkShell {

@@ -1,4 +1,4 @@
-use aoc_template::{solve_part1, solve_part2};
+use template_rust::{solve_part1, solve_part2};
 use std::io::{self, Read};
 use std::time::Instant;
 

@@ -1,3 +1,3 @@
-module aoc-solution
+module template-go
 
 go 1.21

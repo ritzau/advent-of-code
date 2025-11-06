@@ -18,7 +18,7 @@
         # Prefer a pre-generated static Nix expression if present (generated.nix)
         package = if builtins.pathExists ./generated.nix
           then haskellPackages.callPackage ./generated.nix {}
-          else haskellPackages.callCabal2nix "aoc-solution" ./. { };
+          else haskellPackages.callCabal2nix "template-haskell" ./. { };
 
         # Build package with tests enabled (for checks)
         # If we generated a package above, reuse it; otherwise fall back to callCabal2nix
@@ -40,7 +40,7 @@
 
           # Check formatting with ormolu
           format-check = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-format-check";
+            name = "template-haskell-format-check";
             src = ./.;
             nativeBuildInputs = [ haskellPackages.ormolu ];
             buildPhase = ''
@@ -57,18 +57,18 @@
           # Default: run part1
           default = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/template-haskell-part1";
           };
 
           # Run individual parts
-          part1 = {
+          template-haskell-part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/template-haskell-part1";
           };
 
-          part2 = {
+          template-haskell-part2 = {
             type = "app";
-            program = "${package}/bin/part2";
+            program = "${package}/bin/template-haskell-part2";
           };
         };
 

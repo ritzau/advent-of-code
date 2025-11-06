@@ -13,7 +13,7 @@
 
         # Build the Rust package
         package = pkgs.rustPlatform.buildRustPackage {
-          pname = "aoc-template";
+          pname = "template-rust";
           version = "0.1.0";
           src = ./.;
           cargoLock.lockFile = ./Cargo.lock;
@@ -30,7 +30,7 @@
 
           # Run tests with proper Rust setup
           test = pkgs.rustPlatform.buildRustPackage {
-            pname = "aoc-template-tests";
+            pname = "template-rust-tests";
             version = "0.1.0";
             src = ./.;
             cargoLock.lockFile = ./Cargo.lock;
@@ -45,7 +45,7 @@
 
           # Run clippy with proper Rust setup
           lint = pkgs.rustPlatform.buildRustPackage {
-            pname = "aoc-template-lint";
+            pname = "template-rust-lint";
             version = "0.1.0";
             src = ./.;
             cargoLock.lockFile = ./Cargo.lock;
@@ -61,7 +61,7 @@
 
           # Verify formatting is correct
           format-check = pkgs.rustPlatform.buildRustPackage {
-            pname = "aoc-template-format-check";
+            pname = "template-rust-format-check";
             version = "0.1.0";
             src = ./.;
             cargoLock.lockFile = ./Cargo.lock;
@@ -80,27 +80,18 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-template";
+            program = "${package}/bin/template-rust";
           };
 
           # Run individual parts
           part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/template-rust-part1";
           };
 
           part2 = {
             type = "app";
-            program = "${package}/bin/part2";
-          };
-
-          # Format code (app because it modifies files)
-          format = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              export PATH=${pkgs.rustfmt}/bin:$PATH
-              exec ${pkgs.rustfmt}/bin/cargo-fmt
-            '');
+            program = "${package}/bin/template-rust-part2";
           };
         };
 

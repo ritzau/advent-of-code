@@ -93,15 +93,6 @@
             type = "app";
             program = "${package}/bin/s16e01-rust-part2";
           };
-
-          # Format code (app because it modifies files)
-          format = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              export PATH=${pkgs.rustfmt}/bin:$PATH
-              exec ${pkgs.rustfmt}/bin/cargo-fmt
-            '');
-          };
         };
 
         devShells.default = pkgs.mkShell {
