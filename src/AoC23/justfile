@@ -31,7 +31,7 @@ format-check:
 
 # Format code (requires nix develop or prettier installed)
 format:
-    prettier --write "*.ts"
+    nix develop --command prettier --write "**/*.ts"
 
 # Install dependencies
 install:

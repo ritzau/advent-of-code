@@ -11,96 +11,153 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         nodejs = pkgs.nodejs_20;
+
+        # Hash of npm dependencies
+        npmDepsHash = "sha256-WnSKoxMFjLztOlHE31xKN3fsa/CzZfqM124tCH7YD2U=";
+
+        # List of all days (01-19)
+        days = [ "01" "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" ];
+
+        # Build the TypeScript package
+        package = pkgs.buildNpmPackage {
+          pname = "aoc23";
+          version = "23.19.0";
+          src = ./.;
+
+          inherit npmDepsHash;
+
+          buildPhase = ''
+            runHook preBuild
+
+            # Compile TypeScript
+            npx tsc --outDir dist
+
+            runHook postBuild
+          '';
+
+          installPhase = ''
+            runHook preInstall
+
+            mkdir -p $out/bin $out/lib
+            cp -r dist/* $out/lib/
+
+            # Create wrapper scripts for part1 and part2 binaries
+            ${pkgs.lib.concatMapStringsSep "\n" (day: ''
+              cat > $out/bin/s23e${day}-part1 <<EOF
+              #!/bin/sh
+              exec ${nodejs}/bin/node $out/lib/s23e${day}/s23e${day}-part1.js "\$@"
+              EOF
+              chmod +x $out/bin/s23e${day}-part1
+
+              cat > $out/bin/s23e${day}-part2 <<EOF
+              #!/bin/sh
+              exec ${nodejs}/bin/node $out/lib/s23e${day}/s23e${day}-part2.js "\$@"
+              EOF
+              chmod +x $out/bin/s23e${day}-part2
+            '') days}
+
+            runHook postInstall
+          '';
+        };
       in
       {
         packages = {
-          default = pkgs.mkYarnPackage {
-            pname = "aoc23";
-            version = "23.19.0";
-            src = ./.;
-
-            packageJSON = ./package.json;
-            yarnLock = ./yarn.lock;
-
-            buildPhase = ''
-              runHook preBuild
-              # No compilation needed - ts-node runs TypeScript directly
-              runHook postBuild
-            '';
-
-            # Don't override installPhase - let mkYarnPackage do its thing
-            # It will create: libexec/aoc23/node_modules and libexec/aoc23/deps/aoc23/
-
-            postInstall = ''
-              # Add our wrapper script after mkYarnPackage's default install
-              mkdir -p $out/bin
-              cat > $out/bin/aoc23 <<EOF
-              #!/bin/sh
-              cd $out/libexec/aoc23/deps/aoc23
-              exec ${nodejs}/bin/node $out/libexec/aoc23/node_modules/.bin/ts-node index.ts "\$@"
-              EOF
-              chmod +x $out/bin/aoc23
-            '';
-
-            # Skip the dist phase which is causing issues
-            doDist = false;
-          };
+          default = package;
+          aoc23 = package;
         };
 
         checks = {
-          # Build succeeds = package is valid
-          build = self.packages.${system}.default;
+            # Build succeeds = package is valid
+            build = package;
 
-          # Verify TypeScript compiles without errors
-          typecheck = pkgs.mkYarnPackage {
-            name = "aoc23-typecheck";
-            src = ./.;
+            # Run all vitest tests
+            tests = pkgs.buildNpmPackage {
+              name = "aoc23-tests";
+              src = ./.;
 
-            packageJSON = ./package.json;
-            yarnLock = ./yarn.lock;
+              inherit npmDepsHash;
 
-            buildPhase = ''
-              runHook preBuild
-              # Run tsc from the installed node_modules
-              yarn --offline tsc --noEmit
-              runHook postBuild
-            '';
+              buildPhase = ''
+                runHook preBuild
+                # Run all vitest tests
+                npx vitest run
+                runHook postBuild
+              '';
 
-            installPhase = ''
-              mkdir -p $out
-              echo "Type check passed" > $out/result
-            '';
+              installPhase = ''
+                mkdir -p $out
+                echo "All tests passed" > $out/result
+              '';
+            };
 
-            doDist = false;
+            # Verify TypeScript compiles without errors
+            typecheck = pkgs.buildNpmPackage {
+              name = "aoc23-typecheck";
+              src = ./.;
+
+              inherit npmDepsHash;
+
+              buildPhase = ''
+                runHook preBuild
+                npx tsc --noEmit
+                runHook postBuild
+              '';
+
+              installPhase = ''
+                mkdir -p $out
+                echo "Type check passed" > $out/result
+              '';
+            };
+
+            # Verify formatting is correct
+            format-check = pkgs.stdenv.mkDerivation {
+              name = "aoc23-format-check";
+              src = ./.;
+              nativeBuildInputs = [ pkgs.nodePackages.prettier ];
+              buildPhase = ''
+                ${pkgs.nodePackages.prettier}/bin/prettier --check "lib/**/*.ts" "s23e*/**/*.ts"
+              '';
+              installPhase = ''
+                mkdir -p $out
+                echo "Format check passed" > $out/result
+              '';
+            };
           };
 
-          # Verify formatting is correct
-          format-check = pkgs.stdenv.mkDerivation {
-            name = "aoc23-format-check";
-            src = ./.;
-            nativeBuildInputs = [ pkgs.nodePackages.prettier ];
-            buildPhase = ''
-              ${pkgs.nodePackages.prettier}/bin/prettier --check "*.ts"
-            '';
-            installPhase = ''
-              mkdir -p $out
-              echo "Format check passed" > $out/result
-            '';
+        apps =
+          let
+            # Create apps for each day (part1 and part2)
+            dayApps = pkgs.lib.listToAttrs (
+              pkgs.lib.flatten (map (day: [
+                {
+                  name = "s23e${day}-part1";
+                  value = {
+                    type = "app";
+                    program = "${package}/bin/s23e${day}-part1";
+                  };
+                }
+                {
+                  name = "s23e${day}-part2";
+                  value = {
+                    type = "app";
+                    program = "${package}/bin/s23e${day}-part2";
+                  };
+                }
+              ]) days)
+            );
+          in
+          dayApps // {
+            # Default app runs day 1 part 1
+            default = {
+              type = "app";
+              program = "${package}/bin/s23e01-part1";
+            };
           };
-        };
-
-        apps = {
-          # Default: run all solutions
-          default = {
-            type = "app";
-            program = "${self.packages.${system}.default}/bin/aoc23";
-          };
-        };
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             nodejs_20
-            yarn
+            typescript
             nodePackages.ts-node
             nodePackages.prettier
           ];
@@ -109,22 +166,19 @@
             echo "🎄 TypeScript environment ready for AoC 2023"
             echo ""
             echo "Local dev:"
-            echo "  yarn install         - Install dependencies"
-            echo "  yarn start           - Run all solutions"
-            echo "  ts-node index.ts 1   - Run day 1"
-            echo "  prettier --write .   - Format code"
+            echo "  npm install                      - Install dependencies"
+            echo "  npm test                         - Run all vitest tests"
+            echo "  tsc                              - Compile TypeScript"
+            echo "  prettier --write .               - Format code"
             echo ""
             echo "Nix commands:"
-            echo "  nix build            - Build package"
-            echo "  nix run              - Run all solutions"
-            echo "  nix run . -- 1       - Run day 1"
-            echo "  nix flake check      - Run all checks"
+            echo "  nix build                        - Build all days"
+            echo "  nix run .#s23e01-part1 < input   - Run day 1 part 1"
+            echo "  nix flake check                  - Run all checks (tests, typecheck, format)"
             echo ""
             echo "Just shortcuts:"
             echo "  just build           - Build package"
-            echo "  just run             - Run all solutions"
-            echo "  just run 1           - Run day 1"
-            echo "  just check           - Run all checks"
+            echo "  just check-all       - Run all checks"
             echo "  just typecheck       - Type check only"
             echo "  just format-check    - Check formatting"
             echo "  just format          - Format code"
