@@ -90,17 +90,20 @@
           default = {
             type = "app";
             program = "${package}/bin/template-zig-part1";
+            meta.description = "template-zig: Run part 1";
           };
 
           # Run individual parts
           template-zig-part1 = {
             type = "app";
             program = "${package}/bin/template-zig-part1";
+            meta.description = "template-zig: Run part 1";
           };
 
           template-zig-part2 = {
             type = "app";
             program = "${package}/bin/template-zig-part2";
+            meta.description = "template-zig: Run part 2";
           };
         };
 

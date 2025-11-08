@@ -93,17 +93,20 @@
           default = {
             type = "app";
             program = "${package}/bin/s16e01-zig";
+            meta.description = "s16e01-zig: Run all parts";
           };
 
           # Run individual parts
           part1 = {
             type = "app";
             program = "${package}/bin/s16e01-zig-part1";
+            meta.description = "s16e01-zig: Run part 1";
           };
 
           part2 = {
             type = "app";
             program = "${package}/bin/s16e01-zig-part2";
+            meta.description = "s16e01-zig: Run part 2";
           };
         };
 

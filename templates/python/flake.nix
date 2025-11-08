@@ -106,17 +106,20 @@
           default = {
             type = "app";
             program = "${package}/bin/template-python";
+            meta.description = "template-python: Run all parts";
           };
 
           # Run individual parts
           template-python-part1 = {
             type = "app";
             program = "${package}/bin/template-python-part1";
+            meta.description = "template-python: Run part 1";
           };
 
           template-python-part2 = {
             type = "app";
             program = "${package}/bin/template-python-part2";
+            meta.description = "template-python: Run part 2";
           };
         };
 

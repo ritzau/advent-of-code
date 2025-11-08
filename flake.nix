@@ -248,9 +248,17 @@
           # Run the aoc test runner (override default to be aoc)
           # Reference the app or package directly to avoid string-interpolating
           # derivation output paths at evaluation time (which forces builds / IFD).
-          aoc = inputs.aoc-cli.apps.${system}.default or inputs.aoc-cli.packages.${system}.default;
+          aoc = {
+            type = "app";
+            program = inputs.aoc-cli.apps.${system}.default.program or "${inputs.aoc-cli.packages.${system}.default}/bin/aoc";
+            meta.description = "aoc: CLI test runner for all solutions";
+          };
 
-          default = inputs.aoc-cli.apps.${system}.default or inputs.aoc-cli.packages.${system}.default;
+          default = {
+            type = "app";
+            program = inputs.aoc-cli.apps.${system}.default.program or "${inputs.aoc-cli.packages.${system}.default}/bin/aoc";
+            meta.description = "aoc: CLI test runner for all solutions";
+          };
         };
 
         devShells.default = pkgs.mkShell {

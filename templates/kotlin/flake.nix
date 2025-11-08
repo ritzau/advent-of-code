@@ -47,24 +47,31 @@
         };
         packages.default = package;
 
+        checks = package.passthru.tests;
+
         apps = {
           default = {
             type = "app";
-            program = "${package}/bin/aoc-solution";
+            program = "${package}/bin/template-kotlin";
+            meta.description = "Run all parts";
+          };
+
+          template-kotlin = {
+            type = "app";
+            program = "${package}/bin/template-kotlin";
+            meta.description = "Run all parts";
           };
 
           template-kotlin-part1 = {
             type = "app";
-            program = toString (pkgs.writeShellScript "template-kotlin-part1" ''
-              exec ${jdk}/bin/java -cp ${package}/lib/'*' Part1Kt
-            '');
+            program = "${package}/bin/template-kotlin-part1";
+            meta.description = "Run part 1";
           };
 
           template-kotlin-part2 = {
             type = "app";
-            program = toString (pkgs.writeShellScript "template-kotlin-part2" ''
-              exec ${jdk}/bin/java -cp ${package}/lib/'*' Part2Kt
-            '');
+            program = "${package}/bin/template-kotlin-part2";
+            meta.description = "Run part 2";
           };
         };
       });

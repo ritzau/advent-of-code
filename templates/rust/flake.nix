@@ -81,17 +81,20 @@
           default = {
             type = "app";
             program = "${package}/bin/template-rust";
+            meta.description = "template-rust: Run all parts";
           };
 
           # Run individual parts
           template-rust-part1 = {
             type = "app";
             program = "${package}/bin/template-rust-part1";
+            meta.description = "template-rust: Run part 1";
           };
 
           template-rust-part2 = {
             type = "app";
             program = "${package}/bin/template-rust-part2";
+            meta.description = "template-rust: Run part 2";
           };
         };
 

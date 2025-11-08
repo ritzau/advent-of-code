@@ -85,17 +85,20 @@
           default = {
             type = "app";
             program = "${package}/bin/template-nim";
+            meta.description = "template-nim: Run all parts";
           };
 
           # Run individual parts
           template-nim-part1 = {
             type = "app";
             program = "${package}/bin/template-nim-part1";
+            meta.description = "template-nim: Run part 1";
           };
 
           template-nim-part2 = {
             type = "app";
             program = "${package}/bin/template-nim-part2";
+            meta.description = "template-nim: Run part 2";
           };
         };
 

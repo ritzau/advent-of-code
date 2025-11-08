@@ -108,17 +108,20 @@
           default = {
             type = "app";
             program = "${package}/bin/template-typescript";
+            meta.description = "template-typescript: Run all parts";
           };
 
           # Run individual parts
           template-typescript-part1 = {
             type = "app";
             program = "${package}/bin/template-typescript-part1";
+            meta.description = "template-typescript: Run part 1";
           };
 
           template-typescript-part2 = {
             type = "app";
             program = "${package}/bin/template-typescript-part2";
+            meta.description = "template-typescript: Run part 2";
           };
         };
 

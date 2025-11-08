@@ -73,17 +73,20 @@
           default = {
             type = "app";
             program = "${package}/bin/template-go";
+            meta.description = "template-go: Run all parts";
           };
 
           # Run individual parts
           template-go-part1 = {
             type = "app";
             program = "${package}/bin/template-go-part1";
+            meta.description = "template-go: Run part 1";
           };
 
           template-go-part2 = {
             type = "app";
             program = "${package}/bin/template-go-part2";
+            meta.description = "template-go: Run part 2";
           };
         };
 

@@ -58,17 +58,20 @@
           default = {
             type = "app";
             program = "${package}/bin/template-haskell-part1";
+            meta.description = "template-haskell: Run part 1";
           };
 
           # Run individual parts
           template-haskell-part1 = {
             type = "app";
             program = "${package}/bin/template-haskell-part1";
+            meta.description = "template-haskell: Run part 1";
           };
 
           template-haskell-part2 = {
             type = "app";
             program = "${package}/bin/template-haskell-part2";
+            meta.description = "template-haskell: Run part 2";
           };
         };
 

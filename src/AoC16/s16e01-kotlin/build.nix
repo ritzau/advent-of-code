@@ -33,28 +33,61 @@ in stdenv.mkDerivation {
     runHook postBuild
   '';
 
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    ktlint src/**/*.kt
-    export GRADLE_USER_HOME=$TMP/gradle-home
-    export NIX_MAVEN_REPO=${mavenRepo}
-    unset GRADLE_OPTS
-    gradle check \
-      --offline --no-daemon \
-      --warning-mode=all --parallel \
-      -PnixMavenRepo=${mavenRepo}
-    runHook postCheck
-  '';
+  # Only run checks during 'nix flake check', not during regular builds
+  doCheck = false;
+
+  passthru.tests = {
+    check = stdenv.mkDerivation {
+      pname = "s16e01-kotlin-check";
+      version = "0.1.0";
+      src = ./.;
+
+      nativeBuildInputs = [ gradle_8 ktlint ];
+
+      JDK_HOME = "${jdk.home}";
+
+      buildPhase = ''
+        ktlint src/**/*.kt
+        export GRADLE_USER_HOME=$TMP/gradle-home
+        export NIX_MAVEN_REPO=${mavenRepo}
+        unset GRADLE_OPTS
+        gradle check \
+          --offline --no-daemon \
+          --warning-mode=all --parallel \
+          -PnixMavenRepo=${mavenRepo}
+
+        # Create a marker file to indicate success
+        touch $out
+      '';
+
+      installPhase = "true";
+    };
+  };
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
+    mkdir -p $out/bin
 
     # Extract the tar distribution created by distTar
     tar -xf build/distributions/*.tar -C $out --strip-components=1
 
-    # Wrap all start scripts to use the correct JDK
+    # Remove Windows batch files
+    rm -f $out/bin/*.bat
+
+    # Create part1 and part2 runner scripts
+    cat > $out/bin/s16e01-kotlin-part1 << 'EOF'
+#!/bin/sh
+exec ${jdk}/bin/java -cp $out/lib/'*' Part1Kt "$@"
+EOF
+    chmod +x $out/bin/s16e01-kotlin-part1
+
+    cat > $out/bin/s16e01-kotlin-part2 << 'EOF'
+#!/bin/sh
+exec ${jdk}/bin/java -cp $out/lib/'*' Part2Kt "$@"
+EOF
+    chmod +x $out/bin/s16e01-kotlin-part2
+
+    # Wrap all scripts to use the correct JDK
     wrapProgram $out/bin/s16e01-kotlin \
       --set JAVA_HOME "${jdk.home}" \
       --prefix PATH : "${jdk}/bin"

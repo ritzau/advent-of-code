@@ -27,6 +27,7 @@
           default = {
             type = "app";
             program = "${package}/bin/aoc22";
+            meta.description = "aoc22: Advent of Code 2022 solutions";
           };
         };
 
