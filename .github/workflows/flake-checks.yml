@@ -21,8 +21,8 @@ jobs:
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v2
 
-      - name: Build all packages (including template-kotlin-gradle)
+      - name: Build all packages (including slow flakes)
         run: nix build .#all --show-trace
 
-      - name: Run all checks (including template-kotlin-gradle)
+      - name: Run all checks (including slow flakes)
         run: nix build .#check-all --show-trace
