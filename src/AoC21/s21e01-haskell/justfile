@@ -1,0 +1,41 @@
+# Advent of Code Solution
+# All commands use Nix for reproducible builds
+
+# Get current system (e.g., x86_64-linux, aarch64-darwin)
+system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
+
+# Build the solution
+build:
+    nix build
+
+# Run both parts (default)
+default:
+    nix run
+
+# Run a specific part with input from stdin (used by AOC CLI)
+run PART:
+    @nix run .#s21e01-haskell-{{PART}}
+
+# Run all checks (build + tests + format)
+check-all:
+    nix flake check
+
+# Run tests only
+check-test:
+    nix build .#checks.{{system}}.test
+
+# Check formatting without modifying files
+check-format:
+    nix build .#checks.{{system}}.format-check
+
+# Format code
+format:
+    nix develop --command ormolu -i *.hs
+
+# Lint code
+lint:
+    nix develop --command hlint .
+
+# Clean build artifacts
+clean:
+    rm -rf dist-newstyle/ result .ghc.environment.*
