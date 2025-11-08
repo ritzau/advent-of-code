@@ -125,9 +125,16 @@
         (name: name != "self" && name != "nixpkgs" && name != "flake-utils")
         (builtins.attrNames inputs);
 
-      # Default project flakes - exclude template-kotlin-gradle (heavy Gradle build)
-      projectFlakes = builtins.filter
-        (name: name != "template-kotlin-gradle")
+      # Helper to check if a flake is marked as slow
+      isSlowFlake = system: name:
+        let
+          flakePackages = inputs.${name}.packages.${system} or {};
+        in
+          flakePackages.slow or false;
+
+      # Default project flakes - exclude slow flakes (e.g., Gradle builds)
+      defaultProjectFlakes = system: builtins.filter
+        (name: !(isSlowFlake system name))
         allProjectFlakes;
 
     in
@@ -150,11 +157,11 @@
           {}
           flakes;
 
-        # Aggregate checks from default project flakes (excluding template-kotlin-gradle)
-        allChecks = aggregateChecks projectFlakes;
+        # Aggregate checks from ALL project flakes (including slow ones)
+        allChecks = aggregateChecks allProjectFlakes;
 
-        # Aggregate checks from ALL project flakes (including template-kotlin-gradle)
-        allChecksIncludingGradle = aggregateChecks allProjectFlakes;
+        # Aggregate checks from default (fast) project flakes only
+        defaultChecks = aggregateChecks (defaultProjectFlakes system);
 
         # Helper to determine binary prefix for a flake
         getBinaryPrefix = name:
@@ -228,11 +235,11 @@
           {}
           flakes;
 
-        # Aggregate packages from default project flakes (excluding template-kotlin-gradle)
-        allPackages = aggregatePackages projectFlakes;
+        # Aggregate packages from ALL project flakes (including slow ones)
+        allPackages = aggregatePackages allProjectFlakes;
 
-        # Aggregate packages from ALL project flakes (including template-kotlin-gradle)
-        allPackagesIncludingGradle = aggregatePackages allProjectFlakes;
+        # Aggregate packages from default (fast) project flakes only
+        defaultPackages = aggregatePackages (defaultProjectFlakes system);
 
         # Aggregate apps from all project flakes
         # Simplified: merge each flake's apps directly, but skip formatter
@@ -246,42 +253,53 @@
               acc // filteredApps
           )
           {}
-          projectFlakes;
+          allProjectFlakes;
+
+        # Default apps (from fast flakes only)
+        defaultApps = pkgs.lib.foldl'
+          (acc: name:
+            let
+              flakeApps = inputs.${name}.apps.${system} or {};
+              filteredApps = pkgs.lib.filterAttrs (appName: appValue: appName != "default") flakeApps;
+            in
+              acc // filteredApps
+          )
+          {}
+          (defaultProjectFlakes system);
       in
       {
-        # Default checks exclude template-kotlin-gradle (heavy Gradle build)
-        checks = allChecks // {
-          # Special check that includes ALL checks including template-kotlin-gradle
-          # Can be run with: nix flake check --all-systems --override-input template-kotlin-gradle path:./templates/kotlin-gradle
-          # Or build via: nix build .#checks.<system>.all-including-gradle
-          all-including-gradle = pkgs.runCommand "all-checks-including-gradle" {
-            buildInputs = pkgs.lib.mapAttrsToList (name: check: check) allChecksIncludingGradle;
+        # Default checks exclude slow flakes (e.g., Gradle builds)
+        checks = defaultChecks // {
+          # Special check that includes ALL checks including slow flakes
+          # Can be run with: nix build .#checks.<system>.all-including-slow
+          all-including-slow = pkgs.runCommand "all-checks-including-slow" {
+            buildInputs = pkgs.lib.mapAttrsToList (name: check: check) allChecks;
           } ''
-            echo "All checks passed (including template-kotlin-gradle)"
+            echo "All checks passed (including slow flakes)"
             touch $out
           '';
         };
 
-        packages = allPackages // {
-          # Default package that builds all solution packages with renamed binaries (excluding template-kotlin-gradle)
+        packages = defaultPackages // {
+          # Default package that builds fast solution packages with renamed binaries
           default = pkgs.symlinkJoin {
             name = "advent-of-code-default";
-            paths = pkgs.lib.mapAttrsToList (name: pkg: wrapWithPrefix name pkg) allPackages;
-            meta.description = "All Advent of Code solution packages with properly named binaries (excluding template-kotlin-gradle)";
+            paths = pkgs.lib.mapAttrsToList (name: pkg: wrapWithPrefix name pkg) defaultPackages;
+            meta.description = "Advent of Code solution packages with properly named binaries (fast builds only)";
           };
 
-          # Package that builds ALL packages including template-kotlin-gradle
+          # Package that builds ALL packages including slow ones
           all = pkgs.symlinkJoin {
             name = "advent-of-code-all";
-            paths = pkgs.lib.mapAttrsToList (name: pkg: wrapWithPrefix name pkg) allPackagesIncludingGradle;
-            meta.description = "All Advent of Code packages including template-kotlin-gradle";
+            paths = pkgs.lib.mapAttrsToList (name: pkg: wrapWithPrefix name pkg) allPackages;
+            meta.description = "All Advent of Code packages including slow flakes";
           };
 
-          # Run all checks including template-kotlin-gradle
+          # Run all checks including slow flakes
           check-all = pkgs.runCommand "check-all" {
-            buildInputs = pkgs.lib.mapAttrsToList (name: check: check) allChecksIncludingGradle;
+            buildInputs = pkgs.lib.mapAttrsToList (name: check: check) allChecks;
           } ''
-            echo "All checks passed (including template-kotlin-gradle)"
+            echo "All checks passed (including slow flakes)"
             touch $out
           '';
 
@@ -289,8 +307,8 @@
           aoc = inputs.aoc-cli.packages.${system}.default;
         };
 
-        # Apps for easy running
-        apps = allApps // {
+        # Apps for easy running (default apps exclude slow flakes)
+        apps = defaultApps // {
           # Run the aoc test runner (override default to be aoc)
           # Reference the app or package directly to avoid string-interpolating
           # derivation output paths at evaluation time (which forces builds / IFD).

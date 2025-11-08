@@ -47,6 +47,9 @@
         };
         packages.default = package;
 
+        # Mark this flake as slow (uses Gradle, Maven dependencies)
+        packages.slow = true;
+
         checks = package.passthru.tests;
 
         apps = {
