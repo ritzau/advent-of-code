@@ -109,14 +109,20 @@
             meta.description = "s16e01-python: Run all parts";
           };
 
+          s16e01-python = {
+            type = "app";
+            program = "${package}/bin/s16e01-python";
+            meta.description = "s16e01-python: Run all parts";
+          };
+
           # Run individual parts
-          part1 = {
+          s16e01-python-part1 = {
             type = "app";
             program = "${package}/bin/s16e01-python-part1";
             meta.description = "s16e01-python: Run part 1";
           };
 
-          part2 = {
+          s16e01-python-part2 = {
             type = "app";
             program = "${package}/bin/s16e01-python-part2";
             meta.description = "s16e01-python: Run part 2";

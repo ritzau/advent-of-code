@@ -81,21 +81,27 @@
         };
 
         apps = {
-          # Default: run main verification binary
+          # Default: run main executable
           default = {
             type = "app";
             program = "${package}/bin/s16e01-nim";
             meta.description = "s16e01-nim: Run all parts";
           };
 
+          s16e01-nim = {
+            type = "app";
+            program = "${package}/bin/s16e01-nim";
+            meta.description = "s16e01-nim: Run all parts";
+          };
+
           # Run individual parts
-          part1 = {
+          s16e01-nim-part1 = {
             type = "app";
             program = "${package}/bin/s16e01-nim-part1";
             meta.description = "s16e01-nim: Run part 1";
           };
 
-          part2 = {
+          s16e01-nim-part2 = {
             type = "app";
             program = "${package}/bin/s16e01-nim-part2";
             meta.description = "s16e01-nim: Run part 2";

@@ -104,21 +104,27 @@
         };
 
         apps = {
-          # Default: run main verification binary
+          # Default: run main executable
           default = {
             type = "app";
             program = "${package}/bin/s16e01-typescript";
             meta.description = "s16e01-typescript: Run all parts";
           };
 
+          s16e01-typescript = {
+            type = "app";
+            program = "${package}/bin/s16e01-typescript";
+            meta.description = "s16e01-typescript: Run all parts";
+          };
+
           # Run individual parts
-          part1 = {
+          s16e01-typescript-part1 = {
             type = "app";
             program = "${package}/bin/s16e01-typescript-part1";
             meta.description = "s16e01-typescript: Run part 1";
           };
 
-          part2 = {
+          s16e01-typescript-part2 = {
             type = "app";
             program = "${package}/bin/s16e01-typescript-part2";
             meta.description = "s16e01-typescript: Run part 2";

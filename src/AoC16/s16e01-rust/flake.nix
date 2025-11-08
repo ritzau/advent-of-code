@@ -84,14 +84,20 @@
             meta.description = "s16e01-rust: Run all parts";
           };
 
+          s16e01-rust = {
+            type = "app";
+            program = "${package}/bin/s16e01-rust";
+            meta.description = "s16e01-rust: Run all parts";
+          };
+
           # Run individual parts
-          part1 = {
+          s16e01-rust-part1 = {
             type = "app";
             program = "${package}/bin/s16e01-rust-part1";
             meta.description = "s16e01-rust: Run part 1";
           };
 
-          part2 = {
+          s16e01-rust-part2 = {
             type = "app";
             program = "${package}/bin/s16e01-rust-part2";
             meta.description = "s16e01-rust: Run part 2";
