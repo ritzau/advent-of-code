@@ -53,11 +53,6 @@
     };
 
     # Legacy Haskell solutions
-    aoc21 = {
-      url = "path:./src/AoC21";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     aoc22 = {
       url = "path:./src/AoC22";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -116,6 +111,13 @@
       # Don't follow nixpkgs - Zig uses its own pinned version for zig_0_12
       inputs.flake-utils.follows = "flake-utils";
     };
+
+    # 2021 Day 1 Solutions
+    s21e01-haskell = {
+      url = "path:./src/AoC21/s21e01-haskell";
+      # Don't follow root nixpkgs - this solution uses nixos-24.05 for GHC 9.6.5
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
@@ -169,8 +171,6 @@
             name  # template-rust -> template-rust
           else if pkgs.lib.hasPrefix "s" name && pkgs.lib.hasInfix "e" name then
             name  # s16e01-rust -> s16e01-rust
-          else if name == "aoc21" then
-            "aoc21"
           else if name == "aoc22" then
             "aoc22"
           else if name == "aoc23" then

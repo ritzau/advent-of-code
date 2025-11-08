@@ -19,25 +19,6 @@
       },
       "parent": []
     },
-    "aoc21": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "./src/AoC21",
-        "type": "path"
-      },
-      "original": {
-        "path": "./src/AoC21",
-        "type": "path"
-      },
-      "parent": []
-    },
     "aoc22": {
       "inputs": {
         "flake-utils": [
@@ -158,10 +139,25 @@
         "type": "github"
       }
     },
+    "nixpkgs_5": {
+      "locked": {
+        "lastModified": 1735563628,
+        "narHash": "sha256-OnSAY7XDSx7CtDoqNh8jwVwh4xNL/2HaJxGjryLWzX8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b134951a4c9f3c995fd7be05f3243f8ecd65d798",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "aoc-cli": "aoc-cli",
-        "aoc21": "aoc21",
         "aoc22": "aoc22",
         "aoc23": "aoc23",
         "flake-utils": "flake-utils",
@@ -174,6 +170,7 @@
         "s16e01-rust": "s16e01-rust",
         "s16e01-typescript": "s16e01-typescript",
         "s16e01-zig": "s16e01-zig",
+        "s21e01-haskell": "s21e01-haskell",
         "template-go": "template-go",
         "template-haskell": "template-haskell",
         "template-kotlin-gradle": "template-kotlin-gradle",
@@ -330,6 +327,23 @@
       },
       "original": {
         "path": "./src/AoC16/s16e01-zig",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "s21e01-haskell": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "path": "./src/AoC21/s21e01-haskell",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/AoC21/s21e01-haskell",
         "type": "path"
       },
       "parent": []
@@ -553,7 +567,7 @@
         "flake-utils": [
           "flake-utils"
         ],
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": "nixpkgs_5"
       },
       "locked": {
         "path": "./templates/zig",
