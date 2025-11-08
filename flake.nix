@@ -277,6 +277,14 @@
             meta.description = "All Advent of Code packages including template-kotlin-gradle";
           };
 
+          # Run all checks including template-kotlin-gradle
+          check-all = pkgs.runCommand "check-all" {
+            buildInputs = pkgs.lib.mapAttrsToList (name: check: check) allChecksIncludingGradle;
+          } ''
+            echo "All checks passed (including template-kotlin-gradle)"
+            touch $out
+          '';
+
           # Explicit alias for aoc CLI for easy access
           aoc = inputs.aoc-cli.packages.${system}.default;
         };
