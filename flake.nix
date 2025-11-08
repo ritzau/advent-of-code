@@ -16,8 +16,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    template-kotlin = {
-      url = "path:./templates/kotlin";
+    template-kotlin-gradle = {
+      url = "path:./templates/kotlin-gradle";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    template-kotlin-kotlinc = {
+      url = "path:./templates/kotlin-kotlinc";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };

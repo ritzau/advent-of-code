@@ -52,26 +52,26 @@
         apps = {
           default = {
             type = "app";
-            program = "${package}/bin/template-kotlin";
-            meta.description = "Run all parts";
+            program = "${package}/bin/template-kotlin-gradle";
+            meta.description = "template-kotlin-gradle: Run all parts";
           };
 
-          template-kotlin = {
+          template-kotlin-gradle = {
             type = "app";
-            program = "${package}/bin/template-kotlin";
-            meta.description = "Run all parts";
+            program = "${package}/bin/template-kotlin-gradle";
+            meta.description = "template-kotlin-gradle: Run all parts";
           };
 
-          template-kotlin-part1 = {
+          template-kotlin-gradle-part1 = {
             type = "app";
-            program = "${package}/bin/template-kotlin-part1";
-            meta.description = "Run part 1";
+            program = "${package}/bin/template-kotlin-gradle-part1";
+            meta.description = "template-kotlin-gradle: Run part 1";
           };
 
-          template-kotlin-part2 = {
+          template-kotlin-gradle-part2 = {
             type = "app";
-            program = "${package}/bin/template-kotlin-part2";
-            meta.description = "Run part 2";
+            program = "${package}/bin/template-kotlin-gradle-part2";
+            meta.description = "template-kotlin-gradle: Run part 2";
           };
         };
       });

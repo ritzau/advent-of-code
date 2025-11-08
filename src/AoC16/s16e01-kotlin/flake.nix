@@ -51,25 +51,25 @@
           default = {
             type = "app";
             program = "${package}/bin/s16e01-kotlin";
-            meta.description = "Run all parts";
+            meta.description = "s16e01-kotlin: Run all parts";
           };
 
           s16e01-kotlin = {
             type = "app";
             program = "${package}/bin/s16e01-kotlin";
-            meta.description = "Run all parts";
+            meta.description = "s16e01-kotlin: Run all parts";
           };
 
           s16e01-kotlin-part1 = {
             type = "app";
             program = "${package}/bin/s16e01-kotlin-part1";
-            meta.description = "Run part 1";
+            meta.description = "s16e01-kotlin: Run part 1";
           };
 
           s16e01-kotlin-part2 = {
             type = "app";
             program = "${package}/bin/s16e01-kotlin-part2";
-            meta.description = "Run part 2";
+            meta.description = "s16e01-kotlin: Run part 2";
           };
         };
       });

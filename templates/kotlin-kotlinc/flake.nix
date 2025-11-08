@@ -52,25 +52,25 @@
           default = {
             type = "app";
             program = "${package}/bin/template-kotlin-kotlinc";
-            meta.description = "Run all parts";
+            meta.description = "template-kotlin-kotlinc: Run all parts";
           };
 
           template-kotlin-kotlinc = {
             type = "app";
             program = "${package}/bin/template-kotlin-kotlinc";
-            meta.description = "Run all parts";
+            meta.description = "template-kotlin-kotlinc: Run all parts";
           };
 
           template-kotlin-kotlinc-part1 = {
             type = "app";
             program = "${package}/bin/template-kotlin-kotlinc-part1";
-            meta.description = "Run part 1";
+            meta.description = "template-kotlin-kotlinc: Run part 1";
           };
 
           template-kotlin-kotlinc-part2 = {
             type = "app";
             program = "${package}/bin/template-kotlin-kotlinc-part2";
-            meta.description = "Run part 2";
+            meta.description = "template-kotlin-kotlinc: Run part 2";
           };
         };
       });

@@ -48,7 +48,7 @@ tasks.withType<KotlinCompile> {
 
 application {
     mainClass.set("MainKt")
-    applicationName = "template-kotlin"
+    applicationName = "template-kotlin-gradle"
 }
 
 // Don't generate Windows batch files
