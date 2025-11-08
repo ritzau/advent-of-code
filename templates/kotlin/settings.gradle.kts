@@ -1,4 +1,4 @@
-rootProject.name = "aoc-solution"
+rootProject.name = "template-kotlin"
 
 pluginManagement {
     repositories {

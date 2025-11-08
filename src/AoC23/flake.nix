@@ -134,6 +134,7 @@
                   value = {
                     type = "app";
                     program = "${package}/bin/s23e${day}-part1";
+                    meta.description = "s23e${day}: Run part 1";
                   };
                 }
                 {
@@ -141,6 +142,7 @@
                   value = {
                     type = "app";
                     program = "${package}/bin/s23e${day}-part2";
+                    meta.description = "s23e${day}: Run part 2";
                   };
                 }
               ]) days)
@@ -151,6 +153,7 @@
             default = {
               type = "app";
               program = "${package}/bin/s23e01-part1";
+              meta.description = "s23e01: Run part 1";
             };
           };
 

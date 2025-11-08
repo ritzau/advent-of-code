@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"aoc-solution/common"
+	"template-go/common"
 )
 
 func main() {

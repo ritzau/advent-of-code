@@ -12,7 +12,10 @@
         pkgs = nixpkgs.legacyPackages.${system};
         haskellPackages = pkgs.haskellPackages;
 
-        package = haskellPackages.callCabal2nix "aoc22" ./. { };
+        # Prefer a generated static expression when available
+        package = if builtins.pathExists ./generated.nix
+          then haskellPackages.callPackage ./generated.nix {}
+          else haskellPackages.callCabal2nix "aoc22" ./. { };
 
       in
       {
@@ -24,6 +27,7 @@
           default = {
             type = "app";
             program = "${package}/bin/aoc22";
+            meta.description = "aoc22: Advent of Code 2022 solutions";
           };
         };
 

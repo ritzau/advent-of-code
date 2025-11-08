@@ -17,7 +17,7 @@ allprojects {
 }
 
 plugins {
-    kotlin("jvm") version "1.9.23"
+    kotlin("jvm") version "2.2.21"
     application
 }
 
@@ -41,7 +41,9 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "21"
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
 }
 
 application {
@@ -49,40 +51,9 @@ application {
     applicationName = "s16e01-kotlin"
 }
 
-// Create start script for Part 1
-val createPart1StartScripts =
-    tasks.register<CreateStartScripts>("createPart1StartScripts") {
-        applicationName = "s16e01-kotlin-part1"
-        mainClass.set("Part1Kt")
-        outputDir = file("build/scripts-part1")
-        classpath = tasks
-            .named<Jar>("jar")
-            .get()
-            .outputs.files + configurations.runtimeClasspath.get()
-    }
-
-// Create start script for Part 2
-val createPart2StartScripts =
-    tasks.register<CreateStartScripts>("createPart2StartScripts") {
-        applicationName = "s16e01-kotlin-part2"
-        mainClass.set("Part2Kt")
-        outputDir = file("build/scripts-part2")
-        classpath = tasks
-            .named<Jar>("jar")
-            .get()
-            .outputs.files + configurations.runtimeClasspath.get()
-    }
-
-// Include additional start scripts in distributions
-distributions {
-    main {
-        contents {
-            from(createPart1StartScripts) {
-                into("bin")
-            }
-            from(createPart2StartScripts) {
-                into("bin")
-            }
-        }
+// Don't generate Windows batch files
+tasks.withType<CreateStartScripts> {
+    doLast {
+        delete(windowsScript)
     }
 }

@@ -1,5 +1,5 @@
-use aoc_template::solve_part1;
 use std::io::{self, Read};
+use template_rust::solve_part1;
 
 fn main() {
     let mut input = String::new();

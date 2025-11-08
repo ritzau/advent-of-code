@@ -1,29 +1,62 @@
 [
   {
-    "group": "com.github.ajalt",
-    "name": "colormath",
-    "version": "1.2.0",
+    "group": "com.github.ben-manes.caffeine",
+    "name": "caffeine",
+    "version": "2.9.3",
     "artifacts": {
-      "colormath-1.2.0.jar": "86a51f7dbb32abe410d54331ec61ac0684a543b24ee97967bbac0a4e6729f031",
-      "colormath-1.2.0.pom": "6b710a8d0a10bbe3e05795ef7f4deec778fd79005b0c1bc0e5c17801ee6bdd9d"
+      "caffeine-2.9.3.jar": "1e0a7bbef1dd791653143f3f05d0e489934bf5481e58a87c9e619cd46b68729b",
+      "caffeine-2.9.3.module": "27dfd34ad6656990d3c73176344b0991f2c82709fab30709b3ddea8fa3003070"
     }
   },
   {
-    "group": "com.github.ajalt",
-    "name": "mordant",
-    "version": "1.2.1",
+    "group": "com.google.code.gson",
+    "name": "gson",
+    "version": "2.11.0",
     "artifacts": {
-      "mordant-1.2.1.jar": "7a714eb8d25b4d9ba7f256a54c7559cca87d85ec90d6943df1913cad43db95d6",
-      "mordant-1.2.1.pom": "f032dc57f8079c1f5626fbc5f0f65fcf5e12340de272d829b0b54e92979a72ba"
+      "gson-2.11.0.jar": "57928d6e5a6edeb2abd3770a8f95ba44dce45f3b23b7a9dc2b309c581552a78b",
+      "gson-2.11.0.pom": "c0e547bea998888e6e25c5886a90e762272bc88b5275343dd2c05ded6ca2e360"
     }
   },
   {
-    "group": "io.github.classgraph",
-    "name": "classgraph",
-    "version": "4.8.162",
+    "group": "com.google.code.gson",
+    "name": "gson-parent",
+    "version": "2.11.0",
     "artifacts": {
-      "classgraph-4.8.162.jar": "ea30b2d5e29e89d52706bcecf7a6ae3b44682d4a1566a5f22b9453f9be2a970c",
-      "classgraph-4.8.162.pom": "492c69908c3b682a635d8ca9d909b9b42c8245a34eb7b9e7b7dc671521d9b307"
+      "gson-parent-2.11.0.pom": "8acb1f3b72a6f026916ac0735bad9aab0293d527edb7b365327def13a9367b7a"
+    }
+  },
+  {
+    "group": "com.google.errorprone",
+    "name": "error_prone_annotations",
+    "version": "2.27.0",
+    "artifacts": {
+      "error_prone_annotations-2.27.0.jar": "24c923372c58e35d0b9f16a028929bb9aedc77521867c274f2bd0735df5ba1f5",
+      "error_prone_annotations-2.27.0.pom": "4ca5a35d61235e16549ac346d1e34551cdf0fe27e84aa57e03cbeb255ea4e5da"
+    }
+  },
+  {
+    "group": "com.google.errorprone",
+    "name": "error_prone_annotations",
+    "version": "2.28.0",
+    "artifacts": {
+      "error_prone_annotations-2.28.0.jar": "f3fc8a3a0a4020706a373b00e7f57c2512dd26d1f83d28c7d38768f8682b231e",
+      "error_prone_annotations-2.28.0.pom": "0ce909f13a568148476e5ee200f380f98c75ba08971aaf15db295eb77598ef3a"
+    }
+  },
+  {
+    "group": "com.google.errorprone",
+    "name": "error_prone_parent",
+    "version": "2.27.0",
+    "artifacts": {
+      "error_prone_parent-2.27.0.pom": "fa81829d049559df6927f9c9a6fd6bbd09f8b50e6d4736ae72c8300b6c3d7654"
+    }
+  },
+  {
+    "group": "com.google.errorprone",
+    "name": "error_prone_parent",
+    "version": "2.28.0",
+    "artifacts": {
+      "error_prone_parent-2.28.0.pom": "accefdbb5416cef5fcd2ddc37db4f1fcb34a2193cc1a55dfe5970a131b3e7683"
     }
   },
   {
@@ -44,230 +77,21 @@
     }
   },
   {
-    "group": "io.kotest",
-    "name": "kotest-assertions-api",
-    "version": "5.8.0",
+    "group": "io.opentelemetry",
+    "name": "opentelemetry-api",
+    "version": "1.41.0",
     "artifacts": {
-      "kotest-assertions-api-5.8.0.module": "a29f68c9a7639bff188f147cbef8671eb8f0b58fe5bae180b6455db77df9728b",
-      "kotest-assertions-api-metadata-5.8.0.jar": "5f0b74cb292e7b731ab92f5257edfcca0d902541998871e09354bffee9391bf1"
+      "opentelemetry-api-1.41.0.jar": "9336668f388de68a0a2c3e114154febd29db19a7644f27c4eba548f5de852258",
+      "opentelemetry-api-1.41.0.module": "261468589c993b88f7ccad9338ffd8166b9df4cc34de308066932b2a5c9de956"
     }
   },
   {
-    "group": "io.kotest",
-    "name": "kotest-assertions-api-jvm",
-    "version": "5.8.0",
+    "group": "io.opentelemetry",
+    "name": "opentelemetry-context",
+    "version": "1.41.0",
     "artifacts": {
-      "kotest-assertions-api-jvm-5.8.0.jar": "24e5429f8de994056147f4e4198f03bc1b37303b2e4e2bad81a5c388f5fe8d21",
-      "kotest-assertions-api-jvm-5.8.0.module": "0ebcc607ee9b3226ab5c162fc1bc25dc928d7be4b9889077c08e753267bb8c1a"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-assertions-core",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-assertions-core-5.8.0.module": "dcf4167b7e67b090039fa009b5260a4710e5d4d5678595f2cf5eb73cc35f8cab",
-      "kotest-assertions-core-metadata-5.8.0.jar": "9e2e06073a5329d2999b4c6004967e3a9efc39cc203108b95c7c2b52ceba3a7d"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-assertions-core-jvm",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-assertions-core-jvm-5.8.0.jar": "c2c94547fb1521a4820d0e2e17eaa4b903c368edea78fe2e1ffad143abacf61c",
-      "kotest-assertions-core-jvm-5.8.0.module": "e5f3f67e1fc08fe6008a631df77f32814ecc0b6b9fdccb73656af4ac1164c91f"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-assertions-shared",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-assertions-shared-5.8.0.module": "072bd3276684c9ab673268e35e546255231f593e54e61a350d97c0c9961771f2",
-      "kotest-assertions-shared-metadata-5.8.0.jar": "4325fc011e36ecaa64c8dcd1568e97841a827c1a85bf28dc30f7606fe2ea8974"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-assertions-shared-jvm",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-assertions-shared-jvm-5.8.0.jar": "f959ffd72d8a739c54f2e09017f8003d25f4468de853a52c20ffb2930d5354c1",
-      "kotest-assertions-shared-jvm-5.8.0.module": "74ae18111f43524c174ecad6c4acfde4a3044685dffebc898783275d911fb66d"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-common",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-common-5.8.0.module": "070c0947134b35e8cd63d166a4629ed0a10b92b371e57612ec0e3f93f4c64374",
-      "kotest-common-metadata-5.8.0.jar": "6bd4202edb89e59eb54352745bd0e1fbc95c54d5d3305b98f92132404f07ae42"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-common-jvm",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-common-jvm-5.8.0.jar": "f7e713bba225fba5879741665a3b6193fa528bc27be54752a7763808a4f29513",
-      "kotest-common-jvm-5.8.0.module": "17a9b67077bc7650efaf69df4c2d99e69766958ec96160b9122ce6c610bac7fc"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-extensions",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-extensions-5.8.0.module": "c1127d3610a13e7b6532d84765bb211cf3f21c901aec7ecfa181bac20edc17a8"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-extensions-jvm",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-extensions-jvm-5.8.0.jar": "b7b649b01ab0b50c7f855721b1cd90ceb93b7ec790c9e0d454eacd89f1822c31",
-      "kotest-extensions-jvm-5.8.0.module": "c2957c40db030704c3c1c450463450fd421f515d9e4dfd70158ae0953c7bb392"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-framework-api",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-framework-api-5.8.0.module": "4d4fb8d9f31995c1135138923f739076d28c6c8ba78e86ecb79e925533659bcb"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-framework-api-jvm",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-framework-api-jvm-5.8.0.jar": "ab32b248767a8fcdee96a3a7debc1d4bca15b4107d03a8f0ecb43f0a12a66078",
-      "kotest-framework-api-jvm-5.8.0.module": "fbc00241e6bfa4f07663ed64f995917046acdddd2873ca5da59b4cb8c1a6731f"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-framework-concurrency",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-framework-concurrency-5.8.0.module": "0299bbac9f9db2d3447d0dc1d230fa79db87a4441d8158eef3bea2e43c86538a"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-framework-concurrency-jvm",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-framework-concurrency-jvm-5.8.0.jar": "fa3562b9b7a17d10886d955915980506683e6d4253fda2d9a610c707b6a1c534",
-      "kotest-framework-concurrency-jvm-5.8.0.module": "104751977214edb45b6d0e505f5731f0f2c4481644dad49d640935ee68d3eac0"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-framework-discovery",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-framework-discovery-5.8.0.module": "5684839a75fcf0c8e82bb37bd41a7f44172de8c5b4d0d7ba517beb2a6f902ce8"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-framework-discovery-jvm",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-framework-discovery-jvm-5.8.0.jar": "9605cc7df0a678ac760168151d1e0c1cae4a60b5c7e1ab9f0c83fdd24d18d508",
-      "kotest-framework-discovery-jvm-5.8.0.module": "cec6c001e9f892e9b0a1593b5532b079e1198cfeebc17e03ec187ad0ce1e47b7"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-framework-engine",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-framework-engine-5.8.0.module": "4b0200a44a3d0bc155bce4599adf3f4cc786b7c1dcaaf34dd45920675bbde4ae"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-framework-engine-jvm",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-framework-engine-jvm-5.8.0.jar": "b4ef5f3a8ee3d2f72b9a70835bc78bbd63362b57bd49c729cfdc99b882c8229f",
-      "kotest-framework-engine-jvm-5.8.0.module": "a46a10b00a994f5cfeefb9d5d10343097499d05b127076d56630b92c3dd1d76c"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-runner-junit5",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-runner-junit5-5.8.0.module": "cb8c0b79cca41bf1a82313a59efe7e10ec0363ac67957381746c0fb87977a139",
-      "kotest-runner-junit5-metadata-5.8.0.jar": "19895b13bd40d94c56b453fa03865203a8077398718e118b4c2dec54457fff5e"
-    }
-  },
-  {
-    "group": "io.kotest",
-    "name": "kotest-runner-junit5-jvm",
-    "version": "5.8.0",
-    "artifacts": {
-      "kotest-runner-junit5-jvm-5.8.0.jar": "b12cfe724d51390a53cbac8ea20146780984efdbdc79a6bd0a5d739dc4aae7f9",
-      "kotest-runner-junit5-jvm-5.8.0.module": "e356005a5a933c8e58058c41fb7c3a30d7dcf3cfe8a3ea6f72c798291e76b5ff"
-    }
-  },
-  {
-    "group": "net.bytebuddy",
-    "name": "byte-buddy",
-    "version": "1.10.9",
-    "artifacts": {
-      "byte-buddy-1.10.9.jar": "07b9ca6e2f970cb03f4b25651df1f2fce271d491b44e0409827887786f692d4d",
-      "byte-buddy-1.10.9.pom": "40881d4948a871159346270f36945bc29025577c6cb57f6a5dd0c7c222069dac"
-    }
-  },
-  {
-    "group": "net.bytebuddy",
-    "name": "byte-buddy-agent",
-    "version": "1.10.9",
-    "artifacts": {
-      "byte-buddy-agent-1.10.9.jar": "fbd052d2d4cd16f707547c468621c6b7fb842c7ec8866d012ecbc6178de1f394",
-      "byte-buddy-agent-1.10.9.pom": "19907495fbc1c2316c8ebad76f07b96d101feb1a7e3c09bfe1526fd3fc6eec9d"
-    }
-  },
-  {
-    "group": "net.bytebuddy",
-    "name": "byte-buddy-parent",
-    "version": "1.10.9",
-    "artifacts": {
-      "byte-buddy-parent-1.10.9.pom": "93d9d380779cd1768c52b4bcee82cbfaedef9a4a30de87ae06b441e1634fd38c"
-    }
-  },
-  {
-    "group": "net.java.dev.jna",
-    "name": "jna",
-    "version": "5.9.0",
-    "artifacts": {
-      "jna-5.9.0.jar": "eafcc780b445434d3c5ae7fa2fb6665de1a7560d537d2c408a8e80cd14d27161",
-      "jna-5.9.0.pom": "6bc8b8459150b59e9598f3dad9ad245a1ef2150d082581017184eb163e592829"
-    }
-  },
-  {
-    "group": "net.java.dev.jna",
-    "name": "jna-platform",
-    "version": "5.9.0",
-    "artifacts": {
-      "jna-platform-5.9.0.jar": "1903bc6d87f3ab92023957b91f45a9c8eb3515bad030356ce977201e5141b724",
-      "jna-platform-5.9.0.pom": "0bda5d98e4be9261f09cdfaee6fa245988790834d7fcadc8e2fdd93c7d641825"
-    }
-  },
-  {
-    "group": "org.apiguardian",
-    "name": "apiguardian-api",
-    "version": "1.1.0",
-    "artifacts": {
-      "apiguardian-api-1.1.0.pom": "a945b9cb5cd9b77b2c711844e659c43ec070ef59d9f509fa9f4c1861b4862711"
+      "opentelemetry-context-1.41.0.jar": "5e3432a4464a432abfdab73be7142e516d25a84aa8426fce1192ffb0532faa35",
+      "opentelemetry-context-1.41.0.module": "174dcda3e840226138adb8ce9043576ddc43c286b612d3dbf64531f67bd8d987"
     }
   },
   {
@@ -280,6 +104,51 @@
     }
   },
   {
+    "group": "org.bouncycastle",
+    "name": "bcpg-jdk18on",
+    "version": "1.80",
+    "artifacts": {
+      "bcpg-jdk18on-1.80.jar": "3799a0d53511b860780af43c44ae8e0519afabb263195af40174f46312cd58bd",
+      "bcpg-jdk18on-1.80.pom": "07a246c2adafb628783a1ae84ac18d4df4025df06ae3634dfe9387ab94f9ea74"
+    }
+  },
+  {
+    "group": "org.bouncycastle",
+    "name": "bcpkix-jdk18on",
+    "version": "1.80",
+    "artifacts": {
+      "bcpkix-jdk18on-1.80.jar": "4f4ba6a92617ea19dc183f0fa5db492eee426fdde2a0a2d6c94777ffd1af6413",
+      "bcpkix-jdk18on-1.80.pom": "a4a122113467b728e18f26fb0cfd57f0b1a0d7c4a53b86718ace70bf8b86ed47"
+    }
+  },
+  {
+    "group": "org.bouncycastle",
+    "name": "bcprov-jdk18on",
+    "version": "1.80",
+    "artifacts": {
+      "bcprov-jdk18on-1.80.jar": "e8ad209f8c58d291a37ca9750e9e9fac60596956c983e49dd8282381dd8b3249",
+      "bcprov-jdk18on-1.80.pom": "a0a75c76d91c421eea56d0f6062fb8f63edf7fac7ec724fd420ccdcad7181d43"
+    }
+  },
+  {
+    "group": "org.bouncycastle",
+    "name": "bcutil-jdk18on",
+    "version": "1.80",
+    "artifacts": {
+      "bcutil-jdk18on-1.80.jar": "22eca687f7955411f456af33e6ea8e68fc73cd80cb8b32aa5f7a8b1827d7c678",
+      "bcutil-jdk18on-1.80.pom": "421a7de4bfeb9c5b38b1fc47c426a087d90878955d4107f5b7a82eb1d7b747b6"
+    }
+  },
+  {
+    "group": "org.checkerframework",
+    "name": "checker-qual",
+    "version": "3.43.0",
+    "artifacts": {
+      "checker-qual-3.43.0.jar": "3fbc2e98f05854c3df16df9abaa955b91b15b3ecac33623208ed6424640ef0f6",
+      "checker-qual-3.43.0.module": "f8163327245ab8625532948c72a930548cd97f34d6c3fe860fa6aec5a34d79b4"
+    }
+  },
+  {
     "group": "org.jetbrains",
     "name": "annotations",
     "version": "13.0",
@@ -289,192 +158,193 @@
     }
   },
   {
-    "group": "org.jetbrains",
-    "name": "annotations",
-    "version": "23.0.0",
+    "group": "org.jetbrains.kotlin",
+    "name": "abi-tools",
+    "version": "2.2.21",
     "artifacts": {
-      "annotations-23.0.0.jar": "7b0f19724082cbfcbc66e5abea2b9bc92cf08a1ea11e191933ed43801eb3cd05",
-      "annotations-23.0.0.pom": "c9490f655132328df2cfbcfdf743f53fc3916d6c1d10437175a6ca6e3a67771c"
-    }
-  },
-  {
-    "group": "org.jetbrains.intellij.deps",
-    "name": "trove4j",
-    "version": "1.0.20200330",
-    "artifacts": {
-      "trove4j-1.0.20200330.jar": "c5fd725bffab51846bf3c77db1383c60aaaebfe1b7fe2f00d23fe1b7df0a439d",
-      "trove4j-1.0.20200330.pom": "87721cbaa65a3c97d8b1ba9d207840f164c9fe38759fc9ea10ffe26565f8d3e9"
+      "abi-tools-2.2.21.jar": "24bacf795029d2831608d9b31fa8d0d29fe1c3fba7a9b2c7630d1593f2389884",
+      "abi-tools-2.2.21.pom": "953d6734472b99889402704567145f6cd9d0141e12724435c902c34569682cdc"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
-    "name": "kotlin-android-extensions",
-    "version": "1.9.23",
+    "name": "abi-tools-api",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-android-extensions-1.9.23.jar": "61fd7648f931ff4e9bdbff49bf0987705763fbba9c7bb00b264811a36d111ac1",
-      "kotlin-android-extensions-1.9.23.pom": "d3ebc593b173ad3e2d1e2560b69c3314a4690c8da3274721e83a96aedc1611a0"
+      "abi-tools-api-2.2.21.jar": "239901f317c189b4b4cc8bc5e966943dc19e39259539e668baa5d7ef18eb916a",
+      "abi-tools-api-2.2.21.pom": "92490acca0f450581d56ce057961d8ffa9835587e69f66e96d0a7175bacecd85"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
-    "name": "kotlin-build-common",
-    "version": "1.9.23",
+    "name": "fus-statistics-gradle-plugin",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-build-common-1.9.23.jar": "22825a1efe1549137d1813ed79dc9ccaf54b4a8a2700a4ac7f708dc660248baf",
-      "kotlin-build-common-1.9.23.pom": "d9e3c7e61f5849490014fe810bfc104a9e9a44d565ed186c586bbb3f4fc3d3fb"
+      "fus-statistics-gradle-plugin-2.2.21-gradle813.jar": "27dcf4aeaa5bbb64d861bd29ed60d482f0ffd96244c81e2426b9dac5e7fdc63f",
+      "fus-statistics-gradle-plugin-2.2.21.module": "495659b39e305541ecb712e69b622e13e38ad9240f9a827ca058434bd99f211d"
+    }
+  },
+  {
+    "group": "org.jetbrains.kotlin",
+    "name": "kotlin-build-statistics",
+    "version": "2.2.21",
+    "artifacts": {
+      "kotlin-build-statistics-2.2.21.jar": "8dfdfb2b8f67fcdcc4cee3ef90a25af467ca295853b0ea019d0010acebd6f18a",
+      "kotlin-build-statistics-2.2.21.pom": "c8bf62f6dca6d79f436c40b1af09db42f46ebf4bcd72b3079df8c725b5c06358"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-build-tools-api",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-build-tools-api-1.9.23.jar": "82f847e25457b464837efef1da8502ec92532de7406e79205166ce0ecf4fc521",
-      "kotlin-build-tools-api-1.9.23.pom": "096923b625c97c667367966cc4ce92bf94c4e9ff7c53cb1d38486011ac750d58"
+      "kotlin-build-tools-api-2.2.21.jar": "31645ca52239b221ebd060a00fff8d8516ffdc88bbd9f4e4cd7ddb41a7068c70",
+      "kotlin-build-tools-api-2.2.21.pom": "63fdcf1ded2ab45ad77c049979faa44f190f7bb8eeac4f81f9877e9dfa9fd9f9"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-build-tools-impl",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-build-tools-impl-1.9.23.jar": "eac2f04665871955a7d0ae4571969df2b08e7d337b2f12210066fd3ee01f5981",
-      "kotlin-build-tools-impl-1.9.23.pom": "fce2f23c4e9f073b21768bdf56a31ad96d338cdc03d05a157a45a5fdb2ffedb1"
+      "kotlin-build-tools-impl-2.2.21.jar": "458b63ef8fc50a0a3180fe688ec1b995745992a05c495dac61e58d1088927a80",
+      "kotlin-build-tools-impl-2.2.21.pom": "2e7fdca20165cf10e73b62f835f67eecf427c823ed60f19d5f006eb674345afe"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-compiler-embeddable",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-compiler-embeddable-1.9.23.jar": "cc94064974bf9ebf59945e31217cf2d16a0cebaaf2487eb0748fc1cbd1787943",
-      "kotlin-compiler-embeddable-1.9.23.pom": "58b23cd4d82d5aa916a5c9cc99b3218eec55696068a2f6b70beddf6c3691fd15"
+      "kotlin-compiler-embeddable-2.2.21.jar": "9588fa696ac5507af764fd5660df6894185e12704ec1bc3f5cb772af4987f295",
+      "kotlin-compiler-embeddable-2.2.21.pom": "0b33c64f2622ba3bc8283378bdb7505f2be330a2275807038ad54359b33ddf9b"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-compiler-runner",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-compiler-runner-1.9.23.jar": "c8595a3e1711c7453c7f960aaf12a170db4bda3d6fcba49ffc8e32cbfd000ca1",
-      "kotlin-compiler-runner-1.9.23.pom": "29e6e312919b75fe9a3878df9511cf4210dc26e59341cb2ee22483b7b4e072fe"
+      "kotlin-compiler-runner-2.2.21.jar": "a3a422e06bcd35a32a798d191ef6ebb35ea6b39c3553e941d39c01e631fc5c77",
+      "kotlin-compiler-runner-2.2.21.pom": "1f103d8bde08ddd614bd983abdfcb7949139c606ac60cd8a68941fd0fb1ee124"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-daemon-client",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-daemon-client-1.9.23.jar": "e63154254919fd706fe9937c48db937ea9068a631f86de655a514bc1620f988d",
-      "kotlin-daemon-client-1.9.23.pom": "5fbd066acb6e40853980276c6835169928f666ab7c46512c26f24c9d030817d3"
+      "kotlin-daemon-client-2.2.21.jar": "3ce2ca3c5d7bc7c87c4149ac2c593d21a791d6776229ae123db645a3017de814",
+      "kotlin-daemon-client-2.2.21.pom": "4f6fddbc10d9b2167899e34fa113fc9ad75cc4d6ce58ab84f9614b63c05f8da3"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-daemon-embeddable",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-daemon-embeddable-1.9.23.jar": "6f3b661b98267ad24e2f8fb7ad5d06be7d2ed61a5d05c267f4e4caa78df783d9",
-      "kotlin-daemon-embeddable-1.9.23.pom": "58546038be46a383663853d131dd76c4fb2743830ba97b74b27a35cf102d3d02"
+      "kotlin-daemon-embeddable-2.2.21.jar": "91c0673c22e44b054ae0314d323860ebe1f3aff3f0ebc74fff82c4733dde09be",
+      "kotlin-daemon-embeddable-2.2.21.pom": "170bdbecba57ff00a2b8d17ef2c79e08b85f67df69d853ba0a259a4183bfb923"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-gradle-plugin",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-gradle-plugin-1.9.23-gradle82.jar": "bcc74a07c69dd11c94b260b1ee8a618969629ccaeac2e6ea0a779da3c3f7ec3f",
-      "kotlin-gradle-plugin-1.9.23.module": "60bd8150704d581c8eead4c1940876e8b028afe8b14b494010c50920472544a7"
+      "kotlin-gradle-plugin-2.2.21-gradle813.jar": "b7a52865c6a5e160d2cf61e4d423ce44a6a20de0a6b23d03404b6d01a2811737",
+      "kotlin-gradle-plugin-2.2.21.module": "4e23802a3d530024ac465acd26487d6a3a702ee804cd613349c5108deabf4ba2"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-gradle-plugin-annotations",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-gradle-plugin-annotations-1.9.23.jar": "1da8ad060a5bc382b04f157271d3cdad6830714a2f4df4af7c40088d4b922164",
-      "kotlin-gradle-plugin-annotations-1.9.23.pom": "ebd691734e90afd5a3e8fa2a913af0f90e982f86ba2185a170322a1b0890a605"
+      "kotlin-gradle-plugin-annotations-2.2.21.jar": "3594c40c7005d044952f80f704172bb6fd1844241025194fb16bee6d45da2e5b",
+      "kotlin-gradle-plugin-annotations-2.2.21.pom": "544ae92ab377408fc1ed304ec41a2eec4293e0f2e139b3d2f6fd27205f14637f"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-gradle-plugin-api",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-gradle-plugin-api-1.9.23.jar": "593cc0842d5fc097b95e0a602bff8c7a489f73743b873cb0b8eec92fce8a415b",
-      "kotlin-gradle-plugin-api-1.9.23.module": "ce68bb21a9d6f20b7b0e729fe32f9a547bb64b25e310f0f5e2f70c509d67edc4"
+      "kotlin-gradle-plugin-api-2.2.21-gradle813.jar": "b7bfd07f5f1e0a44af612eb48474df6328ee0f6f3a6a73642ce473f30645e1a5",
+      "kotlin-gradle-plugin-api-2.2.21.jar": "b7bfd07f5f1e0a44af612eb48474df6328ee0f6f3a6a73642ce473f30645e1a5",
+      "kotlin-gradle-plugin-api-2.2.21.module": "1e74b486f944ab9e116f9a4aae20c52fc2f9ac523a552db97dd6581480fe940b"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-gradle-plugin-idea",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-gradle-plugin-idea-1.9.23.jar": "8d1af87632d95148f122a9fa0ae2903c19ee6fab7d01e017f76e0d2c9a022c20",
-      "kotlin-gradle-plugin-idea-1.9.23.module": "1beba2ba2b5113de0533e515e17f56d5364e9b54225ff31fb4d8fec9f715d82c"
+      "kotlin-gradle-plugin-idea-2.2.21.jar": "ec969c5f0b099f823846232238f9bd64f3d3741e62ea9050ad2e432fad79d0a0",
+      "kotlin-gradle-plugin-idea-2.2.21.module": "9151ae223787f1c20b70b24a117789b4d14d0cc484e462732cb230a797f75bcf"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-gradle-plugin-idea-proto",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-gradle-plugin-idea-proto-1.9.23.jar": "8bbfdad14d3c3c50b32bf6bfe0f1c7027be54285c46daf79827cf93b5cb43d7f",
-      "kotlin-gradle-plugin-idea-proto-1.9.23.pom": "c74729f4d605900121669b4110ed45baf55e075ab53b63a642b90b3aff793422"
+      "kotlin-gradle-plugin-idea-proto-2.2.21.jar": "4b4be774efb9585af0fda180d33903d8272e497df7b81bb091fa9339ecda45bd",
+      "kotlin-gradle-plugin-idea-proto-2.2.21.pom": "ba1bce248e47458eed46685eba212b793ffb7d37e429dff670a213ddd102d0c0"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-gradle-plugin-model",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-gradle-plugin-model-1.9.23.jar": "3e58dfae5e43fc88365f52df3a344208c0100c975a72a94a2c4a09f661d32317",
-      "kotlin-gradle-plugin-model-1.9.23.module": "12f9a5a25e580831179e5da3049a013118bd076cde0a452e668f2ab1609acfbd"
+      "kotlin-gradle-plugin-model-2.2.21.jar": "908e6e5c890bb49dbc9266dccf28bdb0c258c48647039aed702fe9d586640186",
+      "kotlin-gradle-plugin-model-2.2.21.module": "fe446e71d58b9f5bdead8ef05b68b498617317e1b92d47b9ab3b674d64f27664"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-gradle-plugins-bom",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-gradle-plugins-bom-1.9.23.module": "d72345e255bf20a3a97ab5d01086b608c5d7d0cf3f6778a71e85cacbad41425a",
-      "kotlin-gradle-plugins-bom-1.9.23.pom": "d88bdeeed9b944cac718cdcf2940f815d8225eeccd21beca07ddd081f0d2428c"
+      "kotlin-gradle-plugins-bom-2.2.21.module": "dc4fc0f35a5532a53a432ee4fe2243132548555f275f63ee6990d50333f8ce2a",
+      "kotlin-gradle-plugins-bom-2.2.21.pom": "25f44666339deee0106a76ea5efccfab34afcfdb960a7672fb887f71ba0da8bd"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-klib-commonizer-api",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-klib-commonizer-api-1.9.23.jar": "5df1164db1c345d86d0a1aa414909e367afb9782fe3fbcaf0e2af7a8bf62b839",
-      "kotlin-klib-commonizer-api-1.9.23.pom": "b125a9d7d71c193847af92a2271c6551b3d29755454b1c85d374b24ae755c33e"
+      "kotlin-klib-commonizer-api-2.2.21.jar": "58bc451ce62ed6befd077ac107ea5f133443e74dd78cf3a4a48f868e61837e8b",
+      "kotlin-klib-commonizer-api-2.2.21.pom": "c8992a77a96d2b9f8d81374c40bd71d32e21d9ff1cdb799d15d49718b12a12e1"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-klib-commonizer-embeddable",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-klib-commonizer-embeddable-1.9.23.jar": "b80a38b4bb81fb03d0f307473d032d73b2778fa76b0346387e5a10dd833d728e",
-      "kotlin-klib-commonizer-embeddable-1.9.23.pom": "88b0403b667f715257ea00d776216493382093eef6eef501b2553a1d52071b68"
+      "kotlin-klib-commonizer-embeddable-2.2.21.jar": "fff95b9b5995798116407a7c0ca2da28f7d3304eee65191c7fe79b404f5f7308",
+      "kotlin-klib-commonizer-embeddable-2.2.21.pom": "bebc0d696c91dc15d1e7f937f10a2074df97a76c25671a1a7aa4534a9c398365"
+    }
+  },
+  {
+    "group": "org.jetbrains.kotlin",
+    "name": "kotlin-metadata-jvm",
+    "version": "2.2.21",
+    "artifacts": {
+      "kotlin-metadata-jvm-2.2.21.jar": "e181f32a21a3cdf195f974004a42f0067c2bd9deaa2a883636748d83fdefd99d",
+      "kotlin-metadata-jvm-2.2.21.pom": "4cb6bd5de8aed7293a8befae7a900c3c36ac927c4094cc7027f4ab58cd6b3c9d"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-native-utils",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-native-utils-1.9.23.jar": "5fd01485bd73e617be556bff4992ff012aaeb9f0d9c0084f37cb5d88a3bcad84",
-      "kotlin-native-utils-1.9.23.pom": "78268bea5b8bf50a95ee76312ae363cc0bd6aadd5df47430ac135a206ef8ebb6"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlin",
-    "name": "kotlin-project-model",
-    "version": "1.9.23",
-    "artifacts": {
-      "kotlin-project-model-1.9.23.jar": "8fcb3ce512abb452d7d431dbb2c312d5c4505d1762493b51b106afc147d99367",
-      "kotlin-project-model-1.9.23.pom": "9ef4b2f3d9d9f59ab0c2bf7eb8ef763205149938e0e78d2a231c478921c79745"
+      "kotlin-native-utils-2.2.21.jar": "e74b14406dae0a02388187c62c1731183ba7d0d8e60675682de511a90afa6c56",
+      "kotlin-native-utils-2.2.21.pom": "d5226a7c86069fa9a721abc97ae4da15a40ed1689c8ab5505e1a1ad2db20dc5f"
     }
   },
   {
@@ -488,258 +358,171 @@
   },
   {
     "group": "org.jetbrains.kotlin",
-    "name": "kotlin-reflect",
-    "version": "1.8.10",
-    "artifacts": {
-      "kotlin-reflect-1.8.10.jar": "99672410459045090d062a0194ed87008e2371f06946b6bfa7287c697f924bea",
-      "kotlin-reflect-1.8.10.pom": "8530d0707113ea20bf6f4f1562119a31bce760a56910ac155f16cae818997d17"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlin",
     "name": "kotlin-script-runtime",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-script-runtime-1.9.23.jar": "75137e414a1a5b4b4d090f812d0e35eb30b4f0c923a53d69585456bb24fc1df8",
-      "kotlin-script-runtime-1.9.23.pom": "2d6c74b06a540e989cabd0530a16e7658190525f2f4d5a43ab9b1afe7414fc5f"
+      "kotlin-script-runtime-2.2.21.jar": "2b1519b427b514d1536c1b425674b03fe914af637924028e9959c6625442df51",
+      "kotlin-script-runtime-2.2.21.pom": "8767a540fc5dbe20b7e1283a95f510297e6c0c98b2eac2edc4d0612a2d0f2eaf"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-scripting-common",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-scripting-common-1.9.23.jar": "8a2e567f3dbf373e61c01acd7884631ec8538465ab8ee978ac63296f8cc9af46",
-      "kotlin-scripting-common-1.9.23.pom": "fc28975b94dc40c0d90fd1175e22b1b646bad2c637ebcf9f4f6ab2d4e7bc5dd5"
+      "kotlin-scripting-common-2.2.21.jar": "414ed91c3f5e4492b23cb9537842b4651038e25dad84107939f434c2203f2a92",
+      "kotlin-scripting-common-2.2.21.pom": "ec25a979945175bad216546a484b0b8f44a8670559195e240b347f1fda1770df"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-scripting-compiler-embeddable",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-scripting-compiler-embeddable-1.9.23.jar": "7b8039ff0b779d556ced00923035abd1334f0e5f2a88796182d02ba45f926d20",
-      "kotlin-scripting-compiler-embeddable-1.9.23.pom": "ed8ebffebe5499ed62486fa818127bb5dd501d74c4ab95c57e7c01ef3f8db968"
+      "kotlin-scripting-compiler-embeddable-2.2.21.jar": "d934b9d0c246bc09624b7068af58ad57cef11dbe2addbc7b19d250cce42de1c9",
+      "kotlin-scripting-compiler-embeddable-2.2.21.pom": "1148662c95f36e00981178fb2d895d06b2ece7d057ed84532dd353bbd6c35650"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-scripting-compiler-impl-embeddable",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-scripting-compiler-impl-embeddable-1.9.23.jar": "90e53dd12f62dcd82343c12c0cb314adcff0cbc3988edb118d1e6689960e9d63",
-      "kotlin-scripting-compiler-impl-embeddable-1.9.23.pom": "f76de498ed76c46ae86656679807f72761223c3fa10a1131832006a4ab395ded"
+      "kotlin-scripting-compiler-impl-embeddable-2.2.21.jar": "788a3060c8e7997f8ae16ba5c0280d05005af0a42029f18cb10c5625b979fac3",
+      "kotlin-scripting-compiler-impl-embeddable-2.2.21.pom": "0ca4f95c32d4ae954e174ea41e5bad62c78dbc93a64c45076fde9ccc84ab3609"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-scripting-jvm",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-scripting-jvm-1.9.23.jar": "d3fca7ec951ff7826f97a75989f8dcaff60cf9e1e76bbdc220edf778376a6e64",
-      "kotlin-scripting-jvm-1.9.23.pom": "e2ef2bfb2eb6f21a7b72ba12edc59a150c7f2176c2b2c54fe2e860ee80230d87"
+      "kotlin-scripting-jvm-2.2.21.jar": "83820c5fcc5d28f045f914ecd5900bbbcf8115b0d7007334de069fe6c70669e6",
+      "kotlin-scripting-jvm-2.2.21.pom": "9d1d43b22dbb8ab9a9df227a6d5458341daffec150ef7595d765cc5ecbf17908"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-stdlib",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-stdlib-1.9.23-all.jar": "cec38bc3302e72a8aaf9cde436b5a9071ee0331e2ad05e84d8bb897334d7e9d4",
-      "kotlin-stdlib-1.9.23.jar": "8910cc238807d86ef550cb1f0b10dd5ed40b35a4ec1a52525f760aede84ead37",
-      "kotlin-stdlib-1.9.23.module": "5195193b37dcdada2e1c0ab0d512c422b2ad76af3557843a1b9c3480f4e71d0e"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlin",
-    "name": "kotlin-stdlib-common",
-    "version": "1.9.23",
-    "artifacts": {
-      "kotlin-stdlib-common-1.9.23.module": "8639f005fa9977aef08c32fc8e7a2779da22ee262464d7273298aafd483715cd"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlin",
-    "name": "kotlin-stdlib-jdk7",
-    "version": "1.8.10",
-    "artifacts": {
-      "kotlin-stdlib-jdk7-1.8.10.pom": "09b86d8d60f80ee0bbc80fd36b419d8d9a640facedc104d1e8d4c4deb87024fa"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlin",
-    "name": "kotlin-stdlib-jdk7",
-    "version": "1.8.20",
-    "artifacts": {
-      "kotlin-stdlib-jdk7-1.8.20.jar": "af1ec40c3b951afdcc0c2a0173c7b81763c5281c2d5bafbf0a8544a24c5dcc0c",
-      "kotlin-stdlib-jdk7-1.8.20.pom": "3622d106578cddcc0a9ec20f8ce815f7f49ff542f640228d2141fcaf80616b06"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlin",
-    "name": "kotlin-stdlib-jdk8",
-    "version": "1.8.10",
-    "artifacts": {
-      "kotlin-stdlib-jdk8-1.8.10.pom": "caa25facba14d4c3e81908056900f7d214421157aabd4fd1d65df6e734eb30bf"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlin",
-    "name": "kotlin-stdlib-jdk8",
-    "version": "1.8.20",
-    "artifacts": {
-      "kotlin-stdlib-jdk8-1.8.20.jar": "e398b67977622718bf18ff99b739c7d9da060f33fb458a2e25203221c16af010",
-      "kotlin-stdlib-jdk8-1.8.20.pom": "3a462214a336e995687769531b1e37b0c81d8e10c9949cd5ea7ae1d7803a0232"
+      "kotlin-stdlib-2.2.21-all.jar": "555cdb4c884a584c1b5d59f696fb76cd660917fab36b8ae8032bcd62c750efe5",
+      "kotlin-stdlib-2.2.21.jar": "6558a3d233da56a20934b32159f9db5f86ed5816ef098f78a2c223dc6abb79dd",
+      "kotlin-stdlib-2.2.21.module": "bfbc657ddd3a8e37e4c8ad417968d5eb0b0b171c9fce48f962c2ad32ee434c21"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-test",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-test-1.9.23.jar": "00a6ece9717b31d7f81b9a4a7da56440cfd2889aa2ee3b44c535d6499f400351",
-      "kotlin-test-1.9.23.module": "ff6f607021c4638dbaf5a670db590e6e8ab904f3f1dce0a5ae939c5e841d7469"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlin",
-    "name": "kotlin-test-annotations-common",
-    "version": "1.9.23",
-    "artifacts": {
-      "kotlin-test-annotations-common-1.9.23.jar": "f2819e2bc9ef078707912fc67116580b5381b576e956a0a5e586779586eb1eae",
-      "kotlin-test-annotations-common-1.9.23.pom": "24fd722dcfec72c5252fbe52296b51cfe98b59d27c3eece9618a899fb0d0c2b0"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlin",
-    "name": "kotlin-test-common",
-    "version": "1.9.23",
-    "artifacts": {
-      "kotlin-test-common-1.9.23.jar": "f9b756f8e154ed185fd721d1828947f0273c3c5d5f0f729ba0e7570c53c58872",
-      "kotlin-test-common-1.9.23.pom": "395089c75c85bbd41562865e77bef2c7aa5b156f51538e812aca1153bf546ff1"
+      "kotlin-test-2.2.21-all.jar": "b681fa192b6c62b03c69b0a73f81deb1daf2191cfc0ce8925444932f548d38b4",
+      "kotlin-test-2.2.21.jar": "612966ddee4d3d0486156f10c77a57c5c47dae65eb98a2bddf34cf2aeeb894c4",
+      "kotlin-test-2.2.21.module": "0ec1ba42ceef59efdcd158e4eaaf89a629e8cdacc11a9400089d6bdaadf6fdb3"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-test-junit5",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-test-junit5-1.9.23.jar": "7f8b03b7cfa45689f2e6f1dd8943d124c5876b93b8ea7e76c1e0f7f954a5cf11",
-      "kotlin-test-junit5-1.9.23.module": "52eb11ec938ecfdad2c3c652d2c239d97bcea7e3b81b39c34921e107dab99778"
+      "kotlin-test-junit5-2.2.21.jar": "ba3c55b993598efe5669c0b7f1082a107b291488d8e185e356470ed075d71af7",
+      "kotlin-test-junit5-2.2.21.module": "596b3655687dde031e2a79264154c8a44db15d70ae0f7fcbbdae632642f88b9a"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-tooling-core",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-tooling-core-1.9.23.jar": "8938eb97e36320daa3e6fb2a60fd2a05b232ff4a557173c5019f045b8832d9f4",
-      "kotlin-tooling-core-1.9.23.pom": "7e20345488fbbf5b9fe99787360bd3ec744a6fea91a699bd11b561c3281b07d8"
+      "kotlin-tooling-core-2.2.21.jar": "74014ec4f3ef78ce7da7e3e6964f2c526a3121d5c58fef8ca2979e5f344582f4",
+      "kotlin-tooling-core-2.2.21.pom": "dd33e61932c1badf3dde85f204f634c8004be96427c3a1ca8866cc011d711dfa"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-util-io",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-util-io-1.9.23.jar": "7a6dce40e78acbe66fc7d678eb741c877845a3cfd1c76c4d2bbf8ec845d2d929",
-      "kotlin-util-io-1.9.23.pom": "acd1f237809ee275a9c09e4402dd4539d04dec368c0906ec79c3f803abf067c8"
+      "kotlin-util-io-2.2.21.jar": "266aa4026a106f59fcefc3f151768870af91cef15e4011fac0aa1f1f567d49f4",
+      "kotlin-util-io-2.2.21.pom": "ebb50cf41c7444976f02c2f915b41732572c5f3994a6581c88e64de0b998f7bd"
     }
   },
   {
     "group": "org.jetbrains.kotlin",
     "name": "kotlin-util-klib",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "kotlin-util-klib-1.9.23.jar": "e4018b6b8fbc91e4d0a37ab81c050a81396868075108cd85082b925c79d3bc6d",
-      "kotlin-util-klib-1.9.23.pom": "fb3e45847d5d212e4c2b5db44451903c9e1f0e32f6987e1f59b9cc11c4c3898a"
+      "kotlin-util-klib-2.2.21.jar": "55400a917e6b984a6197eae78b5b52edbdf2cd6e0a7c3843f7954481bafb243f",
+      "kotlin-util-klib-2.2.21.pom": "a352dfd36527b3aef0f7c0ec6490dec9d5fc9bec4f334d844cae94f81743df30"
+    }
+  },
+  {
+    "group": "org.jetbrains.kotlin",
+    "name": "kotlin-util-klib-metadata",
+    "version": "2.2.21",
+    "artifacts": {
+      "kotlin-util-klib-metadata-2.2.21.jar": "022b95a3dfed949d7c2e47820bcd9836ee057b721513f773361e4333f6c76f8c",
+      "kotlin-util-klib-metadata-2.2.21.pom": "f3b323d1fe9e33dc7e9c5ed77f305283ffd637815d88c507945411bd7aa2a30f"
+    }
+  },
+  {
+    "group": "org.jetbrains.kotlin",
+    "name": "swift-export-embeddable",
+    "version": "2.2.21",
+    "artifacts": {
+      "swift-export-embeddable-2.2.21.jar": "c7a17644e99fa8ab07393e896bb49aa3013b968b139e8107ac950cb04b2eb701",
+      "swift-export-embeddable-2.2.21.pom": "aee9b4c63454f0cb1415d965b776c17476567832b24320f4ce3c5fa78f6bd9ae"
     }
   },
   {
     "group": "org.jetbrains.kotlin.jvm",
     "name": "org.jetbrains.kotlin.jvm.gradle.plugin",
-    "version": "1.9.23",
+    "version": "2.2.21",
     "artifacts": {
-      "org.jetbrains.kotlin.jvm.gradle.plugin-1.9.23.pom": "fe99a0eeb7d605bd207fa1b32c6e36b00174ae42c1b240c3f8cac07c5edeb4ca"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlinx",
-    "name": "atomicfu",
-    "version": "0.20.2",
-    "artifacts": {
-      "atomicfu-0.20.2.module": "2c995e0e83c583e125706fba3fe85170020d17a88f89d6294a53cd8bd7c4c384",
-      "atomicfu-metadata-0.20.2-all.jar": "2a91f10b826d3febc47c2b664e268615757c311114239787f5dc37481fdec441"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlinx",
-    "name": "kotlinx-coroutines-bom",
-    "version": "1.7.0",
-    "artifacts": {
-      "kotlinx-coroutines-bom-1.7.0.pom": "598dd7da8c60aa4420cbef3eb3ac7050aba38ba627ab9c5d4eefa4b0c810afcc"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlinx",
-    "name": "kotlinx-coroutines-core",
-    "version": "1.7.0",
-    "artifacts": {
-      "kotlinx-coroutines-core-1.7.0.module": "9f6d572ceac56e4578b3887fde12c01ce29889b5cda523ec348a925dcdbea992",
-      "kotlinx-coroutines-core-metadata-1.7.0-all.jar": "4b33fee11240a72d3d6a1ad87687b89c5aa0dfa7c27f486afdaf822e515e6e02"
+      "org.jetbrains.kotlin.jvm.gradle.plugin-2.2.21.pom": "8d3b2cba90c8457c00e3669eb34edf8db2086f83490804513569c6ecc7b8548b"
     }
   },
   {
     "group": "org.jetbrains.kotlinx",
     "name": "kotlinx-coroutines-core-jvm",
-    "version": "1.5.0",
+    "version": "1.8.0",
     "artifacts": {
-      "kotlinx-coroutines-core-jvm-1.5.0.jar": "78d6cc7135f84d692ff3752fcfd1fa1bbe0940d7df70652e4f1eaeec0c78afbb",
-      "kotlinx-coroutines-core-jvm-1.5.0.module": "c885dd0281076c5843826de317e3cbcdc3d8859dbeef53ae1cfacd1b9c60f96e"
+      "kotlinx-coroutines-core-jvm-1.8.0.jar": "9860906a1937490bf5f3b06d2f0e10ef451e65b95b269f22daf68a3d1f5065c5",
+      "kotlinx-coroutines-core-jvm-1.8.0.module": "ff6a22da40040938751db0ae21177e76517dbf126a76796f5426727bf76c1228"
     }
   },
   {
     "group": "org.jetbrains.kotlinx",
-    "name": "kotlinx-coroutines-core-jvm",
-    "version": "1.7.0",
+    "name": "kotlinx-serialization-bom",
+    "version": "1.7.3",
     "artifacts": {
-      "kotlinx-coroutines-core-jvm-1.7.0.jar": "9a32c5ba8abdfa6361778dc12edb56fd7a939720ee5e73f5b18b3b4ab2117f68",
-      "kotlinx-coroutines-core-jvm-1.7.0.module": "345266d1272f9c6f71805e2e6d455ee5ccc568d783275a2b2464439a460273c6"
+      "kotlinx-serialization-bom-1.7.3.pom": "4226a491c5b59ce909f73b65aa98944191c8dcac3825637c6be1069e6b589a46"
     }
   },
   {
     "group": "org.jetbrains.kotlinx",
-    "name": "kotlinx-coroutines-debug",
-    "version": "1.7.0",
+    "name": "kotlinx-serialization-core",
+    "version": "1.7.3",
     "artifacts": {
-      "kotlinx-coroutines-debug-1.7.0.jar": "58cfc7fb60c926d20878fa725728c5e8033a1d654e5c7eea453f2c4f42fa8c9e",
-      "kotlinx-coroutines-debug-1.7.0.module": "d61740524495d49242a4e97caed24f6c2476bbd9db993ee4be2637bb0241ccd6"
+      "kotlinx-serialization-core-1.7.3.module": "39d09a6e02df2b32558440a64c628f9c605fae8c4f6090321798334c82177e64"
     }
   },
   {
     "group": "org.jetbrains.kotlinx",
-    "name": "kotlinx-coroutines-jdk8",
-    "version": "1.7.0",
+    "name": "kotlinx-serialization-core-jvm",
+    "version": "1.7.3",
     "artifacts": {
-      "kotlinx-coroutines-jdk8-1.7.0.jar": "db966aa4eb62c077606f6a75f33198aaad9a5453cf36765b50103557ea667376",
-      "kotlinx-coroutines-jdk8-1.7.0.module": "f397a38067a8762e46afd0a639f9df6f583f2b855d295f3312e7f71dd5c1e478"
+      "kotlinx-serialization-core-jvm-1.7.3.jar": "f0adde45864144475385cf4aa7e0b7feb27f61fcf9472665ed98cc971b06b1eb",
+      "kotlinx-serialization-core-jvm-1.7.3.module": "73bb4c02793f87c29ef64bea4ba0258076f4d4c963fcda633d1248ef24b4b4ef"
     }
   },
   {
-    "group": "org.jetbrains.kotlinx",
-    "name": "kotlinx-coroutines-test",
-    "version": "1.7.0",
+    "group": "org.junit",
+    "name": "junit-bom",
+    "version": "5.10.1",
     "artifacts": {
-      "kotlinx-coroutines-test-1.7.0.module": "cb8fa327f6e095734fc1f8a9f3d7bb19357509b521a80d5ebc6240446a61311d"
-    }
-  },
-  {
-    "group": "org.jetbrains.kotlinx",
-    "name": "kotlinx-coroutines-test-jvm",
-    "version": "1.7.0",
-    "artifacts": {
-      "kotlinx-coroutines-test-jvm-1.7.0.jar": "0fdb9fa0bc02ae831cd2a41e4b8f07003b87b44da9f4a7afb3f63db0616c167f",
-      "kotlinx-coroutines-test-jvm-1.7.0.module": "bd4be599da62ee571b7b9d9938309a27ce6447022fb7ae9dcaee7b0f23d5f0bb"
+      "junit-bom-5.10.1.module": "21b0afcfffe2ecb3770f5eb00ae7a19feaee94e771fa3918173850dae78067b7"
     }
   },
   {
@@ -748,6 +531,15 @@
     "version": "5.8.2",
     "artifacts": {
       "junit-bom-5.8.2.module": "40cfad993fa70ecdf2af74d0c56da1484ee220964be8f932cfe632be9a2733fa"
+    }
+  },
+  {
+    "group": "org.junit.jupiter",
+    "name": "junit-jupiter-api",
+    "version": "5.10.1",
+    "artifacts": {
+      "junit-jupiter-api-5.10.1.jar": "60d5c398c32dc7039b99282514ad6064061d8417cf959a1f6bd2038cc907c913",
+      "junit-jupiter-api-5.10.1.module": "f87f7311549f49fe24e6282a1165e907e017a91e979cadabfdf9bf54c3f7106f"
     }
   },
   {
@@ -762,9 +554,10 @@
   {
     "group": "org.junit.jupiter",
     "name": "junit-jupiter-engine",
-    "version": "5.6.3",
+    "version": "5.10.1",
     "artifacts": {
-      "junit-jupiter-engine-5.6.3.module": "c0f6e764d8af73d8a834f8f9ec0fd2a6a6376040b9379718bc48c63781c4a66c"
+      "junit-jupiter-engine-5.10.1.jar": "02930dfe495f93fe70b26550ace3a28f7e1b900c84426c2e4626ce020c7282d6",
+      "junit-jupiter-engine-5.10.1.module": "54121e582ccb2d4625ec9fa54679436c903fa053c74097bbe45fdfb9ddb67fb8"
     }
   },
   {
@@ -772,8 +565,16 @@
     "name": "junit-jupiter-engine",
     "version": "5.8.2",
     "artifacts": {
-      "junit-jupiter-engine-5.8.2.jar": "753b7726cdd158bb34cedb94c161e2291896f47832a1e9eda53d970020a8184e",
       "junit-jupiter-engine-5.8.2.module": "a56204c716c2379970ca8e3fe2a72e3a030cd9027328d3ce1457dd10c0150e7e"
+    }
+  },
+  {
+    "group": "org.junit.platform",
+    "name": "junit-platform-commons",
+    "version": "1.10.1",
+    "artifacts": {
+      "junit-platform-commons-1.10.1.jar": "7d9855ee3f3f71f015eb1479559bf923783243c24fbfbd8b29bed8e8099b5672",
+      "junit-platform-commons-1.10.1.module": "56d37062fce27041f0b5a35f393c68c8ad23afe34b2d30ef8e07b04fc119d4dd"
     }
   },
   {
@@ -788,28 +589,27 @@
   {
     "group": "org.junit.platform",
     "name": "junit-platform-engine",
+    "version": "1.10.1",
+    "artifacts": {
+      "junit-platform-engine-1.10.1.jar": "baa48e470d6dee7369a0a8820c51da89c1463279eda6e13a304d11f45922c760",
+      "junit-platform-engine-1.10.1.module": "297893711b92cf495f747e35a3aacb48310b1d1341a45cd84d23f9431c52e29d"
+    }
+  },
+  {
+    "group": "org.junit.platform",
+    "name": "junit-platform-engine",
     "version": "1.8.2",
     "artifacts": {
-      "junit-platform-engine-1.8.2.jar": "0b7d000f8c3e8e5f7d6b819649936e7b9938314e87c8f983805218ea57567e59",
       "junit-platform-engine-1.8.2.module": "eba77b36efdf75a67f46438333825f9e448f550d521e7249d950358580ee636b"
     }
   },
   {
     "group": "org.junit.platform",
     "name": "junit-platform-launcher",
-    "version": "1.8.2",
+    "version": "1.10.1",
     "artifacts": {
-      "junit-platform-launcher-1.8.2.jar": "822156409fd83e682e4c5199b3460054299b538a058c2c6d0f5c9b6a5bdb7594",
-      "junit-platform-launcher-1.8.2.module": "e17400ec7be7608c1f888d721b43001e9736c150d40f98c8a0bcda9563d8caeb"
-    }
-  },
-  {
-    "group": "org.junit.platform",
-    "name": "junit-platform-suite-api",
-    "version": "1.8.2",
-    "artifacts": {
-      "junit-platform-suite-api-1.8.2.jar": "94ef343b05b875bb2e4ef94a7cc62e610e1b9cd78247e2b2ec43ed618a1ed0a7",
-      "junit-platform-suite-api-1.8.2.module": "9306a05389fc40d7ad9d0b128a014430e5d1ca574a184aee8d7867b3e8910b7a"
+      "junit-platform-launcher-1.10.1.jar": "ded414c504e88d02270331071969084e1b2fd9bcf8443f35d44da2c6e3301bc2",
+      "junit-platform-launcher-1.10.1.module": "dd9703c744ea0b9e15bf8c9e3febccfc1e347016a55d71ef7ffa9b0bc4c40512"
     }
   },
   {

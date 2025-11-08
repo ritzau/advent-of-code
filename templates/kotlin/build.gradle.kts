@@ -1,3 +1,4 @@
+import org.gradle.jvm.application.tasks.CreateStartScripts
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 allprojects {
@@ -16,7 +17,7 @@ allprojects {
 }
 
 plugins {
-    kotlin("jvm") version "1.9.23"
+    kotlin("jvm") version "2.2.21"
     application
 }
 
@@ -40,7 +41,19 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "21"
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
 }
 
-application { mainClass.set("MainKt") }
+application {
+    mainClass.set("MainKt")
+    applicationName = "template-kotlin"
+}
+
+// Don't generate Windows batch files
+tasks.withType<CreateStartScripts> {
+    doLast {
+        delete(windowsScript)
+    }
+}

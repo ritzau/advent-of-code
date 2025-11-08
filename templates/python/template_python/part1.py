@@ -2,7 +2,7 @@
 
 import sys
 
-from aoc_solution import solve_part1
+from template_python import solve_part1
 
 
 def main():

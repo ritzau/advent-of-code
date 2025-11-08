@@ -13,7 +13,7 @@
 
         # Build the Python package using uv
         package = pkgs.python3Packages.buildPythonApplication {
-          pname = "aoc-solution";
+          pname = "template-python";
           version = "0.1.0";
           src = ./.;
           format = "pyproject";
@@ -39,7 +39,7 @@
 
           # Run tests
           test = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-tests";
+            name = "template-python-tests";
             src = ./.;
 
             nativeBuildInputs = [
@@ -62,7 +62,7 @@
 
           # Run linting with ruff
           lint = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-lint";
+            name = "template-python-lint";
             src = ./.;
 
             nativeBuildInputs = [
@@ -71,7 +71,7 @@
             ];
 
             buildPhase = ''
-              ruff check aoc_solution/ tests/
+              ruff check template_python/ tests/
             '';
 
             installPhase = ''
@@ -82,7 +82,7 @@
 
           # Verify formatting is correct
           format-check = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-format-check";
+            name = "template-python-format-check";
             src = ./.;
 
             nativeBuildInputs = [
@@ -91,7 +91,7 @@
             ];
 
             buildPhase = ''
-              ruff format --check aoc_solution/ tests/ || (echo "Format check failed. Run 'just format' to fix." && exit 1)
+              ruff format --check template_python/ tests/ || (echo "Format check failed. Run 'just format' to fix." && exit 1)
             '';
 
             installPhase = ''
@@ -105,27 +105,21 @@
           # Default: run main verification binary
           default = {
             type = "app";
-            program = "${package}/bin/aoc-solution";
+            program = "${package}/bin/template-python";
+            meta.description = "template-python: Run all parts";
           };
 
           # Run individual parts
-          part1 = {
+          template-python-part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/template-python-part1";
+            meta.description = "template-python: Run part 1";
           };
 
-          part2 = {
+          template-python-part2 = {
             type = "app";
-            program = "${package}/bin/part2";
-          };
-
-          # Format code (app because it modifies files)
-          format = {
-            type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              export PATH=${pkgs.ruff}/bin:$PATH
-              exec ${pkgs.ruff}/bin/ruff format aoc_solution/ tests/
-            '');
+            program = "${package}/bin/template-python-part2";
+            meta.description = "template-python: Run part 2";
           };
         };
 

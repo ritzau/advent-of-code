@@ -47,31 +47,31 @@
         };
         packages.default = package;
 
+        checks = package.passthru.tests;
+
         apps = {
           default = {
             type = "app";
             program = "${package}/bin/s16e01-kotlin";
+            meta.description = "Run all parts";
           };
 
-          part1 = {
+          s16e01-kotlin = {
             type = "app";
-            program = toString (pkgs.writeShellScript "part1" ''
-              exec ${jdk}/bin/java -cp ${package}/lib/'*' Part1Kt
-            '');
+            program = "${package}/bin/s16e01-kotlin";
+            meta.description = "Run all parts";
           };
 
-          part2 = {
+          s16e01-kotlin-part1 = {
             type = "app";
-            program = toString (pkgs.writeShellScript "part2" ''
-              exec ${jdk}/bin/java -cp ${package}/lib/'*' Part2Kt
-            '');
+            program = "${package}/bin/s16e01-kotlin-part1";
+            meta.description = "Run part 1";
           };
 
-          format = {
+          s16e01-kotlin-part2 = {
             type = "app";
-            program = toString (pkgs.writeShellScript "format" ''
-              exec ${pkgs.ktlint}/bin/ktlint -F "src/**/*.kt"
-            '');
+            program = "${package}/bin/s16e01-kotlin-part2";
+            meta.description = "Run part 2";
           };
         };
       });

@@ -15,12 +15,14 @@
         haskellPackages = pkgs.haskellPackages;
 
         # Build package without tests (for faster dev iteration)
-        package = haskellPackages.callCabal2nix "aoc-solution" ./. { };
+        # Prefer a pre-generated static Nix expression if present (generated.nix)
+        package = if builtins.pathExists ./generated.nix
+          then haskellPackages.callPackage ./generated.nix {}
+          else haskellPackages.callCabal2nix "template-haskell" ./. { };
 
         # Build package with tests enabled (for checks)
-        packageWithTests = pkgs.haskell.lib.compose.doCheck (
-          haskellPackages.callCabal2nix "aoc-solution" ./. { }
-        );
+        # If we generated a package above, reuse it; otherwise fall back to callCabal2nix
+        packageWithTests = pkgs.haskell.lib.compose.doCheck (package);
 
       in
       {
@@ -38,7 +40,7 @@
 
           # Check formatting with ormolu
           format-check = pkgs.stdenv.mkDerivation {
-            name = "aoc-solution-format-check";
+            name = "template-haskell-format-check";
             src = ./.;
             nativeBuildInputs = [ haskellPackages.ormolu ];
             buildPhase = ''
@@ -55,18 +57,21 @@
           # Default: run part1
           default = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/template-haskell-part1";
+            meta.description = "template-haskell: Run part 1";
           };
 
           # Run individual parts
-          part1 = {
+          template-haskell-part1 = {
             type = "app";
-            program = "${package}/bin/part1";
+            program = "${package}/bin/template-haskell-part1";
+            meta.description = "template-haskell: Run part 1";
           };
 
-          part2 = {
+          template-haskell-part2 = {
             type = "app";
-            program = "${package}/bin/part2";
+            program = "${package}/bin/template-haskell-part2";
+            meta.description = "template-haskell: Run part 2";
           };
         };
 

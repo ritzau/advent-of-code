@@ -215,23 +215,15 @@
           projectFlakes;
 
         # Aggregate apps from all project flakes
-        # Namespace each flake's apps to avoid name collisions
+        # Simplified: merge each flake's apps directly, but skip formatter
+        # apps and the `default` app, since those are handled elsewhere.
         allApps = pkgs.lib.foldl'
           (acc: name:
             let
               flakeApps = inputs.${name}.apps.${system} or {};
-              # For the default app, use the flake name directly
-              # For other apps, prefix with flake name (e.g., s16e01-go-part1)
-              namespacedApps = pkgs.lib.mapAttrs'
-                (appName: appValue:
-                  if appName == "default" then
-                    pkgs.lib.nameValuePair name appValue
-                  else
-                    pkgs.lib.nameValuePair "${name}-${appName}" appValue
-                )
-                flakeApps;
+              filteredApps = pkgs.lib.filterAttrs (appName: appValue: appName != "default") flakeApps;
             in
-              acc // namespacedApps
+              acc // filteredApps
           )
           {}
           projectFlakes;
@@ -254,14 +246,18 @@
         # Apps for easy running
         apps = allApps // {
           # Run the aoc test runner (override default to be aoc)
+          # Reference the app or package directly to avoid string-interpolating
+          # derivation output paths at evaluation time (which forces builds / IFD).
           aoc = {
             type = "app";
-            program = "${inputs.aoc-cli.packages.${system}.default}/bin/aoc";
+            program = inputs.aoc-cli.apps.${system}.default.program or "${inputs.aoc-cli.packages.${system}.default}/bin/aoc";
+            meta.description = "aoc: CLI test runner for all solutions";
           };
 
           default = {
             type = "app";
-            program = "${inputs.aoc-cli.packages.${system}.default}/bin/aoc";
+            program = inputs.aoc-cli.apps.${system}.default.program or "${inputs.aoc-cli.packages.${system}.default}/bin/aoc";
+            meta.description = "aoc: CLI test runner for all solutions";
           };
         };
 

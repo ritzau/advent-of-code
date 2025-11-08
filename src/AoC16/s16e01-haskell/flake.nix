@@ -15,7 +15,10 @@
         haskellPackages = pkgs.haskellPackages;
 
         # Build package without tests (for faster dev iteration)
-        package = haskellPackages.callCabal2nix "aoc-solution" ./. { };
+        # Prefer generated.nix if present (offline-generated expression)
+        package = if builtins.pathExists ./generated.nix
+          then haskellPackages.callPackage ./generated.nix {}
+          else haskellPackages.callCabal2nix "aoc-solution" ./. { };
 
         # Build package with tests enabled (for checks)
         packageWithTests = pkgs.haskell.lib.compose.doCheck (
@@ -56,17 +59,26 @@
           default = {
             type = "app";
             program = "${package}/bin/s16e01-haskell";
+            meta.description = "s16e01-haskell: Run all parts";
+          };
+
+          s16e01-haskell = {
+            type = "app";
+            program = "${package}/bin/s16e01-haskell";
+            meta.description = "s16e01-haskell: Run all parts";
           };
 
           # Run individual parts
-          part1 = {
+          s16e01-haskell-part1 = {
             type = "app";
             program = "${package}/bin/s16e01-haskell-part1";
+            meta.description = "s16e01-haskell: Run part 1";
           };
 
-          part2 = {
+          s16e01-haskell-part2 = {
             type = "app";
             program = "${package}/bin/s16e01-haskell-part2";
+            meta.description = "s16e01-haskell: Run part 2";
           };
         };
 
