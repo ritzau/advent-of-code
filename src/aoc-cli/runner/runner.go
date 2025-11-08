@@ -41,22 +41,12 @@ func New(rootDir string) *Runner {
 func (r *Runner) RunPart(paths *builder.SolutionPaths, part int, input string) Result {
 	start := time.Now()
 
-	var cmd *exec.Cmd
-	if paths.UseNixRun {
-		// Use nix run
-		appName := paths.Part1
-		if part == 2 {
-			appName = paths.Part2
-		}
-		cmd = exec.Command("nix", "run", paths.SolutionDir+"#"+appName)
-	} else {
-		// Use binary path
-		binaryPath := paths.Part1
-		if part == 2 {
-			binaryPath = paths.Part2
-		}
-		cmd = exec.Command(binaryPath)
+	// Use binary path
+	binaryPath := paths.Part1
+	if part == 2 {
+		binaryPath = paths.Part2
 	}
+	cmd := exec.Command(binaryPath)
 
 	cmd.Stdin = strings.NewReader(input)
 

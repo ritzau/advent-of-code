@@ -9,21 +9,26 @@ import (
 
 // Builder handles building AoC solutions
 type Builder struct {
-	rootDir string
+	rootDir    string
+	builtFlakes map[string]bool // Track which flakes have been built in this session
 }
 
 // New creates a new Builder
 func New(rootDir string) *Builder {
-	return &Builder{rootDir: rootDir}
+	return &Builder{
+		rootDir:     rootDir,
+		builtFlakes: make(map[string]bool),
+	}
 }
 
-// SolutionPaths contains the paths to the built binaries or nix run info
+// SolutionPaths contains the paths to the built binaries
 type SolutionPaths struct {
 	Language    string
-	Part1       string // Binary path or "nix-run"
-	Part2       string // Binary path or "nix-run"
-	SolutionDir string // Directory containing flake.nix for nix run
-	UseNixRun   bool   // If true, use nix run instead of binaries
+	Part1       string // Binary path
+	Part2       string // Binary path
+	SolutionDir string // Directory containing flake.nix
+	FlakeDir    string // Directory where the flake was built
+	ResultLink  string // Path to the result symlink
 }
 
 // FindSolutions finds all solution directories for the given year and day
@@ -81,7 +86,7 @@ func (b *Builder) FindSolution(year, day int) (string, error) {
 }
 
 // ExtractLanguage extracts the language from a solution path
-// Returns "default" if no language suffix is present (e.g., "s16e01" -> "default")
+// Returns "unknown" if no language can be detected
 // Returns the language name if present (e.g., "s16e01-go" -> "go")
 func (b *Builder) ExtractLanguage(solutionPath string) string {
 	baseName := filepath.Base(solutionPath)
@@ -92,19 +97,98 @@ func (b *Builder) ExtractLanguage(solutionPath string) string {
 		idx--
 	}
 
-	// No hyphen found, this is a default implementation
-	if idx < 0 {
-		return "default"
+	// If hyphen found, return language suffix
+	if idx >= 0 {
+		return baseName[idx+1:]
 	}
 
-	// Return everything after the hyphen
-	return baseName[idx+1:]
+	// No hyphen found, try to detect language from directory contents
+	// First check the solution directory itself
+	if lang := b.detectLanguageFromDir(solutionPath); lang != "" {
+		return lang
+	}
+
+	// Then check the parent directory (for year-level flakes)
+	parentDir := filepath.Dir(solutionPath)
+	if lang := b.detectLanguageFromDir(parentDir); lang != "" {
+		return lang
+	}
+
+	return "unknown"
+}
+
+// detectLanguageFromDir detects the language by checking for characteristic files
+func (b *Builder) detectLanguageFromDir(dir string) string {
+	// Check for package.json (TypeScript/JavaScript)
+	if _, err := os.Stat(filepath.Join(dir, "package.json")); err == nil {
+		return "typescript"
+	}
+
+	// Check for Cargo.toml (Rust)
+	if _, err := os.Stat(filepath.Join(dir, "Cargo.toml")); err == nil {
+		return "rust"
+	}
+
+	// Check for go.mod (Go)
+	if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+		return "go"
+	}
+
+	// Check for *.cabal (Haskell)
+	entries, err := os.ReadDir(dir)
+	if err == nil {
+		for _, entry := range entries {
+			if !entry.IsDir() {
+				name := entry.Name()
+				if filepath.Ext(name) == ".cabal" {
+					return "haskell"
+				}
+			}
+		}
+	}
+
+	return ""
+}
+
+// findFlakeForSolution finds the best flake to use for building a solution
+// Returns the flake directory and whether it's a solution-level flake
+func (b *Builder) findFlakeForSolution(year, day int, solutionPath string) (string, bool, error) {
+	// Priority order:
+	// 1. Solution-level flake (e.g., src/AoC16/s16e01-go/flake.nix)
+	// 2. Year-level flake (e.g., src/AoC23/flake.nix)
+	// 3. Root-level flake (./flake.nix)
+
+	// Check solution-level flake
+	if solutionPath != "" {
+		solutionFlake := filepath.Join(solutionPath, "flake.nix")
+		if _, err := os.Stat(solutionFlake); err == nil {
+			return solutionPath, true, nil
+		}
+	}
+
+	// Check year-level flake
+	yearDir := filepath.Join(b.rootDir, fmt.Sprintf("src/AoC%02d", year%100))
+	yearFlake := filepath.Join(yearDir, "flake.nix")
+	if _, err := os.Stat(yearFlake); err == nil {
+		return yearDir, false, nil
+	}
+
+	// Check root-level flake
+	rootFlake := filepath.Join(b.rootDir, "flake.nix")
+	if _, err := os.Stat(rootFlake); err == nil {
+		return b.rootDir, false, nil
+	}
+
+	return "", false, fmt.Errorf("no flake found for year %d day %d", year, day)
 }
 
 // BuildSolution builds a specific solution at the given path
 func (b *Builder) BuildSolution(solutionPath string) (*SolutionPaths, error) {
-	fmt.Printf("Building solution at %s...\n", solutionPath)
+	return b.BuildSolutionForDay(0, 0, solutionPath)
+}
 
+// BuildSolutionForDay builds a specific solution for a given year and day
+func (b *Builder) BuildSolutionForDay(year, day int, solutionPath string) (*SolutionPaths, error) {
 	// Extract solution name from path (e.g., "s16e01-go")
 	solutionName := filepath.Base(solutionPath)
 	language := b.ExtractLanguage(solutionPath)
@@ -112,8 +196,14 @@ func (b *Builder) BuildSolution(solutionPath string) (*SolutionPaths, error) {
 	// Check if nix is available
 	_, err := exec.LookPath("nix")
 	if err == nil {
+		// Find the appropriate flake
+		flakeDir, isSolutionLevel, err := b.findFlakeForSolution(year, day, solutionPath)
+		if err != nil {
+			return nil, err
+		}
+
 		// Try building with nix
-		paths, err := b.buildWithNix(solutionPath, solutionName)
+		paths, err := b.buildWithNix(year, day, solutionPath, solutionName, flakeDir, isSolutionLevel)
 		if err != nil {
 			return nil, err
 		}
@@ -141,26 +231,72 @@ func (b *Builder) Build(year, day int) (*SolutionPaths, error) {
 	return b.BuildSolution(solutionPath)
 }
 
-// buildWithNix prepares for running via nix run
-func (b *Builder) buildWithNix(solutionPath, solutionName string) (*SolutionPaths, error) {
+// buildWithNix builds using nix and returns paths to binaries in result/bin
+func (b *Builder) buildWithNix(year, day int, solutionPath, solutionName, flakeDir string, isSolutionLevel bool) (*SolutionPaths, error) {
 	// Test that the flake is valid by checking if we can evaluate it
 	cmd := exec.Command("nix", "flake", "metadata", "--json")
-	cmd.Dir = solutionPath
+	cmd.Dir = flakeDir
 	if err := cmd.Run(); err != nil {
 		return nil, fmt.Errorf("failed to evaluate flake: %w", err)
 	}
 
-	fmt.Printf("Solution has valid flake, will use nix run\n")
+	// Use a unique result link based on the solution path to avoid conflicts
+	// when building multiple solutions in parallel or sequentially
+	resultLink := filepath.Join(b.rootDir, ".aoc-build", solutionName)
 
-	// Return paths configured for nix run
-	paths := &SolutionPaths{
-		Part1:       "part1", // App name in the flake
-		Part2:       "part2", // App name in the flake
-		SolutionDir: solutionPath,
-		UseNixRun:   true,
+	// Determine binary names based on whether it's a solution-level or year-level flake
+	var part1Binary, part2Binary string
+	if isSolutionLevel {
+		part1Binary = fmt.Sprintf("%s-part1", solutionName)
+		part2Binary = fmt.Sprintf("%s-part2", solutionName)
+	} else {
+		part1Binary = fmt.Sprintf("s%02de%02d-part1", year%100, day)
+		part2Binary = fmt.Sprintf("s%02de%02d-part2", year%100, day)
 	}
 
-	return paths, nil
+	// Check if binaries already exist and we've already built this flake
+	part1Path := filepath.Join(resultLink, "bin", part1Binary)
+	part2Path := filepath.Join(resultLink, "bin", part2Binary)
+
+	_, part1Exists := os.Stat(part1Path)
+	_, part2Exists := os.Stat(part2Path)
+	alreadyBuilt := b.builtFlakes[flakeDir]
+
+	if part1Exists == nil && part2Exists == nil && alreadyBuilt {
+		// Binaries exist and we've built this flake - use cached build
+		// Silent - no output
+	} else {
+		// Build the flake
+		if err := os.MkdirAll(filepath.Dir(resultLink), 0755); err != nil {
+			return nil, fmt.Errorf("failed to create build directory: %w", err)
+		}
+
+		cmd = exec.Command("nix", "build", "--out-link", resultLink)
+		cmd.Dir = flakeDir
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			return nil, fmt.Errorf("failed to build flake: %w\nOutput: %s", err, output)
+		}
+
+		// Mark this flake as built
+		b.builtFlakes[flakeDir] = true
+	}
+
+	// Verify binaries exist
+	if _, err := os.Stat(part1Path); err != nil {
+		return nil, fmt.Errorf("part1 binary not found: %s", part1Path)
+	}
+	if _, err := os.Stat(part2Path); err != nil {
+		return nil, fmt.Errorf("part2 binary not found: %s", part2Path)
+	}
+
+	return &SolutionPaths{
+		Part1:       part1Path,
+		Part2:       part2Path,
+		SolutionDir: solutionPath,
+		FlakeDir:    flakeDir,
+		ResultLink:  resultLink,
+	}, nil
 }
 
 // buildWithLanguage builds using language-specific tools

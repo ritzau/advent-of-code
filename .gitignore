@@ -12,6 +12,7 @@ input.txt
 .flake-selection
 result
 result-*
+.aoc-build/
 
 # Language-specific
 node_modules/
