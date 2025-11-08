@@ -121,18 +121,22 @@
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
     let
       # All project flakes - everything except self and system inputs
-      projectFlakes = builtins.filter
+      allProjectFlakes = builtins.filter
         (name: name != "self" && name != "nixpkgs" && name != "flake-utils")
         (builtins.attrNames inputs);
+
+      # Default project flakes - exclude template-kotlin-gradle (heavy Gradle build)
+      projectFlakes = builtins.filter
+        (name: name != "template-kotlin-gradle")
+        allProjectFlakes;
 
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # Aggregate checks from all project flakes (including templates)
-        # Namespace each flake's checks to avoid name collisions
-        allChecks = pkgs.lib.foldl'
+        # Helper to aggregate checks from a list of flakes
+        aggregateChecks = flakes: pkgs.lib.foldl'
           (acc: name:
             let
               flakeChecks = inputs.${name}.checks.${system} or {};
@@ -144,7 +148,13 @@
               acc // namespacedChecks
           )
           {}
-          projectFlakes;
+          flakes;
+
+        # Aggregate checks from default project flakes (excluding template-kotlin-gradle)
+        allChecks = aggregateChecks projectFlakes;
+
+        # Aggregate checks from ALL project flakes (including template-kotlin-gradle)
+        allChecksIncludingGradle = aggregateChecks allProjectFlakes;
 
         # Helper to determine binary prefix for a flake
         getBinaryPrefix = name:
@@ -209,15 +219,20 @@
             else
               pkg;
 
-        # Aggregate packages from all project flakes (including templates)
-        # Don't wrap them here to avoid IFD issues with nix flake show
-        allPackages = pkgs.lib.foldl'
+        # Helper to aggregate packages from a list of flakes
+        aggregatePackages = flakes: pkgs.lib.foldl'
           (acc: name:
             let pkg = inputs.${name}.packages.${system}.default or null;
             in if pkg != null then acc // { ${name} = pkg; } else acc
           )
           {}
-          projectFlakes;
+          flakes;
+
+        # Aggregate packages from default project flakes (excluding template-kotlin-gradle)
+        allPackages = aggregatePackages projectFlakes;
+
+        # Aggregate packages from ALL project flakes (including template-kotlin-gradle)
+        allPackagesIncludingGradle = aggregatePackages allProjectFlakes;
 
         # Aggregate apps from all project flakes
         # Simplified: merge each flake's apps directly, but skip formatter
@@ -234,14 +249,32 @@
           projectFlakes;
       in
       {
-        checks = allChecks;
+        # Default checks exclude template-kotlin-gradle (heavy Gradle build)
+        checks = allChecks // {
+          # Special check that includes ALL checks including template-kotlin-gradle
+          # Can be run with: nix flake check --all-systems --override-input template-kotlin-gradle path:./templates/kotlin-gradle
+          # Or build via: nix build .#checks.<system>.all-including-gradle
+          all-including-gradle = pkgs.runCommand "all-checks-including-gradle" {
+            buildInputs = pkgs.lib.mapAttrsToList (name: check: check) allChecksIncludingGradle;
+          } ''
+            echo "All checks passed (including template-kotlin-gradle)"
+            touch $out
+          '';
+        };
 
         packages = allPackages // {
-          # Default package that builds all solution packages with renamed binaries
+          # Default package that builds all solution packages with renamed binaries (excluding template-kotlin-gradle)
           default = pkgs.symlinkJoin {
-            name = "advent-of-code-all";
+            name = "advent-of-code-default";
             paths = pkgs.lib.mapAttrsToList (name: pkg: wrapWithPrefix name pkg) allPackages;
-            meta.description = "All Advent of Code solution packages with properly named binaries";
+            meta.description = "All Advent of Code solution packages with properly named binaries (excluding template-kotlin-gradle)";
+          };
+
+          # Package that builds ALL packages including template-kotlin-gradle
+          all = pkgs.symlinkJoin {
+            name = "advent-of-code-all";
+            paths = pkgs.lib.mapAttrsToList (name: pkg: wrapWithPrefix name pkg) allPackagesIncludingGradle;
+            meta.description = "All Advent of Code packages including template-kotlin-gradle";
           };
 
           # Explicit alias for aoc CLI for easy access
