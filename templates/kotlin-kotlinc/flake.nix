@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code solution in Kotlin";
+  description = "Advent of Code solution in Kotlin (kotlinc-based)";
 
   inputs = { nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable"; };
 
@@ -12,7 +12,6 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        updateLocks = pkgs.callPackage ./update-locks.nix { };
         package = pkgs.callPackage ./build.nix {
           jdk = pkgs.temurin-bin-21;
         };
@@ -20,20 +19,19 @@
       in {
         devShells.default = pkgs.mkShell {
           buildInputs = [
-            pkgs.gradle_8
+            pkgs.kotlin
             pkgs.temurin-bin-21
-            updateLocks
             pkgs.ktlint
           ];
 
           shellHook = ''
-            echo "🎄 Kotlin environment ready"
+            echo "🎄 Kotlin environment ready (kotlinc-based)"
             echo ""
             echo "Local dev:"
-            echo "  ./gradlew build        - Build with Gradle"
-            echo "  ./gradlew run          - Run application"
+            echo "  ./build.sh             - Build with kotlinc"
+            echo "  ./run.sh               - Run application"
+            echo "  ./lint.sh              - Lint with ktlint"
             echo "  ktlint -F src/**/*.kt  - Format code"
-            echo "  update-locks           - Update dependency locks"
             echo ""
             echo "Nix commands:"
             echo "  nix build              - Build package"
@@ -45,6 +43,7 @@
             echo "  just run               - Run verification"
           '';
         };
+
         packages.default = package;
 
         checks = package.passthru.tests;
@@ -52,26 +51,26 @@
         apps = {
           default = {
             type = "app";
-            program = "${package}/bin/template-kotlin";
-            meta.description = "Run all parts";
+            program = "${package}/bin/template-kotlin-kotlinc";
+            meta.description = "template-kotlin-kotlinc: Run all parts";
           };
 
-          template-kotlin = {
+          template-kotlin-kotlinc = {
             type = "app";
-            program = "${package}/bin/template-kotlin";
-            meta.description = "Run all parts";
+            program = "${package}/bin/template-kotlin-kotlinc";
+            meta.description = "template-kotlin-kotlinc: Run all parts";
           };
 
-          template-kotlin-part1 = {
+          template-kotlin-kotlinc-part1 = {
             type = "app";
-            program = "${package}/bin/template-kotlin-part1";
-            meta.description = "Run part 1";
+            program = "${package}/bin/template-kotlin-kotlinc-part1";
+            meta.description = "template-kotlin-kotlinc: Run part 1";
           };
 
-          template-kotlin-part2 = {
+          template-kotlin-kotlinc-part2 = {
             type = "app";
-            program = "${package}/bin/template-kotlin-part2";
-            meta.description = "Run part 2";
+            program = "${package}/bin/template-kotlin-kotlinc-part2";
+            meta.description = "template-kotlin-kotlinc: Run part 2";
           };
         };
       });

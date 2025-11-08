@@ -11,7 +11,7 @@ run:
 
 # Run a specific part with input from stdin
 run-part PART:
-    nix run .#s16e01-kotlin-part{{PART}}
+    nix run .#template-kotlin-kotlinc-part{{PART}}
 
 # Format code
 format:

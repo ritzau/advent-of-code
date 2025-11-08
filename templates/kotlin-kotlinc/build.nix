@@ -1,7 +1,7 @@
 { lib, stdenv, jdk, kotlin, ktlint, makeWrapper }:
 
 stdenv.mkDerivation {
-  pname = "s16e01-kotlin";
+  pname = "template-kotlin-kotlinc";
   version = "0.1.0";
 
   src = ./.;
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   passthru.tests = {
     check = stdenv.mkDerivation {
-      pname = "s16e01-kotlin-check";
+      pname = "template-kotlin-kotlinc-check";
       version = "0.1.0";
       src = ./.;
 
@@ -63,36 +63,36 @@ stdenv.mkDerivation {
     cp -r classes/* $out/lib/
 
     # Create main runner script
-    cat > $out/bin/s16e01-kotlin << 'EOF'
+    cat > $out/bin/template-kotlin-kotlinc << 'EOF'
 #!/bin/sh
 exec ${jdk}/bin/java -cp $out/lib:${kotlin}/lib/kotlin-stdlib.jar MainKt "$@"
 EOF
-    chmod +x $out/bin/s16e01-kotlin
+    chmod +x $out/bin/template-kotlin-kotlinc
 
     # Create part1 runner script
-    cat > $out/bin/s16e01-kotlin-part1 << 'EOF'
+    cat > $out/bin/template-kotlin-kotlinc-part1 << 'EOF'
 #!/bin/sh
 exec ${jdk}/bin/java -cp $out/lib:${kotlin}/lib/kotlin-stdlib.jar Part1Kt "$@"
 EOF
-    chmod +x $out/bin/s16e01-kotlin-part1
+    chmod +x $out/bin/template-kotlin-kotlinc-part1
 
     # Create part2 runner script
-    cat > $out/bin/s16e01-kotlin-part2 << 'EOF'
+    cat > $out/bin/template-kotlin-kotlinc-part2 << 'EOF'
 #!/bin/sh
 exec ${jdk}/bin/java -cp $out/lib:${kotlin}/lib/kotlin-stdlib.jar Part2Kt "$@"
 EOF
-    chmod +x $out/bin/s16e01-kotlin-part2
+    chmod +x $out/bin/template-kotlin-kotlinc-part2
 
     # Wrap all scripts to ensure proper environment
-    wrapProgram $out/bin/s16e01-kotlin \
+    wrapProgram $out/bin/template-kotlin-kotlinc \
       --set JAVA_HOME "${jdk.home}" \
       --prefix PATH : "${jdk}/bin"
 
-    wrapProgram $out/bin/s16e01-kotlin-part1 \
+    wrapProgram $out/bin/template-kotlin-kotlinc-part1 \
       --set JAVA_HOME "${jdk.home}" \
       --prefix PATH : "${jdk}/bin"
 
-    wrapProgram $out/bin/s16e01-kotlin-part2 \
+    wrapProgram $out/bin/template-kotlin-kotlinc-part2 \
       --set JAVA_HOME "${jdk.home}" \
       --prefix PATH : "${jdk}/bin"
 

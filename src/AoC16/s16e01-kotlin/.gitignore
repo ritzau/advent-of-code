@@ -1,9 +1,5 @@
-# Gradle
-.gradle/
-build/
-gradle-app.setting
-!gradle-wrapper.jar
-.gradletasknamecache
+# Compiled classes
+classes/
 
 # IntelliJ IDEA
 .idea/

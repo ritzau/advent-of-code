@@ -1,5 +1,5 @@
 {
-  description = "Advent of Code 2016 Day 1 solution in Kotlin";
+  description = "Advent of Code solution in Kotlin";
 
   inputs = { nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable"; };
 
@@ -12,6 +12,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
+        updateLocks = pkgs.callPackage ./update-locks.nix { };
         package = pkgs.callPackage ./build.nix {
           jdk = pkgs.temurin-bin-21;
         };
@@ -19,19 +20,20 @@
       in {
         devShells.default = pkgs.mkShell {
           buildInputs = [
-            pkgs.kotlin
+            pkgs.gradle_8
             pkgs.temurin-bin-21
+            updateLocks
             pkgs.ktlint
           ];
 
           shellHook = ''
-            echo "🎄 Kotlin environment ready (kotlinc-based)"
+            echo "🎄 Kotlin environment ready"
             echo ""
             echo "Local dev:"
-            echo "  ./build.sh             - Build with kotlinc"
-            echo "  ./run.sh               - Run application"
-            echo "  ./lint.sh              - Lint with ktlint"
+            echo "  ./gradlew build        - Build with Gradle"
+            echo "  ./gradlew run          - Run application"
             echo "  ktlint -F src/**/*.kt  - Format code"
+            echo "  update-locks           - Update dependency locks"
             echo ""
             echo "Nix commands:"
             echo "  nix build              - Build package"
@@ -45,31 +47,34 @@
         };
         packages.default = package;
 
+        # Mark this flake as slow (uses Gradle, Maven dependencies)
+        packages.slow = true;
+
         checks = package.passthru.tests;
 
         apps = {
           default = {
             type = "app";
-            program = "${package}/bin/s16e01-kotlin";
-            meta.description = "s16e01-kotlin: Run all parts";
+            program = "${package}/bin/template-kotlin-gradle";
+            meta.description = "template-kotlin-gradle: Run all parts";
           };
 
-          s16e01-kotlin = {
+          template-kotlin-gradle = {
             type = "app";
-            program = "${package}/bin/s16e01-kotlin";
-            meta.description = "s16e01-kotlin: Run all parts";
+            program = "${package}/bin/template-kotlin-gradle";
+            meta.description = "template-kotlin-gradle: Run all parts";
           };
 
-          s16e01-kotlin-part1 = {
+          template-kotlin-gradle-part1 = {
             type = "app";
-            program = "${package}/bin/s16e01-kotlin-part1";
-            meta.description = "s16e01-kotlin: Run part 1";
+            program = "${package}/bin/template-kotlin-gradle-part1";
+            meta.description = "template-kotlin-gradle: Run part 1";
           };
 
-          s16e01-kotlin-part2 = {
+          template-kotlin-gradle-part2 = {
             type = "app";
-            program = "${package}/bin/s16e01-kotlin-part2";
-            meta.description = "s16e01-kotlin: Run part 2";
+            program = "${package}/bin/template-kotlin-gradle-part2";
+            meta.description = "template-kotlin-gradle: Run part 2";
           };
         };
       });

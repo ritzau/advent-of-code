@@ -12,7 +12,7 @@ let
     deps = builtins.fromJSON (builtins.readFile ./deps.json);
   };
 in stdenv.mkDerivation {
-  pname = "template-kotlin";
+  pname = "template-kotlin-gradle";
   version = "0.1.0";
 
   src = ./.;
@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
 
   passthru.tests = {
     check = stdenv.mkDerivation {
-      pname = "template-kotlin-check";
+      pname = "template-kotlin-gradle-check";
       version = "0.1.0";
       src = ./.;
 
@@ -75,28 +75,28 @@ in stdenv.mkDerivation {
     rm -f $out/bin/*.bat
 
     # Create part1 and part2 runner scripts
-    cat > $out/bin/template-kotlin-part1 << 'EOF'
+    cat > $out/bin/template-kotlin-gradle-part1 << 'EOF'
 #!/bin/sh
 exec ${jdk}/bin/java -cp $out/lib/'*' Part1Kt "$@"
 EOF
-    chmod +x $out/bin/template-kotlin-part1
+    chmod +x $out/bin/template-kotlin-gradle-part1
 
-    cat > $out/bin/template-kotlin-part2 << 'EOF'
+    cat > $out/bin/template-kotlin-gradle-part2 << 'EOF'
 #!/bin/sh
 exec ${jdk}/bin/java -cp $out/lib/'*' Part2Kt "$@"
 EOF
-    chmod +x $out/bin/template-kotlin-part2
+    chmod +x $out/bin/template-kotlin-gradle-part2
 
     # Wrap all scripts to use the correct JDK
-    wrapProgram $out/bin/template-kotlin \
+    wrapProgram $out/bin/template-kotlin-gradle \
       --set JAVA_HOME "${jdk.home}" \
       --prefix PATH : "${jdk}/bin"
 
-    wrapProgram $out/bin/template-kotlin-part1 \
+    wrapProgram $out/bin/template-kotlin-gradle-part1 \
       --set JAVA_HOME "${jdk.home}" \
       --prefix PATH : "${jdk}/bin"
 
-    wrapProgram $out/bin/template-kotlin-part2 \
+    wrapProgram $out/bin/template-kotlin-gradle-part2 \
       --set JAVA_HOME "${jdk.home}" \
       --prefix PATH : "${jdk}/bin"
 
