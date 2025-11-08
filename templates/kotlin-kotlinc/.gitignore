@@ -1,0 +1,11 @@
+# Compiled classes
+classes/
+
+# Nix build output
+result
+result-*
+
+# IDE
+.idea/
+*.iml
+.vscode/

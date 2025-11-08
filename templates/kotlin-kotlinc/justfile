@@ -1,0 +1,26 @@
+# Advent of Code Solution
+# All commands use Nix for reproducible builds
+
+# Build the solution
+build:
+    nix build
+
+# Run the main verification binary
+run:
+    nix run
+
+# Run a specific part with input from stdin
+run-part PART:
+    nix run .#template-kotlin-kotlinc-part{{PART}}
+
+# Format code
+format:
+    nix develop --command ktlint -F "src/**/*.kt"
+
+# Run all checks (build + tests)
+check:
+    nix flake check
+
+# Clean build artifacts
+clean:
+    rm -rf result classes
