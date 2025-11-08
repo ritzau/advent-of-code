@@ -1,35 +1,24 @@
-{ lib, stdenv, jdk, gradle_8, ktlint, callPackage, makeWrapper }:
-let
-  buildMavenRepo = callPackage ./maven-repo.nix { };
+{ lib, stdenv, jdk, kotlin, ktlint, makeWrapper }:
 
-  mavenRepo = buildMavenRepo {
-    name = "nix-maven-repo";
-    repos = [
-      "https://repo1.maven.org/maven2"
-      "https://plugins.gradle.org/m2"
-      "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev"
-    ];
-    deps = builtins.fromJSON (builtins.readFile ./deps.json);
-  };
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "s16e01-kotlin";
   version = "0.1.0";
 
   src = ./.;
 
-  nativeBuildInputs = [ gradle_8 ktlint makeWrapper ];
-
-  JDK_HOME = "${jdk.home}";
+  nativeBuildInputs = [ kotlin jdk makeWrapper ];
 
   buildPhase = ''
     runHook preBuild
-    export GRADLE_USER_HOME=$TMP/gradle-home
-    export NIX_MAVEN_REPO=${mavenRepo}
-    unset GRADLE_OPTS
-    gradle distTar -x test \
-      --offline --no-daemon \
-      --warning-mode=all --parallel \
-      -PnixMavenRepo=${mavenRepo}
+
+    # Compile Kotlin sources
+    mkdir -p classes
+    kotlinc -d classes \
+      src/main/kotlin/Common.kt \
+      src/main/kotlin/Main.kt \
+      src/main/kotlin/Part1.kt \
+      src/main/kotlin/Part2.kt
+
     runHook postBuild
   '';
 
@@ -42,19 +31,20 @@ in stdenv.mkDerivation {
       version = "0.1.0";
       src = ./.;
 
-      nativeBuildInputs = [ gradle_8 ktlint ];
-
-      JDK_HOME = "${jdk.home}";
+      nativeBuildInputs = [ kotlin jdk ktlint ];
 
       buildPhase = ''
+        # Run ktlint
         ktlint src/**/*.kt
-        export GRADLE_USER_HOME=$TMP/gradle-home
-        export NIX_MAVEN_REPO=${mavenRepo}
-        unset GRADLE_OPTS
-        gradle check \
-          --offline --no-daemon \
-          --warning-mode=all --parallel \
-          -PnixMavenRepo=${mavenRepo}
+
+        # Compile and run tests
+        mkdir -p classes
+        kotlinc -d classes \
+          src/main/kotlin/Common.kt \
+          src/test/kotlin/CommonTest.kt
+
+        # Run tests
+        java -cp classes:${kotlin}/lib/kotlin-stdlib.jar CommonTestKt
 
         # Create a marker file to indicate success
         touch $out
@@ -66,28 +56,34 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
 
-    # Extract the tar distribution created by distTar
-    tar -xf build/distributions/*.tar -C $out --strip-components=1
+    mkdir -p $out/bin $out/lib
 
-    # Remove Windows batch files
-    rm -f $out/bin/*.bat
+    # Copy compiled classes
+    cp -r classes/* $out/lib/
 
-    # Create part1 and part2 runner scripts
+    # Create main runner script
+    cat > $out/bin/s16e01-kotlin << 'EOF'
+#!/bin/sh
+exec ${jdk}/bin/java -cp $out/lib:${kotlin}/lib/kotlin-stdlib.jar MainKt "$@"
+EOF
+    chmod +x $out/bin/s16e01-kotlin
+
+    # Create part1 runner script
     cat > $out/bin/s16e01-kotlin-part1 << 'EOF'
 #!/bin/sh
-exec ${jdk}/bin/java -cp $out/lib/'*' Part1Kt "$@"
+exec ${jdk}/bin/java -cp $out/lib:${kotlin}/lib/kotlin-stdlib.jar Part1Kt "$@"
 EOF
     chmod +x $out/bin/s16e01-kotlin-part1
 
+    # Create part2 runner script
     cat > $out/bin/s16e01-kotlin-part2 << 'EOF'
 #!/bin/sh
-exec ${jdk}/bin/java -cp $out/lib/'*' Part2Kt "$@"
+exec ${jdk}/bin/java -cp $out/lib:${kotlin}/lib/kotlin-stdlib.jar Part2Kt "$@"
 EOF
     chmod +x $out/bin/s16e01-kotlin-part2
 
-    # Wrap all scripts to use the correct JDK
+    # Wrap all scripts to ensure proper environment
     wrapProgram $out/bin/s16e01-kotlin \
       --set JAVA_HOME "${jdk.home}" \
       --prefix PATH : "${jdk}/bin"

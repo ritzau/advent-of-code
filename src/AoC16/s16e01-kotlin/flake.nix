@@ -12,7 +12,6 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        updateLocks = pkgs.callPackage ./update-locks.nix { };
         package = pkgs.callPackage ./build.nix {
           jdk = pkgs.temurin-bin-21;
         };
@@ -20,20 +19,19 @@
       in {
         devShells.default = pkgs.mkShell {
           buildInputs = [
-            pkgs.gradle_8
+            pkgs.kotlin
             pkgs.temurin-bin-21
-            updateLocks
             pkgs.ktlint
           ];
 
           shellHook = ''
-            echo "🎄 Kotlin environment ready"
+            echo "🎄 Kotlin environment ready (kotlinc-based)"
             echo ""
             echo "Local dev:"
-            echo "  ./gradlew build        - Build with Gradle"
-            echo "  ./gradlew run          - Run application"
+            echo "  ./build.sh             - Build with kotlinc"
+            echo "  ./run.sh               - Run application"
+            echo "  ./lint.sh              - Lint with ktlint"
             echo "  ktlint -F src/**/*.kt  - Format code"
-            echo "  update-locks           - Update dependency locks"
             echo ""
             echo "Nix commands:"
             echo "  nix build              - Build package"

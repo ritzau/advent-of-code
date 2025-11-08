@@ -11,16 +11,16 @@ run:
 
 # Run a specific part with input from stdin
 run-part PART:
-    nix run .#part{{PART}}
+    nix run .#s16e01-kotlin-part{{PART}}
 
 # Format code
 format:
     nix develop --command ktlint -F "src/**/*.kt"
 
 # Run all checks (build + tests)
-check-all:
+check:
     nix flake check
 
 # Clean build artifacts
 clean:
-    rm -rf result
+    rm -rf result classes
