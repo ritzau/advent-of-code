@@ -17,26 +17,114 @@
     part1: 300
     part2: 159
 
-# Example of skipping a day:
-# 2016:
-#   2:
-#     skip: true
-#
-# Example with no results yet (will run but not verify):
-# 2016:
-#   3:
-#     part1: null
-#     part2: null
-#
-# Example of language-specific configuration:
-# 2016:
-#   4:
-#     part1: 123
-#     part2: 456
-#     languages:
-#       go:
-#         skip: true  # Skip Go implementation for this day
-#       rust:
-#         part1: 124  # Rust has different output format
-#       default:
-#         skip: false  # Explicitly enable default implementation
+2021:
+  1:
+    part1: null
+    part2: null
+
+2022:
+  1:
+    part1: 74711
+    part2: 209481
+  2:
+    part1: 11603
+    part2: 12725
+  3:
+    part1: 7990
+    part2: 2602
+  4:
+    part1: 483
+    part2: 874
+  5:
+    part1: "VRWBSFZWM"
+    part2: "RBTWJWMCF"
+  6:
+    part1: 1262
+    part2: 3444
+  7:
+    part1: 1297683
+    part2: 5756764
+  8:
+    part1: 1801
+    part2: 209880
+  9:
+    part1: 6339
+    part2: 2541
+  10:
+    part1: 14780
+    part2: null  # Visual output - screen render
+  11:
+    part1: 62491
+    part2: 17408399184
+  12:
+    part1: null  # TODO: Add expected results
+    part2: null
+  13:
+    part1: 5330
+    part2: 27648
+  14:
+    part1: null  # TODO: Add expected results
+    part2: null
+  15:
+    part1: 5688618
+    part2: 12625383204261
+
+2023:
+  1:
+    part1: 54159
+    part2: 53866
+  2:
+    part1: 2632
+    part2: 69629
+  3:
+    part1: null
+    part2: null
+  4:
+    part1: null
+    part2: null
+  5:
+    skip: true
+    part1: null
+    part2: null
+  6:
+    part1: null
+    part2: null
+  7:
+    part1: null
+    part2: null
+  8:
+    part1: null
+    part2: null
+  9:
+    part1: null
+    part2: null
+  10:
+    part1: null
+    part2: null
+  11:
+    part1: null
+    part2: null
+  12:
+    part1: null
+    part2: null
+  13:
+    part1: null
+    part2: null
+  14:
+    part1: null
+    part2: null
+  15:
+    part1: null
+    part2: null
+  16:
+    part1: null
+    part2: null
+  17:
+    part1: null
+    part2: null
+  18:
+    part1: null
+    part2: null
+  19:
+    part1: null
+    part2: null

@@ -47,7 +47,6 @@ func (d *Downloader) downloadInput(year, day int) (string, error) {
 	}
 
 	url := fmt.Sprintf("https://adventofcode.com/%d/day/%d/input", year, day)
-	fmt.Printf("Downloading from %s...\n", url)
 
 	// Create HTTP request
 	req, err := http.NewRequest("GET", url, nil)
@@ -95,7 +94,6 @@ func (d *Downloader) GetInput(year, day int) (string, error) {
 
 	// If it exists, return the path
 	if _, err := os.Stat(inputPath); err == nil {
-		fmt.Printf("Using cached input: %s\n", inputPath)
 		return inputPath, nil
 	}
 
@@ -116,7 +114,6 @@ func (d *Downloader) GetInput(year, day int) (string, error) {
 		return "", fmt.Errorf("failed to save input to cache: %w", err)
 	}
 
-	fmt.Printf("Downloaded and cached: %s\n", inputPath)
 	return inputPath, nil
 }
 
