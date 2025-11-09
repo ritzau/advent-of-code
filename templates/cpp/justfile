@@ -1,0 +1,31 @@
+# Build the project
+build:
+    nix build
+
+# Run the main verification binary
+run:
+    nix run
+
+# Run a specific part (1 or 2)
+run-part PART:
+    nix run .#template-cpp-part{{PART}}
+
+# Format code
+format:
+    nix develop -c bash -c 'find src tests -name "*.cpp" -o -name "*.h" | xargs clang-format -i'
+
+# Run all checks (build, test, format)
+check-all:
+    nix flake check
+
+# Run only tests
+check-test:
+    nix build .#checks.x86_64-linux.test
+
+# Check code formatting
+check-format:
+    nix build .#checks.x86_64-linux.format-check
+
+# Clean build artifacts
+clean:
+    rm -rf result* build/ CMakeCache.txt CMakeFiles/ cmake_install.cmake Makefile
