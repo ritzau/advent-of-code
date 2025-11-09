@@ -6,6 +6,11 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     # Template flakes
+    template-cpp = {
+      url = "path:./templates/cpp";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
     template-go = {
       url = "path:./templates/go";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -338,7 +343,7 @@
             echo "🎄 Advent of Code Templates"
             echo ""
             echo "Available templates:"
-            echo "  Go, Haskell, Kotlin, Nim, Python, Rust, TypeScript, Zig"
+            echo "  C++, Go, Haskell, Kotlin, Nim, Python, Rust, TypeScript, Zig"
             echo ""
             echo "Solutions:"
             echo "  src/AoC16/s16e01-*         - 2016 Day 1 (all 8 languages)"
