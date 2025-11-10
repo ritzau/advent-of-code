@@ -9,7 +9,7 @@ import (
 
 // Builder handles building AoC solutions
 type Builder struct {
-	rootDir    string
+	rootDir     string
 	builtFlakes map[string]bool // Track which flakes have been built in this session
 }
 

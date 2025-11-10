@@ -16,10 +16,10 @@ type LanguageConfig struct {
 
 // DayConfig represents the configuration for a single day
 type DayConfig struct {
-	Skip      bool                       `yaml:"skip"`
-	Part1     interface{}                `yaml:"part1"`
-	Part2     interface{}                `yaml:"part2"`
-	Languages map[string]LanguageConfig  `yaml:"languages"`
+	Skip      bool                      `yaml:"skip"`
+	Part1     interface{}               `yaml:"part1"`
+	Part2     interface{}               `yaml:"part2"`
+	Languages map[string]LanguageConfig `yaml:"languages"`
 }
 
 // Results represents the entire results configuration
