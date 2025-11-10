@@ -1,8 +1,9 @@
-#include "solution.h"
-#include <iostream>
-#include <sstream>
 #include <chrono>
 #include <iomanip>
+#include <iostream>
+#include <sstream>
+
+#include "solution.h"
 
 // TODO: Set expected values after testing with real input
 constexpr int64_t EXPECTED_PART1 = 0;
@@ -36,8 +37,8 @@ int main() {
     } else {
         std::cout << " ✗ (expected " << EXPECTED_PART1 << ")";
     }
-    std::cout << " (" << std::fixed << std::setprecision(2)
-              << duration1.count() / 1000.0 << " ms)\n";
+    std::cout << " (" << std::fixed << std::setprecision(2) << duration1.count() / 1000.0
+              << " ms)\n";
 
     std::cout << "Part 2: " << result2;
     if (result2 == EXPECTED_PART2) {
@@ -45,8 +46,8 @@ int main() {
     } else {
         std::cout << " ✗ (expected " << EXPECTED_PART2 << ")";
     }
-    std::cout << " (" << std::fixed << std::setprecision(2)
-              << duration2.count() / 1000.0 << " ms)\n";
+    std::cout << " (" << std::fixed << std::setprecision(2) << duration2.count() / 1000.0
+              << " ms)\n";
 
     // Exit with error if results don't match expected
     if (result1 != EXPECTED_PART1 || result2 != EXPECTED_PART2) {

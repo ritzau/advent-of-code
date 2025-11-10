@@ -1,6 +1,7 @@
-#include "solution.h"
 #include <iostream>
 #include <sstream>
+
+#include "solution.h"
 
 std::string read_stdin() {
     std::ostringstream buffer;

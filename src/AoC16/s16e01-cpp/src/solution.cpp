@@ -1,44 +1,52 @@
 #include "solution.h"
+
+#include <cmath>
+#include <set>
 #include <sstream>
 #include <vector>
-#include <set>
-#include <cmath>
 
 namespace aoc {
 
-enum class Direction {
-    North,
-    East,
-    South,
-    West
-};
+enum class Direction { North, East, South, West };
 
 Direction turn_right(Direction dir) {
     switch (dir) {
-        case Direction::North: return Direction::East;
-        case Direction::East: return Direction::South;
-        case Direction::South: return Direction::West;
-        case Direction::West: return Direction::North;
+        case Direction::North:
+            return Direction::East;
+        case Direction::East:
+            return Direction::South;
+        case Direction::South:
+            return Direction::West;
+        case Direction::West:
+            return Direction::North;
     }
     return Direction::North;
 }
 
 Direction turn_left(Direction dir) {
     switch (dir) {
-        case Direction::North: return Direction::West;
-        case Direction::West: return Direction::South;
-        case Direction::South: return Direction::East;
-        case Direction::East: return Direction::North;
+        case Direction::North:
+            return Direction::West;
+        case Direction::West:
+            return Direction::South;
+        case Direction::South:
+            return Direction::East;
+        case Direction::East:
+            return Direction::North;
     }
     return Direction::North;
 }
 
 std::pair<int, int> delta(Direction dir) {
     switch (dir) {
-        case Direction::North: return {0, 1};
-        case Direction::East: return {1, 0};
-        case Direction::South: return {0, -1};
-        case Direction::West: return {-1, 0};
+        case Direction::North:
+            return {0, 1};
+        case Direction::East:
+            return {1, 0};
+        case Direction::South:
+            return {0, -1};
+        case Direction::West:
+            return {-1, 0};
     }
     return {0, 0};
 }
@@ -56,7 +64,8 @@ std::vector<Instruction> parse_input(const std::string& input) {
     while (std::getline(stream, token, ',')) {
         // Trim leading whitespace
         size_t start = token.find_first_not_of(" \t\r\n");
-        if (start == std::string::npos) continue;
+        if (start == std::string::npos)
+            continue;
 
         token = token.substr(start);
 
@@ -66,7 +75,8 @@ std::vector<Instruction> parse_input(const std::string& input) {
             token = token.substr(0, end + 1);
         }
 
-        if (token.empty()) continue;
+        if (token.empty())
+            continue;
 
         char turn = token[0];
         int blocks = std::stoi(token.substr(1));
@@ -131,4 +141,4 @@ int64_t solve_part2(const std::string& input) {
     return 0;
 }
 
-} // namespace aoc
+}  // namespace aoc

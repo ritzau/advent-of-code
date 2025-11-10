@@ -1,4 +1,5 @@
 #include "solution.h"
+
 #include <sstream>
 #include <vector>
 
@@ -33,4 +34,4 @@ int64_t solve_part2(const std::string& input) {
     return 0;
 }
 
-} // namespace aoc
+}  // namespace aoc

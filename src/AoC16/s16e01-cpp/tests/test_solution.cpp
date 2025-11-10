@@ -1,6 +1,7 @@
-#include "solution.h"
 #include <iostream>
 #include <string>
+
+#include "solution.h"
 
 // Simple test framework
 int tests_run = 0;
@@ -12,8 +13,7 @@ void assert_eq(int64_t actual, int64_t expected, const std::string& test_name) {
         tests_passed++;
         std::cout << "✓ " << test_name << "\n";
     } else {
-        std::cout << "✗ " << test_name << ": expected " << expected
-                  << ", got " << actual << "\n";
+        std::cout << "✗ " << test_name << ": expected " << expected << ", got " << actual << "\n";
     }
 }
 
