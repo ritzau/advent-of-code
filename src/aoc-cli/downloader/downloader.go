@@ -19,14 +19,20 @@ func New(rootDir string) *Downloader {
 	return &Downloader{rootDir: rootDir}
 }
 
-// getSessionCookie reads the session cookie from .aoc-session file
+// getSessionCookie reads the session cookie from AOC_SESSION env variable or .aoc-session file
 func (d *Downloader) getSessionCookie() (string, error) {
+	// First, try to read from environment variable
+	if session := os.Getenv("AOC_SESSION"); session != "" {
+		return strings.TrimSpace(session), nil
+	}
+
+	// Fall back to reading from .aoc-session file
 	sessionFile := filepath.Join(d.rootDir, ".aoc-session")
 
 	data, err := os.ReadFile(sessionFile)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return "", fmt.Errorf(".aoc-session file not found\nCreate a .aoc-session file with your session cookie from adventofcode.com\nYou can find it in your browser cookies after logging in")
+			return "", fmt.Errorf(".aoc-session file not found and AOC_SESSION environment variable not set\nEither:\n  - Set the AOC_SESSION environment variable, or\n  - Create a .aoc-session file with your session cookie from adventofcode.com\nYou can find it in your browser cookies after logging in")
 		}
 		return "", fmt.Errorf("failed to read .aoc-session file: %w", err)
 	}
