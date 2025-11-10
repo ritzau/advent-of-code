@@ -6,6 +6,11 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     # Template flakes
+    template-cpp = {
+      url = "path:./templates/cpp";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
     template-go = {
       url = "path:./templates/go";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -71,6 +76,11 @@
     };
 
     # 2016 Day 1 Solutions (multi-language implementations)
+    s16e01-cpp = {
+      url = "path:./src/AoC16/s16e01-cpp";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
     s16e01-go = {
       url = "path:./src/AoC16/s16e01-go";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -338,10 +348,10 @@
             echo "🎄 Advent of Code Templates"
             echo ""
             echo "Available templates:"
-            echo "  Go, Haskell, Kotlin, Nim, Python, Rust, TypeScript, Zig"
+            echo "  C++, Go, Haskell, Kotlin, Nim, Python, Rust, TypeScript, Zig"
             echo ""
             echo "Solutions:"
-            echo "  src/AoC16/s16e01-*         - 2016 Day 1 (all 8 languages)"
+            echo "  src/AoC16/s16e01-*         - 2016 Day 1 (all 9 languages)"
             echo "  src/AoC21                 - 2021 solutions (Haskell)"
             echo "  src/AoC22                 - 2022 solutions (Haskell)"
             echo "  src/AoC23                 - 2023 solutions (TypeScript)"

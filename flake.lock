@@ -162,6 +162,7 @@
         "aoc23": "aoc23",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
+        "s16e01-cpp": "s16e01-cpp",
         "s16e01-go": "s16e01-go",
         "s16e01-haskell": "s16e01-haskell",
         "s16e01-kotlin": "s16e01-kotlin",
@@ -171,6 +172,7 @@
         "s16e01-typescript": "s16e01-typescript",
         "s16e01-zig": "s16e01-zig",
         "s21e01-haskell": "s21e01-haskell",
+        "template-cpp": "template-cpp",
         "template-go": "template-go",
         "template-haskell": "template-haskell",
         "template-kotlin-gradle": "template-kotlin-gradle",
@@ -181,6 +183,25 @@
         "template-typescript": "template-typescript",
         "template-zig": "template-zig"
       }
+    },
+    "s16e01-cpp": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "./src/AoC16/s16e01-cpp",
+        "type": "path"
+      },
+      "original": {
+        "path": "./src/AoC16/s16e01-cpp",
+        "type": "path"
+      },
+      "parent": []
     },
     "s16e01-go": {
       "inputs": {
@@ -407,6 +428,25 @@
         "repo": "default",
         "type": "github"
       }
+    },
+    "template-cpp": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "./templates/cpp",
+        "type": "path"
+      },
+      "original": {
+        "path": "./templates/cpp",
+        "type": "path"
+      },
+      "parent": []
     },
     "template-go": {
       "inputs": {
