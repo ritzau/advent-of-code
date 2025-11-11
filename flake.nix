@@ -21,6 +21,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    template-julia = {
+      url = "path:./templates/julia";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
     template-kotlin-gradle = {
       url = "path:./templates/kotlin-gradle";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -89,6 +94,11 @@
     s16e01-haskell = {
       url = "path:./src/AoC16/s16e01-haskell";
       # Don't follow root nixpkgs - this solution uses nixos-24.05 for GHC 9.6.5
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    s16e01-julia = {
+      url = "path:./src/AoC16/s16e01-julia";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
     s16e01-kotlin = {
@@ -348,10 +358,10 @@
             echo "🎄 Advent of Code Templates"
             echo ""
             echo "Available templates:"
-            echo "  C++, Go, Haskell, Kotlin, Nim, Python, Rust, TypeScript, Zig"
+            echo "  C++, Go, Haskell, Julia, Kotlin, Nim, Python, Rust, TypeScript, Zig"
             echo ""
             echo "Solutions:"
-            echo "  src/AoC16/s16e01-*         - 2016 Day 1 (all 9 languages)"
+            echo "  src/AoC16/s16e01-*         - 2016 Day 1 (all 10 languages)"
             echo "  src/AoC21                 - 2021 solutions (Haskell)"
             echo "  src/AoC22                 - 2022 solutions (Haskell)"
             echo "  src/AoC23                 - 2023 solutions (TypeScript)"
