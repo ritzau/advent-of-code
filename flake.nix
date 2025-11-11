@@ -21,6 +21,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    template-julia = {
+      url = "path:./templates/julia";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
     template-kotlin-gradle = {
       url = "path:./templates/kotlin-gradle";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -348,7 +353,7 @@
             echo "🎄 Advent of Code Templates"
             echo ""
             echo "Available templates:"
-            echo "  C++, Go, Haskell, Kotlin, Nim, Python, Rust, TypeScript, Zig"
+            echo "  C++, Go, Haskell, Julia, Kotlin, Nim, Python, Rust, TypeScript, Zig"
             echo ""
             echo "Solutions:"
             echo "  src/AoC16/s16e01-*         - 2016 Day 1 (all 9 languages)"
