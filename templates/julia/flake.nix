@@ -29,8 +29,7 @@
           buildInputs = [ julia-env ];
 
           buildPhase = ''
-            # Precompile if needed
-            ${julia-env}/bin/julia -e 'using Pkg; Pkg.activate("."); Pkg.precompile()'
+            # No build phase needed for simple Julia scripts
           '';
 
           installPhase = ''
