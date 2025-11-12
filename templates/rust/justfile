@@ -14,13 +14,15 @@ use_nix := if force_nix != '' { 'true' } else { if shell_root == justfile_direct
 build:
     {{ if use_nix == 'true' { 'nix build' } else { 'cargo build --release' } }}
 
-# Run the main verification binary
-run:
-    {{ if use_nix == 'true' { 'nix run' } else { 'cargo run --release' } }}
-
-# Run a specific part with input from stdin
-run-part PART:
-    {{ if use_nix == 'true' { 'nix run .#part{{PART}}' } else { 'cargo run --release --bin template-rust-part{{PART}}' } }}
+# Run the solution (optionally specify part1 or part2)
+run PART='':
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ "{{ PART }}" = "" ]; then
+        {{ if use_nix == 'true' { 'nix run' } else { 'cargo run --release' } }}
+    else
+        {{ if use_nix == 'true' { 'nix run .#template-rust-{{PART}}' } else { 'cargo run --release --bin template-rust-{{PART}}' } }}
+    fi
 
 # Format code (modifies files)
 format:

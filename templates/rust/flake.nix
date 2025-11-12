@@ -121,7 +121,7 @@
             echo ""
             echo "Available commands (auto-detected):"
             echo "  just build        - Build solution"
-            echo "  just run          - Run verification"
+            echo "  just run [PART]   - Run verification (part1, part2, or default)"
             echo "  just check-test   - Run tests"
             echo "  just check-lint   - Run linter"
             echo "  just check-format - Check formatting"
