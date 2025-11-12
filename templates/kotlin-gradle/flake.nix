@@ -24,25 +24,31 @@
             pkgs.temurin-bin-21
             updateLocks
             pkgs.ktlint
+
+            # Common utilities
+            pkgs.just      # Command runner
+            pkgs.jq        # JSON processing
+            pkgs.ripgrep   # Fast search
           ];
 
           shellHook = ''
+            # Mark that we're in this project's Nix shell
+            export AOC_NIX_SHELL_ROOT="$PWD"
+
             echo "🎄 Kotlin environment ready"
             echo ""
-            echo "Local dev:"
-            echo "  ./gradlew build        - Build with Gradle"
-            echo "  ./gradlew run          - Run application"
-            echo "  ktlint -F src/**/*.kt  - Format code"
-            echo "  update-locks           - Update dependency locks"
+            echo "Available commands (auto-detected):"
+            echo "  just build        - Build solution"
+            echo "  just run [PART]   - Run verification (part1, part2, or default)"
+            echo "  just check-test   - Run tests"
+            echo "  just check-format - Check formatting"
+            echo "  just format       - Format code"
+            echo "  just check-all    - Run all checks (hermetic)"
             echo ""
-            echo "Nix commands:"
-            echo "  nix build              - Build package"
-            echo "  nix run                - Run verification"
-            echo "  nix flake check        - Run all checks"
-            echo ""
-            echo "Just shortcuts:"
-            echo "  just check             - Run all checks"
-            echo "  just run               - Run verification"
+            echo "Environment:"
+            echo "  In shell: uses local gradle/ktlint commands (fast)"
+            echo "  Outside:  uses nix commands (hermetic)"
+            echo "  Set JUST_FORCE_NIX=1 to force Nix mode"
           '';
         };
         packages.default = package;

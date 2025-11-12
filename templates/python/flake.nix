@@ -125,29 +125,38 @@
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
+            # Python toolchain
             python3
             python3Packages.pytest
             python3Packages.hatchling
             ruff
             uv
+
+            # Common utilities
+            just      # Command runner
+            jq        # JSON processing
+            ripgrep   # Fast search
           ];
 
           shellHook = ''
+            # Mark that we're in this project's Nix shell
+            export AOC_NIX_SHELL_ROOT="$PWD"
+
             echo "🎄 Python environment ready"
             echo ""
-            echo "Local dev with uv:"
-            echo "  uv run pytest       - Run tests"
-            echo "  uv run ruff check   - Lint code"
-            echo "  uv run ruff format  - Format code"
+            echo "Available commands (auto-detected):"
+            echo "  just build        - Build solution"
+            echo "  just run [PART]   - Run verification (part1, part2, or default)"
+            echo "  just check-test   - Run tests"
+            echo "  just check-lint   - Run linter"
+            echo "  just check-format - Check formatting"
+            echo "  just format       - Format code"
+            echo "  just check-all    - Run all checks (hermetic)"
             echo ""
-            echo "Nix commands:"
-            echo "  nix build           - Build package"
-            echo "  nix run             - Run verification"
-            echo "  nix flake check     - Run all checks"
-            echo ""
-            echo "Just shortcuts:"
-            echo "  just check          - Run all checks"
-            echo "  just run            - Run verification"
+            echo "Environment:"
+            echo "  In shell: uses local uv/ruff commands (fast)"
+            echo "  Outside:  uses nix commands (hermetic)"
+            echo "  Set JUST_FORCE_NIX=1 to force Nix mode"
           '';
         };
       }

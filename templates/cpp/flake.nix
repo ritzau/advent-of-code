@@ -106,11 +106,36 @@
         };
 
         devShells.default = pkgs.mkShell {
-          buildInputs = [
-            pkgs.cmake
-            pkgs.clang-tools
-            pkgs.just
+          buildInputs = with pkgs; [
+            # C++ build tools
+            cmake
+            clang-tools
+
+            # Common utilities
+            just      # Command runner
+            jq        # JSON processing
+            ripgrep   # Fast search
           ];
+
+          shellHook = ''
+            # Mark that we're in this project's Nix shell
+            export AOC_NIX_SHELL_ROOT="$PWD"
+
+            echo "🎄 C++ environment ready"
+            echo ""
+            echo "Available commands (auto-detected):"
+            echo "  just build        - Build solution"
+            echo "  just run [PART]   - Run verification (part1, part2, or default)"
+            echo "  just check-test   - Run tests"
+            echo "  just check-format - Check formatting"
+            echo "  just format       - Format code"
+            echo "  just check-all    - Run all checks (hermetic)"
+            echo ""
+            echo "Environment:"
+            echo "  In shell: uses local cmake/ctest commands (fast)"
+            echo "  Outside:  uses nix commands (hermetic)"
+            echo "  Set JUST_FORCE_NIX=1 to force Nix mode"
+          '';
         };
       }
     );

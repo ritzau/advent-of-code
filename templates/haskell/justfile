@@ -1,41 +1,58 @@
 # Advent of Code Solution
-# All commands use Nix for reproducible builds
+# Commands auto-detect Nix shell and use local tools when available
 
 # Get current system (e.g., x86_64-linux, aarch64-darwin)
 system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
 
+# Detect if we should use Nix or local commands
+# Use Nix if: JUST_FORCE_NIX is set, OR we're not in the correct shell
+force_nix := env_var_or_default('JUST_FORCE_NIX', '')
+shell_root := env_var_or_default('AOC_NIX_SHELL_ROOT', '')
+use_nix := if force_nix != '' { 'true' } else { if shell_root == justfile_directory() { 'false' } else { 'true' } }
+
 # Build the solution
 build:
-    nix build
+    {{ if use_nix == 'true' { 'nix build' } else { 'cabal build' } }}
 
-# Run the default app (part1)
-run:
-    nix run
+# Run the solution (optionally specify part1 or part2)
+run PART='':
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ "{{ PART }}" = "" ]; then
+        {{ if use_nix == 'true' { 'nix run' } else { 'cabal run template-haskell-part1' } }}
+    else
+        {{ if use_nix == 'true' { 'nix run .#template-haskell-{{PART}}' } else { 'cabal run template-haskell-{{PART}}' } }}
+    fi
 
-# Run a specific part with input from stdin
-run-part PART:
-    nix run .#part{{PART}}
+# Format code (modifies files)
+format:
+    {{ if use_nix == 'true' { 'nix develop --command ormolu -i *.hs' } else { 'ormolu -i *.hs' } }}
 
-# Run all checks (build + tests + format)
+# Run all checks (build + tests + lint) - always hermetic
 check-all:
     nix flake check
 
-# Run tests only
+# Run tests
 check-test:
-    nix build .#checks.{{system}}.test
+    {{ if use_nix == 'true' { 'nix build .#checks.{{system}}.test' } else { 'cabal test' } }}
 
 # Check formatting without modifying files
 check-format:
-    nix build .#checks.{{system}}.format-check
+    {{ if use_nix == 'true' { 'nix build .#checks.{{system}}.format-check' } else { 'ormolu -c *.hs' } }}
 
-# Format code
-format:
-    nix develop --command ormolu -i *.hs
-
-# Lint code
-lint:
-    nix develop --command hlint .
+# Run hlint lint
+check-lint:
+    {{ if use_nix == 'true' { 'nix build .#checks.{{system}}.lint' } else { 'hlint .' } }}
 
 # Clean build artifacts
 clean:
     rm -rf dist-newstyle/ result .ghc.environment.*
+
+# Show detected environment mode (debug command)
+show-env:
+    @echo "JUST_FORCE_NIX: {{ force_nix }}"
+    @echo "AOC_NIX_SHELL_ROOT: {{ shell_root }}"
+    @echo "justfile_directory(): {{ justfile_directory() }}"
+    @echo "Using Nix: {{ use_nix }}"
+    @echo ""
+    {{ if use_nix == 'true' { '@echo "Mode: Nix commands (reproducible builds)"' } else { '@echo "Mode: Local commands (fast iteration)"' } }}

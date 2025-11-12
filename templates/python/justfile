@@ -1,41 +1,58 @@
 # Advent of Code Solution
-# All commands use Nix for reproducible builds
+# Commands auto-detect Nix shell and use local tools when available
 
 # Get current system (e.g., x86_64-linux, aarch64-darwin)
 system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
 
+# Detect if we should use Nix or local commands
+# Use Nix if: JUST_FORCE_NIX is set, OR we're not in the correct shell
+force_nix := env_var_or_default('JUST_FORCE_NIX', '')
+shell_root := env_var_or_default('AOC_NIX_SHELL_ROOT', '')
+use_nix := if force_nix != '' { 'true' } else { if shell_root == justfile_directory() { 'false' } else { 'true' } }
+
 # Build the solution
 build:
-    nix build
+    {{ if use_nix == 'true' { 'nix build' } else { 'uv build' } }}
 
-# Run the main verification binary
-run:
-    nix run
+# Run the solution (optionally specify part1 or part2)
+run PART='':
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ "{{ PART }}" = "" ]; then
+        {{ if use_nix == 'true' { 'nix run' } else { 'uv run python -m template_python' } }}
+    else
+        {{ if use_nix == 'true' { 'nix run .#template-python-{{PART}}' } else { 'uv run python -m template_python.{{PART}}' } }}
+    fi
 
-# Run a specific part with input from stdin
-run-part PART:
-    nix run .#part{{PART}}
-
-# Format code
+# Format code (modifies files)
 format:
-    nix develop --command ruff format template_python/ tests/
+    {{ if use_nix == 'true' { 'nix develop --command ruff format template_python/ tests/' } else { 'ruff format template_python/ tests/' } }}
 
-# Run all checks (build + tests + lint)
+# Run all checks (build + tests + lint) - always hermetic
 check-all:
     nix flake check
 
-# Run tests only
+# Run tests
 check-test:
-    nix build .#checks.{{system}}.test
+    {{ if use_nix == 'true' { 'nix build .#checks.{{system}}.test' } else { 'uv run pytest tests/ -v' } }}
 
-# Run ruff lint only
+# Run ruff lint
 check-lint:
-    nix build .#checks.{{system}}.lint
+    {{ if use_nix == 'true' { 'nix build .#checks.{{system}}.lint' } else { 'ruff check template_python/ tests/' } }}
 
 # Check formatting without modifying files
 check-format:
-    nix build .#checks.{{system}}.format-check
+    {{ if use_nix == 'true' { 'nix build .#checks.{{system}}.format-check' } else { 'ruff format --check template_python/ tests/' } }}
 
 # Clean build artifacts
 clean:
-    rm -rf result .pytest_cache/ __pycache__/ template_python/__pycache__/ tests/__pycache__/
+    rm -rf result .pytest_cache/ __pycache__/ template_python/__pycache__/ tests/__pycache__/ dist/
+
+# Show detected environment mode (debug command)
+show-env:
+    @echo "JUST_FORCE_NIX: {{ force_nix }}"
+    @echo "AOC_NIX_SHELL_ROOT: {{ shell_root }}"
+    @echo "justfile_directory(): {{ justfile_directory() }}"
+    @echo "Using Nix: {{ use_nix }}"
+    @echo ""
+    {{ if use_nix == 'true' { '@echo "Mode: Nix commands (reproducible builds)"' } else { '@echo "Mode: Local commands (fast iteration)"' } }}

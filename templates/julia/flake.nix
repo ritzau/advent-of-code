@@ -124,24 +124,33 @@
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
+            # Julia environment
             julia-env
+
+            # Common utilities
+            just      # Command runner
+            jq        # JSON processing
+            ripgrep   # Fast search
           ];
 
           shellHook = ''
+            # Mark that we're in this project's Nix shell
+            export AOC_NIX_SHELL_ROOT="$PWD"
+
             echo "🎄 Julia environment ready"
             echo ""
-            echo "Local dev:"
-            echo "  julia src/main.jl < input.txt  - Run verification"
-            echo "  julia -e 'using Test; include(\"src/lib.jl\"); include(\"test/runtests.jl\")' - Run tests"
+            echo "Available commands (auto-detected):"
+            echo "  just build        - Build solution"
+            echo "  just run [PART]   - Run verification (part1, part2, or default)"
+            echo "  just check-test   - Run tests"
+            echo "  just check-format - Check formatting"
+            echo "  just format       - Format code (not yet standardized)"
+            echo "  just check-all    - Run all checks (hermetic)"
             echo ""
-            echo "Nix commands:"
-            echo "  nix build      - Build package"
-            echo "  nix run        - Run verification"
-            echo "  nix flake check - Run all checks"
-            echo ""
-            echo "Just shortcuts:"
-            echo "  just check     - Run all checks"
-            echo "  just run       - Run verification"
+            echo "Environment:"
+            echo "  In shell: uses local julia commands (fast)"
+            echo "  Outside:  uses nix commands (hermetic)"
+            echo "  Set JUST_FORCE_NIX=1 to force Nix mode"
           '';
         };
       }

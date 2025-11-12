@@ -51,6 +51,20 @@
               echo "Format check passed" > $out/result
             '';
           };
+
+          # Run hlint linter
+          lint = pkgs.stdenv.mkDerivation {
+            name = "template-haskell-lint";
+            src = ./.;
+            nativeBuildInputs = [ haskellPackages.hlint ];
+            buildPhase = ''
+              hlint . || (echo "Lint check failed. Fix the issues reported by hlint." && exit 1)
+            '';
+            installPhase = ''
+              mkdir -p $out
+              echo "Lint passed" > $out/result
+            '';
+          };
         };
 
         apps = {
@@ -76,35 +90,39 @@
         };
 
         devShells.default = pkgs.mkShell {
-          buildInputs = [
+          buildInputs = with pkgs; [
+            # Haskell toolchain
             haskellPackages.ghc
             haskellPackages.cabal-install
             haskellPackages.haskell-language-server
             haskellPackages.ormolu
             haskellPackages.hlint
+
+            # Common utilities
+            just      # Command runner
+            jq        # JSON processing
+            ripgrep   # Fast search
           ];
 
           shellHook = ''
+            # Mark that we're in this project's Nix shell
+            export AOC_NIX_SHELL_ROOT="$PWD"
+
             echo "🎄 Haskell environment ready"
             echo ""
-            echo "Local dev:"
-            echo "  cabal build         - Build all executables"
-            echo "  cabal run part1     - Run part1"
-            echo "  cabal test          - Run tests"
-            echo "  ormolu -i *.hs      - Format code"
-            echo "  hlint .             - Lint code"
+            echo "Available commands (auto-detected):"
+            echo "  just build        - Build solution"
+            echo "  just run [PART]   - Run verification (part1, part2, or default)"
+            echo "  just check-test   - Run tests"
+            echo "  just check-lint   - Run linter"
+            echo "  just check-format - Check formatting"
+            echo "  just format       - Format code"
+            echo "  just check-all    - Run all checks (hermetic)"
             echo ""
-            echo "Nix commands:"
-            echo "  nix build           - Build package"
-            echo "  nix run .#part1     - Run part1"
-            echo "  nix run .#part2     - Run part2"
-            echo "  nix flake check     - Run all checks"
-            echo ""
-            echo "Just shortcuts:"
-            echo "  just check          - Run all checks"
-            echo "  just test           - Run tests"
-            echo "  just format         - Format code"
-            echo "  just format-check   - Check formatting"
+            echo "Environment:"
+            echo "  In shell: uses local cabal commands (fast)"
+            echo "  Outside:  uses nix commands (hermetic)"
+            echo "  Set JUST_FORCE_NIX=1 to force Nix mode"
           '';
         };
       }

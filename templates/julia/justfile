@@ -1,37 +1,54 @@
 # Advent of Code Solution
-# All commands use Nix for reproducible builds
+# Commands auto-detect Nix shell and use local tools when available
 
 # Get current system (e.g., x86_64-linux, aarch64-darwin)
 system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
 
+# Detect if we should use Nix or local commands
+# Use Nix if: JUST_FORCE_NIX is set, OR we're not in the correct shell
+force_nix := env_var_or_default('JUST_FORCE_NIX', '')
+shell_root := env_var_or_default('AOC_NIX_SHELL_ROOT', '')
+use_nix := if force_nix != '' { 'true' } else { if shell_root == justfile_directory() { 'false' } else { 'true' } }
+
 # Build the solution
 build:
-    nix build
+    {{ if use_nix == 'true' { 'nix build' } else { '@echo "Julia scripts do not require compilation"' } }}
 
-# Run the main verification binary
-run:
-    nix run
-
-# Run a specific part with input from stdin
-run-part PART:
-    nix run .#part{{PART}}
+# Run the solution (optionally specify part1 or part2)
+run PART='':
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ "{{ PART }}" = "" ]; then
+        {{ if use_nix == 'true' { 'nix run' } else { 'julia src/main.jl' } }}
+    else
+        {{ if use_nix == 'true' { 'nix run .#template-julia-{{PART}}' } else { 'julia src/{{PART}}.jl' } }}
+    fi
 
 # Format code (Julia doesn't have standard formatter)
 format:
     @echo "Julia formatting not yet standardized - consider using JuliaFormatter.jl"
 
-# Run all checks (build + tests)
+# Run all checks (build + tests) - always hermetic
 check-all:
     nix flake check
 
-# Run tests only
+# Run tests
 check-test:
-    nix build .#checks.{{system}}.test
+    {{ if use_nix == 'true' { 'nix build .#checks.{{system}}.test' } else { 'julia -e \'using Test; include("src/lib.jl"); include("test/runtests.jl")\'' } }}
 
 # Check formatting without modifying files
 check-format:
-    nix build .#checks.{{system}}.format-check
+    {{ if use_nix == 'true' { 'nix build .#checks.{{system}}.format-check' } else { '@echo "Julia formatting not yet standardized"' } }}
 
 # Clean build artifacts
 clean:
     rm -rf result
+
+# Show detected environment mode (debug command)
+show-env:
+    @echo "JUST_FORCE_NIX: {{ force_nix }}"
+    @echo "AOC_NIX_SHELL_ROOT: {{ shell_root }}"
+    @echo "justfile_directory(): {{ justfile_directory() }}"
+    @echo "Using Nix: {{ use_nix }}"
+    @echo ""
+    {{ if use_nix == 'true' { '@echo "Mode: Nix commands (reproducible builds)"' } else { '@echo "Mode: Local commands (fast iteration)"' } }}

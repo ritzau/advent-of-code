@@ -22,25 +22,31 @@
             pkgs.kotlin
             pkgs.temurin-bin-21
             pkgs.ktlint
+
+            # Common utilities
+            pkgs.just      # Command runner
+            pkgs.jq        # JSON processing
+            pkgs.ripgrep   # Fast search
           ];
 
           shellHook = ''
+            # Mark that we're in this project's Nix shell
+            export AOC_NIX_SHELL_ROOT="$PWD"
+
             echo "🎄 Kotlin environment ready (kotlinc-based)"
             echo ""
-            echo "Local dev:"
-            echo "  ./build.sh             - Build with kotlinc"
-            echo "  ./run.sh               - Run application"
-            echo "  ./lint.sh              - Lint with ktlint"
-            echo "  ktlint -F src/**/*.kt  - Format code"
+            echo "Available commands (auto-detected):"
+            echo "  just build        - Build solution"
+            echo "  just run [PART]   - Run verification (part1, part2, or default)"
+            echo "  just check-test   - Run tests"
+            echo "  just check-format - Check formatting"
+            echo "  just format       - Format code"
+            echo "  just check-all    - Run all checks (hermetic)"
             echo ""
-            echo "Nix commands:"
-            echo "  nix build              - Build package"
-            echo "  nix run                - Run verification"
-            echo "  nix flake check        - Run all checks"
-            echo ""
-            echo "Just shortcuts:"
-            echo "  just check             - Run all checks"
-            echo "  just run               - Run verification"
+            echo "Environment:"
+            echo "  In shell: uses local kotlinc commands (fast)"
+            echo "  Outside:  uses nix commands (hermetic)"
+            echo "  Set JUST_FORCE_NIX=1 to force Nix mode"
           '';
         };
 

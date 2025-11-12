@@ -109,30 +109,34 @@
 
         devShells.default = pkgs.mkShell {
           buildInputs = [
+            # Zig toolchain
             zig
             pkgs.zls
+
+            # Common utilities
+            pkgs.just      # Command runner
+            pkgs.jq        # JSON processing
+            pkgs.ripgrep   # Fast search
           ];
 
           shellHook = ''
+            # Mark that we're in this project's Nix shell
+            export AOC_NIX_SHELL_ROOT="$PWD"
+
             echo "🎄 Zig environment ready"
             echo ""
-            echo "Local dev:"
-            echo "  zig build-exe part1.zig - Build part1"
-            echo "  zig test common.zig     - Run tests"
-            echo "  zig fmt .               - Format code"
-            echo "  zig fmt --check .       - Check formatting"
-            echo ""
-            echo "Nix commands:"
-            echo "  nix build       - Build package"
-            echo "  nix run .#part1 - Run part1"
-            echo "  nix run .#part2 - Run part2"
-            echo "  nix flake check - Run all checks"
-            echo ""
-            echo "Just shortcuts:"
-            echo "  just check        - Run all checks"
-            echo "  just test         - Run tests"
+            echo "Available commands (auto-detected):"
+            echo "  just build        - Build solution"
+            echo "  just run [PART]   - Run verification (part1, part2, or default)"
+            echo "  just check-test   - Run tests"
+            echo "  just check-format - Check formatting"
             echo "  just format       - Format code"
-            echo "  just format-check - Check formatting"
+            echo "  just check-all    - Run all checks (hermetic)"
+            echo ""
+            echo "Environment:"
+            echo "  In shell: uses local zig commands (fast)"
+            echo "  Outside:  uses nix commands (hermetic)"
+            echo "  Set JUST_FORCE_NIX=1 to force Nix mode"
           '';
         };
       }

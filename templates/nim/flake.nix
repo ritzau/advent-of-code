@@ -104,26 +104,34 @@
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
+            # Nim toolchain
             nim
             nimlsp
+
+            # Common utilities
+            just      # Command runner
+            jq        # JSON processing
+            ripgrep   # Fast search
           ];
 
           shellHook = ''
+            # Mark that we're in this project's Nix shell
+            export AOC_NIX_SHELL_ROOT="$PWD"
+
             echo "🎄 Nim environment ready"
             echo ""
-            echo "Local dev:"
-            echo "  nim c -r common.nim  - Run tests"
-            echo "  nim c part1.nim      - Build part1"
-            echo "  nimpretty *.nim      - Format code"
+            echo "Available commands (auto-detected):"
+            echo "  just build        - Build solution"
+            echo "  just run [PART]   - Run verification (part1, part2, or default)"
+            echo "  just check-test   - Run tests"
+            echo "  just check-format - Check formatting"
+            echo "  just format       - Format code"
+            echo "  just check-all    - Run all checks (hermetic)"
             echo ""
-            echo "Nix commands:"
-            echo "  nix build            - Build package"
-            echo "  nix run              - Run verification"
-            echo "  nix flake check      - Run all checks"
-            echo ""
-            echo "Just shortcuts:"
-            echo "  just check           - Run all checks"
-            echo "  just run             - Run verification"
+            echo "Environment:"
+            echo "  In shell: uses local nim commands (fast)"
+            echo "  Outside:  uses nix commands (hermetic)"
+            echo "  Set JUST_FORCE_NIX=1 to force Nix mode"
           '';
         };
       }
