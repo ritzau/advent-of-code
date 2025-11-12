@@ -22,33 +22,25 @@ run:
 run-part PART:
     {{ if use_nix == 'true' { 'nix run .#part{{PART}}' } else { 'cargo run --release --bin template-rust-part{{PART}}' } }}
 
-# Run tests
-test:
-    {{ if use_nix == 'true' { 'nix develop --command cargo test' } else { 'cargo test' } }}
-
-# Format code
+# Format code (modifies files)
 format:
     {{ if use_nix == 'true' { 'nix develop --command cargo fmt' } else { 'cargo fmt' } }}
 
-# Run clippy lint
-lint:
-    {{ if use_nix == 'true' { 'nix develop --command cargo clippy' } else { 'cargo clippy -- -D warnings' } }}
-
-# Run all checks (build + tests + lint) - always use Nix for reproducibility
+# Run all checks (build + tests + lint) - always hermetic
 check-all:
     nix flake check
 
-# Run tests only (Nix check)
+# Run tests
 check-test:
-    nix build .#checks.{{system}}.test
+    {{ if use_nix == 'true' { 'nix build .#checks.{{system}}.test' } else { 'cargo test' } }}
 
-# Run clippy lint only (Nix check)
+# Run clippy lint
 check-lint:
-    nix build .#checks.{{system}}.lint
+    {{ if use_nix == 'true' { 'nix build .#checks.{{system}}.lint' } else { 'cargo clippy -- -D warnings' } }}
 
-# Check formatting without modifying files (Nix check)
+# Check formatting without modifying files
 check-format:
-    nix build .#checks.{{system}}.format-check
+    {{ if use_nix == 'true' { 'nix build .#checks.{{system}}.format-check' } else { 'cargo fmt --check' } }}
 
 # Clean build artifacts
 clean:
