@@ -100,29 +100,37 @@
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
+            # Rust toolchain
             rustc
             cargo
             rustfmt
             clippy
             rust-analyzer
+
+            # Common utilities
+            just      # Command runner
+            jq        # JSON processing
+            ripgrep   # Fast search
           ];
 
           shellHook = ''
+            # Mark that we're in this project's Nix shell
+            export AOC_NIX_SHELL_ROOT="$PWD"
+
             echo "🎄 Rust environment ready"
             echo ""
-            echo "Local dev:"
-            echo "  cargo build    - Build locally"
-            echo "  cargo test     - Run tests"
-            echo "  cargo clippy   - Lint code"
+            echo "Local dev (auto-detected in shell):"
+            echo "  just build     - Build locally"
+            echo "  just test      - Run tests"
+            echo "  just format    - Format code"
             echo ""
             echo "Nix commands:"
             echo "  nix build      - Build package"
             echo "  nix run        - Run verification"
             echo "  nix flake check - Run all checks"
             echo ""
-            echo "Just shortcuts:"
-            echo "  just check     - Run all checks"
-            echo "  just run       - Run verification"
+            echo "Environment:"
+            echo "  Set JUST_FORCE_NIX=1 to force Nix mode"
           '';
         };
       }
