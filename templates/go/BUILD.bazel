@@ -1,0 +1,10 @@
+"""Build targets for Advent of Code Go solution."""
+
+load("@rules_go//go:def.bzl", "go_binary")
+
+# Main verification binary - runs both parts and validates results
+go_binary(
+    name = "main",
+    srcs = ["main.go"],
+    deps = ["//templates/go/common"],
+)

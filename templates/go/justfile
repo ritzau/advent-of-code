@@ -1,37 +1,33 @@
-# Advent of Code Solution
-# All commands use Nix for reproducible builds
+# Advent of Code Go Solution
 
-# Get current system (e.g., x86_64-linux, aarch64-darwin)
-system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
-
-# Build the solution
+# Build all targets
 build:
-    nix build
+    bazel build //templates/go/...
 
 # Run the main verification binary
 run:
-    nix run
+    bazel run //templates/go:main
 
 # Run a specific part with input from stdin
 run-part PART:
-    nix run .#part{{PART}}
+    bazel run //templates/go/cmd/template-go-part{{PART}}:part{{PART}}
+
+# Run tests
+test:
+    bazel test //templates/go/...
 
 # Format code
 format:
-    nix develop --command gofmt -w .
+    gofmt -w .
 
-# Run all checks (build + tests)
-check-all:
-    nix flake check
-
-# Run tests only
-check-test:
-    nix build .#checks.{{system}}.test
+# Run all checks (build + tests + format)
+check-all: build test check-format
 
 # Check formatting without modifying files
 check-format:
-    nix build .#checks.{{system}}.format-check
+    @echo "Checking code formatting..."
+    @test -z "$$(gofmt -l .)" || (echo "Format check failed. Run 'just format' to fix." && exit 1)
 
 # Clean build artifacts
 clean:
-    rm -rf build/ result
+    bazel clean

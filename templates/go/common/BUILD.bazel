@@ -1,0 +1,18 @@
+"""Build targets for common Go library."""
+
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+# Common library with solve functions
+go_library(
+    name = "common",
+    srcs = ["common.go"],
+    importpath = "template-go/common",
+    visibility = ["//templates/go:__subpackages__"],
+)
+
+# Unit tests
+go_test(
+    name = "common_test",
+    srcs = ["common_test.go"],
+    embed = [":common"],
+)
