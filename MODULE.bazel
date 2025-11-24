@@ -67,7 +67,7 @@ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
     hub_name = "pip_python_template",
     python_version = "3.13.9",
-    requirements_lock = "//templates/python:requirements.txt",
+    requirements_lock = "//templates/python:requirements_lock.txt",
 )
 use_repo(pip, "pip_python_template")
 
