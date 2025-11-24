@@ -2,48 +2,33 @@
 
 # Part 1 binary - outputs only part 1 result
 genrule(
-    name = "part1_bin",
+    name = "part1",
     srcs = [
         "part1.zig",
         "common.zig",
     ],
-    outs = ["part1"],
+    outs = ["part1_exe"],
     cmd = "zig build-exe -O ReleaseFast -femit-bin=$@ $(location part1.zig)",
     executable = True,
 )
 
-sh_binary(
-    name = "part1",
-    srcs = [":part1_bin"],
-)
-
 # Part 2 binary - outputs only part 2 result
 genrule(
-    name = "part2_bin",
+    name = "part2",
     srcs = [
         "part2.zig",
         "common.zig",
     ],
-    outs = ["part2"],
+    outs = ["part2_exe"],
     cmd = "zig build-exe -O ReleaseFast -femit-bin=$@ $(location part2.zig)",
     executable = True,
 )
 
-sh_binary(
-    name = "part2",
-    srcs = [":part2_bin"],
-)
-
 # Unit tests
 genrule(
-    name = "test_common",
+    name = "common_test",
     srcs = ["common.zig"],
-    outs = ["test_common_bin"],
+    outs = ["test_common_exe"],
     cmd = "zig test -femit-bin=$@ $(location common.zig)",
     executable = True,
-)
-
-sh_test(
-    name = "common_test",
-    srcs = [":test_common"],
 )
