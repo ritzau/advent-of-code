@@ -12,7 +12,7 @@ ts_project(
         "part1.ts",
         "part2.ts",
     ],
-    declaration = True,
+    resolve_json_module = True,
     tsconfig = ":tsconfig.json",
     transpiler = "tsc",
 )
