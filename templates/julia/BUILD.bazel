@@ -60,12 +60,27 @@ chmod +x $@
     executable = True,
 )
 
+# Precompile Julia depot
+genrule(
+    name = "julia_depot",
+    srcs = ["src/lib.jl"],
+    outs = ["depot.tar.gz"],
+    cmd = """
+        DEPOT_DIR=$$(mktemp -d)
+        export JULIA_DEPOT_PATH=$$DEPOT_DIR
+        julia -e 'include("$(location src/lib.jl)"); using .AoCSolution'
+        tar czf $@ -C $$DEPOT_DIR .
+        rm -rf $$DEPOT_DIR
+    """,
+)
+
 # Unit tests
 genrule(
     name = "aoc_tests_bin",
     srcs = [
         "test/runtests.jl",
         "src/lib.jl",
+        ":julia_depot",
     ],
     outs = ["run_tests.sh"],
     cmd = """
@@ -73,9 +88,10 @@ cat > $@ << 'EOF'
 #!/bin/bash
 # Files are in runfiles at the same relative location as the executable
 cd "$$(dirname "$$0")"
-# Create temporary Julia depot to avoid sandbox permission issues
+# Extract precompiled depot
 export JULIA_DEPOT_PATH="$$(mktemp -d)"
 trap "rm -rf $$JULIA_DEPOT_PATH" EXIT
+tar xzf depot.tar.gz -C $$JULIA_DEPOT_PATH
 julia -e 'include("test/runtests.jl")'
 EOF
 chmod +x $@
@@ -89,5 +105,6 @@ sh_test(
     data = [
         "test/runtests.jl",
         "src/lib.jl",
+        ":julia_depot",
     ],
 )
