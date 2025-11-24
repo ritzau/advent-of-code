@@ -71,10 +71,9 @@ genrule(
     cmd = """
 cat > $@ << 'EOF'
 #!/bin/bash
-# Navigate to the runfiles directory where our source files are
-RUNFILES_DIR=$$(dirname $$0)
-cd $$RUNFILES_DIR/_main/templates/julia
-julia -e 'include("test/runtests.jl")'
+# Files are already in runfiles, just run the test from there
+cd "$$(dirname "$$0")/.."
+julia -e 'include("templates/julia/test/runtests.jl")'
 EOF
 chmod +x $@
     """,
