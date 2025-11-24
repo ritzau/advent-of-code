@@ -56,3 +56,7 @@ use_repo(
     go_deps,
     # No external dependencies in template yet
 )
+
+# Kotlin rules
+bazel_dep(name = "rules_kotlin", version = "2.1.0")
+bazel_dep(name = "rules_jvm_external", version = "6.5")
