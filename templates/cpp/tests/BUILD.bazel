@@ -1,0 +1,7 @@
+"""Test targets for Advent of Code solution."""
+
+cc_test(
+    name = "solution_test",
+    srcs = ["test_solution.cpp"],
+    deps = ["//src:solution"],
+)

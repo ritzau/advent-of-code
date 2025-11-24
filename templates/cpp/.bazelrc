@@ -1,0 +1,30 @@
+# Advent of Code C++ Bazel Configuration
+
+# Use Bzlmod (MODULE.bazel) for dependency management
+common --enable_bzlmod
+
+# C++20 standard
+build --cxxopt=-std=c++20
+build --host_cxxopt=-std=c++20
+
+# Strict compiler warnings
+build --cxxopt=-Wall
+build --cxxopt=-Wextra
+build --cxxopt=-Wpedantic
+
+# Optimize release builds
+build:release --compilation_mode=opt
+build:release --copt=-O3
+
+# Debug builds
+build:debug --compilation_mode=dbg
+
+# Enable hermetic toolchain
+build --incompatible_enable_cc_toolchain_resolution
+
+# Show test output on failure
+test --test_output=errors
+
+# Colored output
+build --color=yes
+test --color=yes
