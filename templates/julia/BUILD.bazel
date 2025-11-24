@@ -73,6 +73,9 @@ cat > $@ << 'EOF'
 #!/bin/bash
 # Files are in runfiles at the same relative location as the executable
 cd "$$(dirname "$$0")"
+# Create temporary Julia depot to avoid sandbox permission issues
+export JULIA_DEPOT_PATH="$$(mktemp -d)"
+trap "rm -rf $$JULIA_DEPOT_PATH" EXIT
 julia -e 'include("test/runtests.jl")'
 EOF
 chmod +x $@
