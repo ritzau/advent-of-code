@@ -66,10 +66,15 @@ python.toolchain(
 node = use_extension("@aspect_rules_js//js:extensions.bzl", "node")
 node.toolchain(node_version = "25.2.1")
 
+# TypeScript toolchain
+rules_ts_ext = use_extension("@aspect_rules_ts//ts:extensions.bzl", "ext", dev_dependency = True)
+rules_ts_ext.deps()
+use_repo(rules_ts_ext, "npm_typescript")
+
 # npm dependencies for TypeScript template
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
 npm.npm_translate_lock(
-    name = "npm_typescript",
+    name = "npm_typescript_template",
     pnpm_lock = "//templates/typescript:pnpm-lock.yaml",
 )
-use_repo(npm, "npm_typescript")
+use_repo(npm, "npm_typescript_template")
