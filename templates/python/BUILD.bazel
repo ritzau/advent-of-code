@@ -9,6 +9,7 @@ py_library(
         "template_python/__init__.py",
         "template_python/common.py",
     ],
+    imports = ["."],
     visibility = ["//visibility:public"],
 )
 
