@@ -26,9 +26,14 @@ genrule(
 
 # Unit tests
 genrule(
-    name = "common_test",
+    name = "common_test_bin",
     srcs = ["common.zig"],
     outs = ["test_common_exe"],
     cmd = "zig test -femit-bin=$@ $(location common.zig)",
     executable = True,
+)
+
+sh_test(
+    name = "common_test",
+    srcs = [":common_test_bin"],
 )
