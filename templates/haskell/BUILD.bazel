@@ -1,0 +1,45 @@
+"""Build targets for Advent of Code Haskell solution."""
+
+load("@rules_haskell//haskell:defs.bzl", "haskell_binary", "haskell_library", "haskell_test")
+
+# Solution library containing the core solve functions
+haskell_library(
+    name = "common",
+    srcs = ["Common.hs"],
+    deps = [
+        "@stackage//:base",
+        "@stackage//:containers",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# Part 1 binary - outputs only part 1 result
+haskell_binary(
+    name = "part1",
+    srcs = ["Part1.hs"],
+    deps = [
+        ":common",
+        "@stackage//:base",
+    ],
+)
+
+# Part 2 binary - outputs only part 2 result
+haskell_binary(
+    name = "part2",
+    srcs = ["Part2.hs"],
+    deps = [
+        ":common",
+        "@stackage//:base",
+    ],
+)
+
+# Unit tests
+haskell_test(
+    name = "aoc_tests",
+    srcs = ["Tests.hs"],
+    deps = [
+        ":common",
+        "@stackage//:HUnit",
+        "@stackage//:base",
+    ],
+)

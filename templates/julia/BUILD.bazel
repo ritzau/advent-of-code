@@ -1,0 +1,50 @@
+"""Build targets for Advent of Code Julia solution."""
+
+# Part 1 binary - outputs only part 1 result
+sh_binary(
+    name = "part1",
+    srcs = ["src/part1.jl"],
+    data = ["src/lib.jl"],
+)
+
+# Part 2 binary - outputs only part 2 result
+sh_binary(
+    name = "part2",
+    srcs = ["src/part2.jl"],
+    data = ["src/lib.jl"],
+)
+
+# Main verification binary
+sh_binary(
+    name = "main",
+    srcs = ["src/main.jl"],
+    data = ["src/lib.jl"],
+)
+
+# Unit tests - Julia tests need to be run via julia command
+genrule(
+    name = "test_runner",
+    srcs = [
+        "test/runtests.jl",
+        "src/lib.jl",
+    ],
+    outs = ["run_tests.sh"],
+    cmd = """
+cat > $@ << 'EOF'
+#!/bin/bash
+cd $$(dirname $$(readlink -f $$0))/../..
+julia --project=. -e 'include("test/runtests.jl")'
+EOF
+chmod +x $@
+    """,
+    executable = True,
+)
+
+sh_test(
+    name = "aoc_tests",
+    srcs = [":test_runner"],
+    data = [
+        "test/runtests.jl",
+        "src/lib.jl",
+    ],
+)
