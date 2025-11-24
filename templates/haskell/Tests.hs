@@ -2,22 +2,27 @@ module Main where
 
 import Common (solvePart1, solvePart2)
 import System.Exit (exitFailure, exitSuccess)
-import Test.HUnit
 
 main :: IO ()
 main = do
-  counts <- runTestTT allTests
-  if errors counts + failures counts == 0
-    then exitSuccess
-    else exitFailure
+  let part1Result = solvePart1 "sample input"
+  let part2Result = solvePart2 "sample input"
 
-allTests :: Test
-allTests =
-  TestList
-    [ TestLabel "part1_sample_1" $
-        TestCase $
-          assertEqual "Sample test" 0 (solvePart1 "sample input"),
-      TestLabel "part2_sample_1" $
-        TestCase $
-          assertEqual "Sample test" 0 (solvePart2 "sample input")
-    ]
+  putStrLn "Running tests..."
+
+  -- Test Part 1
+  if part1Result == 0
+    then putStrLn "✓ Part 1 test passed"
+    else do
+      putStrLn $ "✗ Part 1 test failed: expected 0, got " ++ show part1Result
+      exitFailure
+
+  -- Test Part 2
+  if part2Result == 0
+    then putStrLn "✓ Part 2 test passed"
+    else do
+      putStrLn $ "✗ Part 2 test failed: expected 0, got " ++ show part2Result
+      exitFailure
+
+  putStrLn "All tests passed!"
+  exitSuccess
