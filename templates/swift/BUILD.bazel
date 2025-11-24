@@ -1,0 +1,54 @@
+"""Build targets for Advent of Code Swift solution."""
+
+# Part 1 binary - outputs only part 1 result
+genrule(
+    name = "part1",
+    srcs = [
+        "Part1.swift",
+        "Common.swift",
+    ],
+    outs = ["part1_exe"],
+    cmd = "swiftc -O $(location Common.swift) $(location Part1.swift) -o $@",
+    executable = True,
+)
+
+# Part 2 binary - outputs only part 2 result
+genrule(
+    name = "part2",
+    srcs = [
+        "Part2.swift",
+        "Common.swift",
+    ],
+    outs = ["part2_exe"],
+    cmd = "swiftc -O $(location Common.swift) $(location Part2.swift) -o $@",
+    executable = True,
+)
+
+# Main verification binary
+genrule(
+    name = "main",
+    srcs = [
+        "Main.swift",
+        "Common.swift",
+    ],
+    outs = ["main_exe"],
+    cmd = "swiftc -O $(location Common.swift) $(location Main.swift) -o $@",
+    executable = True,
+)
+
+# Unit tests
+genrule(
+    name = "aoc_tests_bin",
+    srcs = [
+        "Tests.swift",
+        "Common.swift",
+    ],
+    outs = ["tests_exe"],
+    cmd = "swiftc -O $(location Common.swift) $(location Tests.swift) -o $@",
+    executable = True,
+)
+
+sh_test(
+    name = "aoc_tests",
+    srcs = [":aoc_tests_bin"],
+)

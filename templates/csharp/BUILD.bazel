@@ -1,0 +1,54 @@
+"""Build targets for Advent of Code C# solution."""
+
+# Part 1 binary - outputs only part 1 result
+genrule(
+    name = "part1",
+    srcs = [
+        "Part1.cs",
+        "Common.cs",
+    ],
+    outs = ["part1_exe"],
+    cmd = "csc -optimize+ -out:$@ $(location Common.cs) $(location Part1.cs)",
+    executable = True,
+)
+
+# Part 2 binary - outputs only part 2 result
+genrule(
+    name = "part2",
+    srcs = [
+        "Part2.cs",
+        "Common.cs",
+    ],
+    outs = ["part2_exe"],
+    cmd = "csc -optimize+ -out:$@ $(location Common.cs) $(location Part2.cs)",
+    executable = True,
+)
+
+# Main verification binary
+genrule(
+    name = "main",
+    srcs = [
+        "Main.cs",
+        "Common.cs",
+    ],
+    outs = ["main_exe"],
+    cmd = "csc -optimize+ -out:$@ $(location Common.cs) $(location Main.cs)",
+    executable = True,
+)
+
+# Unit tests
+genrule(
+    name = "aoc_tests_bin",
+    srcs = [
+        "Tests.cs",
+        "Common.cs",
+    ],
+    outs = ["tests_exe"],
+    cmd = "csc -optimize+ -out:$@ $(location Common.cs) $(location Tests.cs)",
+    executable = True,
+)
+
+sh_test(
+    name = "aoc_tests",
+    srcs = [":aoc_tests_bin"],
+)
