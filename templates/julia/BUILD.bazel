@@ -71,8 +71,9 @@ genrule(
     cmd = """
 cat > $@ << 'EOF'
 #!/bin/bash
-# Files are already in runfiles, just run the test from there
-cd "$$(dirname "$$0")/.."
+# Set working directory to the runfiles _main workspace root
+RUNFILES_DIR="$${RUNFILES_DIR:-$$(dirname "$$0")/.runfiles/_main}"
+cd "$$RUNFILES_DIR"
 julia -e 'include("templates/julia/test/runtests.jl")'
 EOF
 chmod +x $@
