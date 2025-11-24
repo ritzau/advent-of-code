@@ -60,17 +60,15 @@ chmod +x $@
     executable = True,
 )
 
-# Precompile Julia depot
+# Precompile Julia depot (extracted, ready to use)
 genrule(
-    name = "julia_depot",
+    name = "julia_depot_dir",
     srcs = ["src/lib.jl"],
-    outs = ["depot.tar.gz"],
+    outs = ["depot"],
     cmd = """
-        DEPOT_DIR=$$(mktemp -d)
-        export JULIA_DEPOT_PATH=$$DEPOT_DIR
+        mkdir -p $@
+        export JULIA_DEPOT_PATH=$@
         julia -e 'include("$(location src/lib.jl)"); using .AoCSolution'
-        tar czf $@ -C $$DEPOT_DIR .
-        rm -rf $$DEPOT_DIR
     """,
 )
 
@@ -80,7 +78,6 @@ genrule(
     srcs = [
         "test/runtests.jl",
         "src/lib.jl",
-        ":julia_depot",
     ],
     outs = ["run_tests.sh"],
     cmd = """
@@ -88,10 +85,8 @@ cat > $@ << 'EOF'
 #!/bin/bash
 # Files are in runfiles at the same relative location as the executable
 cd "$$(dirname "$$0")"
-# Extract precompiled depot
-export JULIA_DEPOT_PATH="$$(mktemp -d)"
-trap "rm -rf $$JULIA_DEPOT_PATH" EXIT
-tar xzf depot.tar.gz -C $$JULIA_DEPOT_PATH
+# Use precompiled depot from build
+export JULIA_DEPOT_PATH="$$(dirname "$$0")/depot"
 julia -e 'include("test/runtests.jl")'
 EOF
 chmod +x $@
@@ -105,6 +100,6 @@ sh_test(
     data = [
         "test/runtests.jl",
         "src/lib.jl",
-        ":julia_depot",
+        ":julia_depot_dir",
     ],
 )
