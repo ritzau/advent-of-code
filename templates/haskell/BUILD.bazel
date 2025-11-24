@@ -8,7 +8,7 @@ genrule(
         "Common.hs",
     ],
     outs = ["part1_exe"],
-    cmd = "ghc -O2 -outputdir $(@D) -o $@ $(location Part1.hs)",
+    cmd = "cd $$(dirname $(location Part1.hs)) && ghc -O2 -outputdir $$OLDPWD/$(@D) -o $$OLDPWD/$@ Part1.hs",
     executable = True,
 )
 
@@ -20,7 +20,7 @@ genrule(
         "Common.hs",
     ],
     outs = ["part2_exe"],
-    cmd = "ghc -O2 -outputdir $(@D) -o $@ $(location Part2.hs)",
+    cmd = "cd $$(dirname $(location Part2.hs)) && ghc -O2 -outputdir $$OLDPWD/$(@D) -o $$OLDPWD/$@ Part2.hs",
     executable = True,
 )
 
@@ -32,6 +32,6 @@ genrule(
         "Common.hs",
     ],
     outs = ["tests_exe"],
-    cmd = "ghc -O2 -outputdir $(@D) -o $@ $(location Tests.hs)",
+    cmd = "cd $$(dirname $(location Tests.hs)) && ghc -O2 -outputdir $$OLDPWD/$(@D) -o $$OLDPWD/$@ Tests.hs",
     executable = True,
 )
