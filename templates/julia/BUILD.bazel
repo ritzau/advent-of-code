@@ -1,29 +1,68 @@
 """Build targets for Advent of Code Julia solution."""
 
 # Part 1 binary - outputs only part 1 result
-sh_binary(
+genrule(
     name = "part1",
-    srcs = ["src/part1.jl"],
-    data = ["src/lib.jl"],
+    srcs = [
+        "src/part1.jl",
+        "src/lib.jl",
+    ],
+    outs = ["part1.sh"],
+    cmd = """
+cat > $@ << 'EOF'
+#!/bin/bash
+SCRIPT_DIR=$$(cd "$$(dirname "$${BASH_SOURCE[0]}")" && pwd)
+cd $$SCRIPT_DIR/../../../templates/julia
+julia src/part1.jl
+EOF
+chmod +x $@
+    """,
+    executable = True,
 )
 
 # Part 2 binary - outputs only part 2 result
-sh_binary(
+genrule(
     name = "part2",
-    srcs = ["src/part2.jl"],
-    data = ["src/lib.jl"],
+    srcs = [
+        "src/part2.jl",
+        "src/lib.jl",
+    ],
+    outs = ["part2.sh"],
+    cmd = """
+cat > $@ << 'EOF'
+#!/bin/bash
+SCRIPT_DIR=$$(cd "$$(dirname "$${BASH_SOURCE[0]}")" && pwd)
+cd $$SCRIPT_DIR/../../../templates/julia
+julia src/part2.jl
+EOF
+chmod +x $@
+    """,
+    executable = True,
 )
 
 # Main verification binary
-sh_binary(
+genrule(
     name = "main",
-    srcs = ["src/main.jl"],
-    data = ["src/lib.jl"],
+    srcs = [
+        "src/main.jl",
+        "src/lib.jl",
+    ],
+    outs = ["main.sh"],
+    cmd = """
+cat > $@ << 'EOF'
+#!/bin/bash
+SCRIPT_DIR=$$(cd "$$(dirname "$${BASH_SOURCE[0]}")" && pwd)
+cd $$SCRIPT_DIR/../../../templates/julia
+julia src/main.jl
+EOF
+chmod +x $@
+    """,
+    executable = True,
 )
 
-# Unit tests - Julia tests need to be run via julia command
+# Unit tests
 genrule(
-    name = "test_runner",
+    name = "aoc_tests_bin",
     srcs = [
         "test/runtests.jl",
         "src/lib.jl",
@@ -32,8 +71,9 @@ genrule(
     cmd = """
 cat > $@ << 'EOF'
 #!/bin/bash
-cd $$(dirname $$(readlink -f $$0))/../..
-julia --project=. -e 'include("test/runtests.jl")'
+SCRIPT_DIR=$$(cd "$$(dirname "$${BASH_SOURCE[0]}")" && pwd)
+cd $$SCRIPT_DIR/../../../templates/julia
+julia -e 'include("test/runtests.jl")'
 EOF
 chmod +x $@
     """,
@@ -42,9 +82,5 @@ chmod +x $@
 
 sh_test(
     name = "aoc_tests",
-    srcs = [":test_runner"],
-    data = [
-        "test/runtests.jl",
-        "src/lib.jl",
-    ],
+    srcs = [":aoc_tests_bin"],
 )
