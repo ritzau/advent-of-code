@@ -2,30 +2,30 @@
 
 module(
     name = "advent-of-code",
-    version = "1.0.0",
+    version = "0.1.0",
 )
 
-# C++ rules
-bazel_dep(name = "rules_cc", version = "0.0.17")
+bazel_dep(name = "gazelle", version = "0.47.0")
+bazel_dep(name = "rules_cc", version = "0.2.14")
+bazel_dep(name = "rules_go", version = "0.59.0")
+bazel_dep(name = "rules_jvm_external", version = "6.9")
+bazel_dep(name = "rules_kotlin", version = "2.2.0")
+bazel_dep(name = "rules_rust", version = "0.67.0")
+bazel_dep(name = "toolchains_llvm", version = "1.5.0")
 
-# Hermetic LLVM/Clang toolchain for C++
-bazel_dep(name = "toolchains_llvm", version = "1.2.0")
-
+# C++ toolchain
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 llvm.toolchain(
-    llvm_version = "18.1.8",
+    llvm_version = "19.1.6",
 )
 use_repo(llvm, "llvm_toolchain")
 register_toolchains("@llvm_toolchain//:all")
 
-# Rust rules
-bazel_dep(name = "rules_rust", version = "0.54.1")
-
 # Rust toolchain setup
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
-    edition = "2021",
-    versions = ["1.83.0"],
+    edition = "2024",
+    versions = ["1.91.1"],
 )
 use_repo(rust, "rust_toolchains")
 register_toolchains("@rust_toolchains//:all")
@@ -41,13 +41,9 @@ crate.from_cargo(
 )
 use_repo(crate, "crates_rust_template")
 
-# Go rules
-bazel_dep(name = "rules_go", version = "0.50.1")
-bazel_dep(name = "gazelle", version = "0.39.1")
-
 # Go toolchain setup
 go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
-go_sdk.download(version = "1.23.4")
+go_sdk.download(version = "1.25.4")
 
 # Gazelle for Go dependency management
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
@@ -56,7 +52,3 @@ use_repo(
     go_deps,
     # No external dependencies in template yet
 )
-
-# Kotlin rules
-bazel_dep(name = "rules_kotlin", version = "2.1.0")
-bazel_dep(name = "rules_jvm_external", version = "6.5")

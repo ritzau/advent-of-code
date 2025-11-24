@@ -39,3 +39,6 @@ zig-out/
 *.swp
 *.swo
 *~
+
+# Bazel
+/bazel-*

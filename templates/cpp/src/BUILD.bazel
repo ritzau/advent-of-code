@@ -5,6 +5,7 @@ cc_library(
     name = "solution",
     srcs = ["solution.cpp"],
     hdrs = ["solution.h"],
+    includes = ["."],
     visibility = ["//visibility:public"],
 )
 

@@ -3,5 +3,5 @@
 cc_test(
     name = "solution_test",
     srcs = ["test_solution.cpp"],
-    deps = ["//src:solution"],
+    deps = ["//templates/cpp/src:solution"],
 )
