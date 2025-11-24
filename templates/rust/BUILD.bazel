@@ -1,0 +1,42 @@
+"""Build targets for Advent of Code Rust solution."""
+
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library", "rust_test")
+
+# Solution library containing the core solve functions
+rust_library(
+    name = "template_rust",
+    srcs = ["src/lib.rs"],
+    edition = "2021",
+    visibility = ["//visibility:public"],
+)
+
+# Main verification binary - runs both parts and validates results
+rust_binary(
+    name = "main",
+    srcs = ["src/main.rs"],
+    edition = "2021",
+    deps = [":template_rust"],
+)
+
+# Part 1 binary - outputs only part 1 result
+rust_binary(
+    name = "part1",
+    srcs = ["src/bin/part1.rs"],
+    edition = "2021",
+    deps = [":template_rust"],
+)
+
+# Part 2 binary - outputs only part 2 result
+rust_binary(
+    name = "part2",
+    srcs = ["src/bin/part2.rs"],
+    edition = "2021",
+    deps = [":template_rust"],
+)
+
+# Unit tests
+rust_test(
+    name = "template_rust_test",
+    crate = ":template_rust",
+    edition = "2021",
+)

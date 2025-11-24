@@ -1,0 +1,28 @@
+# Advent of Code Kotlin Solution
+
+# Build all targets
+build:
+    bazel build //templates/kotlin-kotlinc/...
+
+# Run the main verification binary
+run:
+    bazel run //templates/kotlin-kotlinc:main
+
+# Run a specific part with input from stdin
+run-part PART:
+    bazel run //templates/kotlin-kotlinc:part{{PART}}
+
+# Run tests
+test:
+    bazel test //templates/kotlin-kotlinc/...
+
+# Format code
+format:
+    ktlint -F "src/**/*.kt"
+
+# Run all checks (build + tests)
+check-all: build test
+
+# Clean build artifacts
+clean:
+    bazel clean

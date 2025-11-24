@@ -1,0 +1,9 @@
+"""Build target for part 1 binary."""
+
+load("@rules_go//go:def.bzl", "go_binary")
+
+go_binary(
+    name = "part1",
+    srcs = ["main.go"],
+    deps = ["//templates/go/common"],
+)

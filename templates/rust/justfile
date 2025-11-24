@@ -1,41 +1,38 @@
-# Advent of Code Solution
-# All commands use Nix for reproducible builds
+# Advent of Code Rust Solution
 
-# Get current system (e.g., x86_64-linux, aarch64-darwin)
-system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
-
-# Build the solution
+# Build all targets
 build:
-    nix build
+    bazel build //templates/rust/...
 
 # Run the main verification binary
 run:
-    nix run
+    bazel run //templates/rust:main
 
 # Run a specific part with input from stdin
 run-part PART:
-    nix run .#part{{PART}}
+    bazel run //templates/rust:part{{PART}}
+
+# Run tests
+test:
+    bazel test //templates/rust/...
 
 # Format code
 format:
-    nix develop --command cargo fmt
+    cargo fmt
 
 # Run all checks (build + tests + lint)
-check-all:
-    nix flake check
+check-all: build test check-format
 
-# Run tests only
-check-test:
-    nix build .#checks.{{system}}.test
-
-# Run clippy lint only
+# Run clippy lint
 check-lint:
-    nix build .#checks.{{system}}.lint
+    cargo clippy -- -D warnings
 
 # Check formatting without modifying files
 check-format:
-    nix build .#checks.{{system}}.format-check
+    @echo "Checking code formatting..."
+    @cargo fmt --check
 
 # Clean build artifacts
 clean:
-    rm -rf target/ result
+    bazel clean
+    rm -rf target/

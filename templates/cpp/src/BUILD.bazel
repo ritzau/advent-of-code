@@ -1,0 +1,31 @@
+"""Build targets for Advent of Code solution."""
+
+# Solution library containing the core solve functions
+cc_library(
+    name = "solution",
+    srcs = ["solution.cpp"],
+    hdrs = ["solution.h"],
+    includes = ["."],
+    visibility = ["//visibility:public"],
+)
+
+# Main verification binary - runs both parts and validates results
+cc_binary(
+    name = "main",
+    srcs = ["main.cpp"],
+    deps = [":solution"],
+)
+
+# Part 1 binary - outputs only part 1 result
+cc_binary(
+    name = "part1",
+    srcs = ["part1.cpp"],
+    deps = [":solution"],
+)
+
+# Part 2 binary - outputs only part 2 result
+cc_binary(
+    name = "part2",
+    srcs = ["part2.cpp"],
+    deps = [":solution"],
+)

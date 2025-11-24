@@ -1,31 +1,31 @@
-# Build the project
+# Build all targets
 build:
-    nix build
+    bazel build //templates/cpp/...
 
 # Run the main verification binary
 run:
-    nix run
+    bazel run //templates/cpp/src:main
 
 # Run a specific part (1 or 2)
 run-part PART:
-    nix run .#template-cpp-part{{PART}}
+    bazel run //templates/cpp/src:part{{PART}}
+
+# Run tests
+test:
+    bazel test //templates/cpp/...
 
 # Format code
 format:
-    nix develop -c bash -c 'find src tests -name "*.cpp" -o -name "*.h" | xargs clang-format -i'
+    find src tests -name "*.cpp" -o -name "*.h" | xargs clang-format -i
 
 # Run all checks (build, test, format)
-check-all:
-    nix flake check
-
-# Run only tests
-check-test:
-    nix build .#checks.x86_64-linux.test
+check-all: build test check-format
 
 # Check code formatting
 check-format:
-    nix build .#checks.x86_64-linux.format-check
+    @echo "Checking code formatting..."
+    @find src tests -name "*.cpp" -o -name "*.h" | xargs clang-format --dry-run -Werror
 
 # Clean build artifacts
 clean:
-    rm -rf result* build/ CMakeCache.txt CMakeFiles/ cmake_install.cmake Makefile
+    bazel clean
