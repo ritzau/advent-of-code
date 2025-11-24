@@ -1,0 +1,28 @@
+"""Bazel module for Advent of Code Rust template."""
+
+module(
+    name = "template-rust",
+    version = "0.1.0",
+)
+
+# Rust rules
+bazel_dep(name = "rules_rust", version = "0.54.1")
+
+# Rust toolchain setup
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.83.0"],
+)
+use_repo(rust, "rust_toolchains")
+
+register_toolchains("@rust_toolchains//:all")
+
+# Crate universe for dependencies (if needed in the future)
+crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
+crate.from_cargo(
+    name = "crates",
+    cargo_lockfile = "//:Cargo.lock",
+    manifests = ["//:Cargo.toml"],
+)
+use_repo(crate, "crates")

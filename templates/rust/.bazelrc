@@ -1,0 +1,21 @@
+# Advent of Code Rust Bazel Configuration
+
+# Use Bzlmod (MODULE.bazel) for dependency management
+common --enable_bzlmod
+
+# Optimize release builds
+build:release --compilation_mode=opt
+
+# Debug builds
+build:debug --compilation_mode=dbg
+
+# Show test output on failure
+test --test_output=errors
+
+# Colored output
+build --color=yes
+test --color=yes
+
+# Rust-specific: Enable clippy for all builds
+build --aspects=@rules_rust//rust:defs.bzl%rust_clippy_aspect
+build --output_groups=+clippy_checks
