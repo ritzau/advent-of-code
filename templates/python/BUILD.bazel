@@ -43,5 +43,6 @@ py_test(
         "tests/__init__.py",
         "tests/test_solution.py",
     ],
+    main = "tests/test_solution.py",
     deps = [":template_python"],
 )
