@@ -60,15 +60,17 @@ chmod +x $@
     executable = True,
 )
 
-# Precompile Julia depot (extracted, ready to use)
+# Precompile Julia depot during build (cached as tarball)
 genrule(
-    name = "julia_depot_dir",
+    name = "julia_depot",
     srcs = ["src/lib.jl"],
-    outs = ["depot"],
+    outs = ["depot.tar.gz"],
     cmd = """
-        mkdir -p $@
-        export JULIA_DEPOT_PATH=$@
+        DEPOT_DIR=$$(mktemp -d)
+        export JULIA_DEPOT_PATH=$$DEPOT_DIR
         julia -e 'include("$(location src/lib.jl)"); using .AoCSolution'
+        tar -czf $@ -C $$DEPOT_DIR .
+        rm -rf $$DEPOT_DIR
     """,
 )
 
@@ -83,11 +85,17 @@ genrule(
     cmd = """
 cat > $@ << 'EOF'
 #!/bin/bash
-# Files are in runfiles at the same relative location as the executable
+# Extract precompiled depot to temp location
+DEPOT_DIR=$$(mktemp -d)
+tar -xzf "$$(dirname "$$0")/depot.tar.gz" -C $$DEPOT_DIR
+export JULIA_DEPOT_PATH=$$DEPOT_DIR
+
+# Navigate to test directory
 cd "$$(dirname "$$0")"
-# Use precompiled depot from build
-export JULIA_DEPOT_PATH="$$(dirname "$$0")/depot"
 julia -e 'include("test/runtests.jl")'
+
+# Cleanup
+rm -rf $$DEPOT_DIR
 EOF
 chmod +x $@
     """,
@@ -100,6 +108,6 @@ sh_test(
     data = [
         "test/runtests.jl",
         "src/lib.jl",
-        ":julia_depot_dir",
+        ":julia_depot",
     ],
 )
