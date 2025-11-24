@@ -1,45 +1,37 @@
 """Build targets for Advent of Code Haskell solution."""
 
-load("@rules_haskell//haskell:defs.bzl", "haskell_binary", "haskell_library", "haskell_test")
-
-# Solution library containing the core solve functions
-haskell_library(
-    name = "common",
-    srcs = ["Common.hs"],
-    deps = [
-        "@stackage//:base",
-        "@stackage//:containers",
-    ],
-    visibility = ["//visibility:public"],
-)
-
 # Part 1 binary - outputs only part 1 result
-haskell_binary(
+genrule(
     name = "part1",
-    srcs = ["Part1.hs"],
-    deps = [
-        ":common",
-        "@stackage//:base",
+    srcs = [
+        "Part1.hs",
+        "Common.hs",
     ],
+    outs = ["part1_exe"],
+    cmd = "ghc -O2 -outputdir $(@D) -o $@ $(location Part1.hs)",
+    executable = True,
 )
 
 # Part 2 binary - outputs only part 2 result
-haskell_binary(
+genrule(
     name = "part2",
-    srcs = ["Part2.hs"],
-    deps = [
-        ":common",
-        "@stackage//:base",
+    srcs = [
+        "Part2.hs",
+        "Common.hs",
     ],
+    outs = ["part2_exe"],
+    cmd = "ghc -O2 -outputdir $(@D) -o $@ $(location Part2.hs)",
+    executable = True,
 )
 
 # Unit tests
-haskell_test(
+genrule(
     name = "aoc_tests",
-    srcs = ["Tests.hs"],
-    deps = [
-        ":common",
-        "@stackage//:HUnit",
-        "@stackage//:base",
+    srcs = [
+        "Tests.hs",
+        "Common.hs",
     ],
+    outs = ["tests_exe"],
+    cmd = "ghc -O2 -outputdir $(@D) -o $@ $(location Tests.hs)",
+    executable = True,
 )
