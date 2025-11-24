@@ -26,7 +26,7 @@ genrule(
 
 # Unit tests
 genrule(
-    name = "aoc_tests",
+    name = "aoc_tests_bin",
     srcs = [
         "Tests.hs",
         "Common.hs",
@@ -34,4 +34,9 @@ genrule(
     outs = ["tests_exe"],
     cmd = "cd $$(dirname $(location Tests.hs)) && ghc -O2 -outputdir $$OLDPWD/$(@D) -o $$OLDPWD/$@ Tests.hs",
     executable = True,
+)
+
+sh_test(
+    name = "aoc_tests",
+    srcs = [":aoc_tests_bin"],
 )
