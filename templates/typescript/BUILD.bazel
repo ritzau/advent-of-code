@@ -1,0 +1,79 @@
+"""Build targets for Advent of Code TypeScript solution."""
+
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@npm_typescript//:defs.bzl", "npm_link_all_packages")
+
+npm_link_all_packages(name = "node_modules")
+
+# Compile TypeScript source files to JavaScript
+ts_project(
+    name = "common_ts",
+    srcs = ["common.ts"],
+    declaration = True,
+    tsconfig = ":tsconfig.json",
+    deps = [":node_modules/@types/node"],
+)
+
+ts_project(
+    name = "main_ts",
+    srcs = ["main.ts"],
+    declaration = True,
+    tsconfig = ":tsconfig.json",
+    deps = [
+        ":common_ts",
+        ":node_modules/@types/node",
+    ],
+)
+
+ts_project(
+    name = "part1_ts",
+    srcs = ["part1.ts"],
+    declaration = True,
+    tsconfig = ":tsconfig.json",
+    deps = [
+        ":common_ts",
+        ":node_modules/@types/node",
+    ],
+)
+
+ts_project(
+    name = "part2_ts",
+    srcs = ["part2.ts"],
+    declaration = True,
+    tsconfig = ":tsconfig.json",
+    deps = [
+        ":common_ts",
+        ":node_modules/@types/node",
+    ],
+)
+
+# Main verification binary - runs both parts and validates results
+js_binary(
+    name = "main",
+    data = [
+        ":common_ts",
+        ":main_ts",
+    ],
+    entry_point = "main.js",
+)
+
+# Part 1 binary - outputs only part 1 result
+js_binary(
+    name = "part1",
+    data = [
+        ":common_ts",
+        ":part1_ts",
+    ],
+    entry_point = "part1.js",
+)
+
+# Part 2 binary - outputs only part 2 result
+js_binary(
+    name = "part2",
+    data = [
+        ":common_ts",
+        ":part2_ts",
+    ],
+    entry_point = "part2.js",
+)

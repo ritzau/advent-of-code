@@ -1,41 +1,30 @@
 # Advent of Code Solution
-# All commands use Nix for reproducible builds
-
-# Get current system (e.g., x86_64-linux, aarch64-darwin)
-system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
+# All commands use Bazel for reproducible builds
 
 # Build the solution
 build:
-    nix build
+    bazel build //templates/python:main
 
 # Run the main verification binary
 run:
-    nix run
+    bazel run //templates/python:main
 
 # Run a specific part with input from stdin
 run-part PART:
-    nix run .#part{{PART}}
+    bazel run //templates/python:part{{PART}}
 
 # Format code
 format:
-    nix develop --command ruff format template_python/ tests/
+    ruff format template_python/ tests/
 
-# Run all checks (build + tests + lint)
-check-all:
-    nix flake check
+# Run all checks (build + tests)
+check-all: build test
 
 # Run tests only
-check-test:
-    nix build .#checks.{{system}}.test
-
-# Run ruff lint only
-check-lint:
-    nix build .#checks.{{system}}.lint
-
-# Check formatting without modifying files
-check-format:
-    nix build .#checks.{{system}}.format-check
+test:
+    bazel test //templates/python:template_python_test
 
 # Clean build artifacts
 clean:
-    rm -rf result .pytest_cache/ __pycache__/ template_python/__pycache__/ tests/__pycache__/
+    bazel clean
+    rm -rf .pytest_cache/ __pycache__/ template_python/__pycache__/ tests/__pycache__/

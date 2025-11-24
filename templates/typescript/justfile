@@ -1,37 +1,30 @@
 # Advent of Code Solution
-# All commands use Nix for reproducible builds
-
-# Get current system (e.g., x86_64-linux, aarch64-darwin)
-system := `nix eval --impure --raw --expr 'builtins.currentSystem'`
+# All commands use Bazel for reproducible builds
 
 # Build the solution
 build:
-    nix build
+    bazel build //templates/typescript:main
 
 # Run the main verification binary
 run:
-    nix run
+    bazel run //templates/typescript:main
 
 # Run a specific part with input from stdin
 run-part PART:
-    nix run .#part{{PART}}
+    bazel run //templates/typescript:part{{PART}}
 
-# Run all checks (build + typecheck + format)
-check-all:
-    nix flake check
-
-# Run type check only
+# Run type check
 check-type:
-    nix build .#checks.{{system}}.typecheck
+    bazel build //templates/typescript:common_ts //templates/typescript:main_ts //templates/typescript:part1_ts //templates/typescript:part2_ts
 
-# Check formatting without modifying files
-check-format:
-    nix build .#checks.{{system}}.format-check
+# Run all checks (build + typecheck)
+check-all: build check-type
 
 # Format code
 format:
-    nix develop --command prettier --write "*.ts"
+    prettier --write "*.ts"
 
 # Clean build artifacts
 clean:
-    rm -rf dist/ node_modules/ result
+    bazel clean
+    rm -rf dist/ node_modules/
