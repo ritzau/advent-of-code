@@ -1,18 +1,18 @@
 # Build all targets
 build:
-    bazel build //...
+    bazel build //templates/cpp/...
 
 # Run the main verification binary
 run:
-    bazel run //src:main
+    bazel run //templates/cpp/src:main
 
 # Run a specific part (1 or 2)
 run-part PART:
-    bazel run //src:part{{PART}}
+    bazel run //templates/cpp/src:part{{PART}}
 
 # Run tests
 test:
-    bazel test //...
+    bazel test //templates/cpp/...
 
 # Format code
 format:

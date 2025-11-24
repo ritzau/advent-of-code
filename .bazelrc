@@ -1,4 +1,4 @@
-# Advent of Code Rust Bazel Configuration
+# Advent of Code Bazel Configuration
 
 # Use Bzlmod (MODULE.bazel) for dependency management
 common --enable_bzlmod
@@ -16,6 +16,14 @@ test --test_output=errors
 build --color=yes
 test --color=yes
 
-# Rust-specific: Enable clippy for all builds
+# C++ settings
+build --cxxopt=-std=c++20
+build --host_cxxopt=-std=c++20
+build --cxxopt=-Wall
+build --cxxopt=-Wextra
+build --cxxopt=-Wpedantic
+build --incompatible_enable_cc_toolchain_resolution
+
+# Rust settings - enable clippy for all builds
 build --aspects=@rules_rust//rust:defs.bzl%rust_clippy_aspect
 build --output_groups=+clippy_checks

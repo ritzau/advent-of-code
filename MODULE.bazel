@@ -1,0 +1,42 @@
+"""Bazel module for Advent of Code monorepo."""
+
+module(
+    name = "advent-of-code",
+    version = "1.0.0",
+)
+
+# C++ rules
+bazel_dep(name = "rules_cc", version = "0.0.17")
+
+# Hermetic LLVM/Clang toolchain for C++
+bazel_dep(name = "toolchains_llvm", version = "1.2.0")
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(
+    llvm_version = "18.1.8",
+)
+use_repo(llvm, "llvm_toolchain")
+register_toolchains("@llvm_toolchain//:all")
+
+# Rust rules
+bazel_dep(name = "rules_rust", version = "0.54.1")
+
+# Rust toolchain setup
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.83.0"],
+)
+use_repo(rust, "rust_toolchains")
+register_toolchains("@rust_toolchains//:all")
+
+# Crate universe for Rust dependencies
+crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
+
+# Rust template dependencies
+crate.from_cargo(
+    name = "crates_rust_template",
+    cargo_lockfile = "//templates/rust:Cargo.lock",
+    manifests = ["//templates/rust:Cargo.toml"],
+)
+use_repo(crate, "crates_rust_template")

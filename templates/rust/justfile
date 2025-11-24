@@ -2,19 +2,19 @@
 
 # Build all targets
 build:
-    bazel build //...
+    bazel build //templates/rust/...
 
 # Run the main verification binary
 run:
-    bazel run //:main
+    bazel run //templates/rust:main
 
 # Run a specific part with input from stdin
 run-part PART:
-    bazel run //:part{{PART}}
+    bazel run //templates/rust:part{{PART}}
 
 # Run tests
 test:
-    bazel test //...
+    bazel test //templates/rust/...
 
 # Format code
 format:
