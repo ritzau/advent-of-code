@@ -6,16 +6,6 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     # Template flakes
-    template-cpp = {
-      url = "path:./templates/cpp";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    template-go = {
-      url = "path:./templates/go";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     template-haskell = {
       url = "path:./templates/haskell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -31,11 +21,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    template-kotlin-kotlinc = {
-      url = "path:./templates/kotlin-kotlinc";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     template-nim = {
       url = "path:./templates/nim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -43,11 +28,6 @@
     };
     template-python = {
       url = "path:./templates/python";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    template-rust = {
-      url = "path:./templates/rust";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
