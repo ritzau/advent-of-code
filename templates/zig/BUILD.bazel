@@ -8,7 +8,7 @@ genrule(
         "common.zig",
     ],
     outs = ["part1_exe"],
-    cmd = "zig build-exe -O ReleaseFast -femit-bin=$@ $(location part1.zig)",
+    cmd = "mkdir -p $(@D)/zig-cache && ZIG_GLOBAL_CACHE_DIR=$(@D)/zig-cache ZIG_LOCAL_CACHE_DIR=$(@D)/zig-cache zig build-exe -O ReleaseFast -femit-bin=$@ $(location part1.zig)",
     executable = True,
 )
 
@@ -20,7 +20,7 @@ genrule(
         "common.zig",
     ],
     outs = ["part2_exe"],
-    cmd = "zig build-exe -O ReleaseFast -femit-bin=$@ $(location part2.zig)",
+    cmd = "mkdir -p $(@D)/zig-cache && ZIG_GLOBAL_CACHE_DIR=$(@D)/zig-cache ZIG_LOCAL_CACHE_DIR=$(@D)/zig-cache zig build-exe -O ReleaseFast -femit-bin=$@ $(location part2.zig)",
     executable = True,
 )
 
@@ -29,7 +29,7 @@ genrule(
     name = "common_test_bin",
     srcs = ["common.zig"],
     outs = ["test_common_exe"],
-    cmd = "zig test -femit-bin=$@ $(location common.zig)",
+    cmd = "mkdir -p $(@D)/zig-cache && ZIG_GLOBAL_CACHE_DIR=$(@D)/zig-cache ZIG_LOCAL_CACHE_DIR=$(@D)/zig-cache zig test -femit-bin=$@ $(location common.zig)",
     executable = True,
 )
 
