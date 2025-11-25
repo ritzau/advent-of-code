@@ -14,6 +14,9 @@ bazel_dep(name = "rules_jvm_external", version = "6.9")
 bazel_dep(name = "rules_kotlin", version = "2.2.0")
 bazel_dep(name = "rules_python", version = "1.7.0")
 bazel_dep(name = "rules_rust", version = "0.67.0")
+bazel_dep(name = "rules_swift", version = "3.1.2")
+bazel_dep(name = "rules_zig", version = "0.12.3")
+bazel_dep(name = "rules_dotnet", version = "0.20.5")
 bazel_dep(name = "toolchains_llvm", version = "1.5.0")
 
 # C++ toolchain
@@ -87,3 +90,15 @@ npm.npm_translate_lock(
     pnpm_lock = "//templates/typescript:pnpm-lock.yaml",
 )
 use_repo(npm, "npm_typescript_template")
+
+# .NET/C# toolchain setup
+dotnet = use_extension("@rules_dotnet//dotnet:extensions.bzl", "dotnet")
+dotnet.toolchain(dotnet_version = "8.0.200")
+use_repo(dotnet, "dotnet_toolchains")
+register_toolchains("@dotnet_toolchains//:all")
+
+# Zig toolchain setup
+zig = use_extension("@rules_zig//zig:extensions.bzl", "zig")
+zig.toolchain(zig_version = "0.13.0")
+use_repo(zig, "zig_toolchains")
+register_toolchains("@zig_toolchains//:all")

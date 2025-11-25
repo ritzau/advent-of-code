@@ -1,54 +1,40 @@
 """Build targets for Advent of Code Swift solution."""
 
+load("@build_bazel_rules_swift//swift:swift_binary.bzl", "swift_binary")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_test.bzl", "swift_test")
+
+# Shared solution library
+swift_library(
+    name = "solution",
+    srcs = ["Common.swift"],
+    visibility = ["//visibility:public"],
+)
+
 # Part 1 binary - outputs only part 1 result
-genrule(
+swift_binary(
     name = "part1",
-    srcs = [
-        "Part1.swift",
-        "Common.swift",
-    ],
-    outs = ["part1_exe"],
-    cmd = "swiftc -O $(location Common.swift) $(location Part1.swift) -o $@",
-    executable = True,
+    srcs = ["Part1.swift"],
+    deps = [":solution"],
 )
 
 # Part 2 binary - outputs only part 2 result
-genrule(
+swift_binary(
     name = "part2",
-    srcs = [
-        "Part2.swift",
-        "Common.swift",
-    ],
-    outs = ["part2_exe"],
-    cmd = "swiftc -O $(location Common.swift) $(location Part2.swift) -o $@",
-    executable = True,
+    srcs = ["Part2.swift"],
+    deps = [":solution"],
 )
 
 # Main verification binary
-genrule(
+swift_binary(
     name = "main",
-    srcs = [
-        "Main.swift",
-        "Common.swift",
-    ],
-    outs = ["main_exe"],
-    cmd = "swiftc -O $(location Common.swift) $(location Main.swift) -o $@",
-    executable = True,
+    srcs = ["Main.swift"],
+    deps = [":solution"],
 )
 
 # Unit tests
-genrule(
-    name = "aoc_tests_bin",
-    srcs = [
-        "Tests.swift",
-        "Common.swift",
-    ],
-    outs = ["tests_exe"],
-    cmd = "swiftc -O $(location Common.swift) $(location Tests.swift) -o $@",
-    executable = True,
-)
-
-sh_test(
+swift_test(
     name = "aoc_tests",
-    srcs = [":aoc_tests_bin"],
+    srcs = ["Tests.swift"],
+    deps = [":solution"],
 )

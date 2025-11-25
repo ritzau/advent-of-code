@@ -1,39 +1,30 @@
 """Build targets for Advent of Code Zig solution."""
 
+load("@rules_zig//zig:defs.bzl", "zig_binary", "zig_library", "zig_test")
+
+# Shared solution library
+zig_library(
+    name = "common",
+    main = "common.zig",
+    visibility = ["//visibility:public"],
+)
+
 # Part 1 binary - outputs only part 1 result
-genrule(
+zig_binary(
     name = "part1",
-    srcs = [
-        "part1.zig",
-        "common.zig",
-    ],
-    outs = ["part1_exe"],
-    cmd = "mkdir -p $(@D)/zig-cache && ZIG_GLOBAL_CACHE_DIR=$(@D)/zig-cache ZIG_LOCAL_CACHE_DIR=$(@D)/zig-cache zig build-exe -O ReleaseFast -femit-bin=$@ $(location part1.zig)",
-    executable = True,
+    main = "part1.zig",
+    deps = [":common"],
 )
 
 # Part 2 binary - outputs only part 2 result
-genrule(
+zig_binary(
     name = "part2",
-    srcs = [
-        "part2.zig",
-        "common.zig",
-    ],
-    outs = ["part2_exe"],
-    cmd = "mkdir -p $(@D)/zig-cache && ZIG_GLOBAL_CACHE_DIR=$(@D)/zig-cache ZIG_LOCAL_CACHE_DIR=$(@D)/zig-cache zig build-exe -O ReleaseFast -femit-bin=$@ $(location part2.zig)",
-    executable = True,
+    main = "part2.zig",
+    deps = [":common"],
 )
 
 # Unit tests
-genrule(
-    name = "common_test_bin",
-    srcs = ["common.zig"],
-    outs = ["test_common_exe"],
-    cmd = "mkdir -p $(@D)/zig-cache && ZIG_GLOBAL_CACHE_DIR=$(@D)/zig-cache ZIG_LOCAL_CACHE_DIR=$(@D)/zig-cache zig test -femit-bin=$@ $(location common.zig)",
-    executable = True,
-)
-
-sh_test(
+zig_test(
     name = "common_test",
-    srcs = [":common_test_bin"],
+    main = "common.zig",
 )

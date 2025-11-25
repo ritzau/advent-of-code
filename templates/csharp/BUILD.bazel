@@ -1,54 +1,43 @@
 """Build targets for Advent of Code C# solution."""
 
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_binary", "csharp_library", "csharp_nunit_test")
+
+# Shared solution library
+csharp_library(
+    name = "solution",
+    srcs = ["Common.cs"],
+    target_frameworks = ["net8.0"],
+    visibility = ["//visibility:public"],
+)
+
 # Part 1 binary - outputs only part 1 result
-genrule(
+csharp_binary(
     name = "part1",
-    srcs = [
-        "Part1.cs",
-        "Common.cs",
-    ],
-    outs = ["part1_exe"],
-    cmd = "csc -optimize+ -out:$@ $(location Common.cs) $(location Part1.cs)",
-    executable = True,
+    srcs = ["Part1.cs"],
+    target_frameworks = ["net8.0"],
+    deps = [":solution"],
 )
 
 # Part 2 binary - outputs only part 2 result
-genrule(
+csharp_binary(
     name = "part2",
-    srcs = [
-        "Part2.cs",
-        "Common.cs",
-    ],
-    outs = ["part2_exe"],
-    cmd = "csc -optimize+ -out:$@ $(location Common.cs) $(location Part2.cs)",
-    executable = True,
+    srcs = ["Part2.cs"],
+    target_frameworks = ["net8.0"],
+    deps = [":solution"],
 )
 
 # Main verification binary
-genrule(
+csharp_binary(
     name = "main",
-    srcs = [
-        "Main.cs",
-        "Common.cs",
-    ],
-    outs = ["main_exe"],
-    cmd = "csc -optimize+ -out:$@ $(location Common.cs) $(location Main.cs)",
-    executable = True,
+    srcs = ["Main.cs"],
+    target_frameworks = ["net8.0"],
+    deps = [":solution"],
 )
 
 # Unit tests
-genrule(
-    name = "aoc_tests_bin",
-    srcs = [
-        "Tests.cs",
-        "Common.cs",
-    ],
-    outs = ["tests_exe"],
-    cmd = "csc -optimize+ -out:$@ $(location Common.cs) $(location Tests.cs)",
-    executable = True,
-)
-
-sh_test(
+csharp_nunit_test(
     name = "aoc_tests",
-    srcs = [":aoc_tests_bin"],
+    srcs = ["Tests.cs"],
+    target_frameworks = ["net8.0"],
+    deps = [":solution"],
 )
