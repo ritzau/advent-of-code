@@ -19,15 +19,6 @@ bazel_dep(name = "rules_rust", version = "0.67.0")
 bazel_dep(name = "rules_swift", version = "3.1.2")
 bazel_dep(name = "rules_zig", version = "0.12.3")
 bazel_dep(name = "rules_dotnet", version = "0.20.5")
-bazel_dep(name = "toolchains_llvm", version = "1.5.0")
-
-# C++ toolchain
-llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
-llvm.toolchain(
-    llvm_version = "19.1.6",
-)
-use_repo(llvm, "llvm_toolchain")
-register_toolchains("@llvm_toolchain//:all")
 
 # Rust toolchain setup
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
