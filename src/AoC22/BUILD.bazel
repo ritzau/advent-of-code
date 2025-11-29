@@ -1,19 +1,13 @@
 """Build targets for Advent of Code 2022 Haskell solutions."""
 
+load("//build:haskell.bzl", "haskell_binary")
+
 # Main executable that runs all 15 days
-genrule(
+haskell_binary(
     name = "aoc22",
-    srcs = glob([
+    main = "Main.hs",
+    deps = glob([
         "*.hs",
         "data/*.txt",
-    ]),
-    outs = ["aoc22_exe"],
-    cmd = """
-        cd $$(dirname $(location Main.hs))
-        ghc -O2 \\
-            -outputdir $$OLDPWD/$(@D) \\
-            -o $$OLDPWD/$@ \\
-            Main.hs
-    """,
-    executable = True,
+    ], exclude = ["Main.hs"]),
 )

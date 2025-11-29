@@ -1,37 +1,15 @@
-/.config/
-/dist-newstyle/
-
 # AoC inputs and session (downloaded on demand)
 /inputs/
 /.aoc-session
-.aoc-session
-input.txt
-
-# Language-specific
-node_modules/
-target/
-build/
-.build/
-*.pyc
-__pycache__/
-.pytest_cache/
-*.class
-*.jar
-*.o
-*.exe
-nimcache/
-zig-cache/
-zig-out/
-
-# AoC CLI binary
-/src/aoc-cli/aoc
+/.aoc-build
 
 # IDE
 .vscode/
 .idea/
-*.swp
-*.swo
 *~
 
 # Bazel
 /bazel-*
+
+# Agents
+/.claude/

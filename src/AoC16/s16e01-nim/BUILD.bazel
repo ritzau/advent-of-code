@@ -1,69 +1,33 @@
 """Build targets for Advent of Code 2016 Day 1 Nim solution."""
 
-# Main verification binary - runs both parts and validates results
-genrule(
-    name = "s16e01_nim_bin",
-    srcs = [
-        "s16e01_nim.nim",
-        "common.nim",
-    ],
-    outs = ["s16e01_nim"],
-    cmd = "nim compile --nimcache:$(@D)/nimcache --out:$@ $(location s16e01_nim.nim)",
-    executable = True,
-    visibility = ["//visibility:public"],
-)
+load("//build:nim.bzl", "nim_binary", "nim_test")
 
-sh_binary(
+# Main verification binary - runs both parts and validates results
+nim_binary(
     name = "s16e01-nim",
-    srcs = [":s16e01_nim_bin"],
+    main = "s16e01_nim.nim",
+    deps = ["common.nim"],
+    visibility = ["//visibility:public"],
 )
 
 # Part 1 binary - outputs only part 1 result
-genrule(
-    name = "s16e01_nim_part1_bin",
-    srcs = [
-        "s16e01_nim_part1.nim",
-        "common.nim",
-    ],
-    outs = ["s16e01_nim_part1"],
-    cmd = "nim compile --nimcache:$(@D)/nimcache --out:$@ $(location s16e01_nim_part1.nim)",
-    executable = True,
-    visibility = ["//visibility:public"],
-)
-
-sh_binary(
+nim_binary(
     name = "part1",
-    srcs = [":s16e01_nim_part1_bin"],
+    main = "s16e01_nim_part1.nim",
+    deps = ["common.nim"],
+    visibility = ["//visibility:public"],
 )
 
 # Part 2 binary - outputs only part 2 result
-genrule(
-    name = "s16e01_nim_part2_bin",
-    srcs = [
-        "s16e01_nim_part2.nim",
-        "common.nim",
-    ],
-    outs = ["s16e01_nim_part2"],
-    cmd = "nim compile --nimcache:$(@D)/nimcache --out:$@ $(location s16e01_nim_part2.nim)",
-    executable = True,
+nim_binary(
+    name = "part2",
+    main = "s16e01_nim_part2.nim",
+    deps = ["common.nim"],
     visibility = ["//visibility:public"],
 )
 
-sh_binary(
-    name = "part2",
-    srcs = [":s16e01_nim_part2_bin"],
-)
-
 # Unit tests - compile and run tests from common.nim
-genrule(
-    name = "test_bin",
-    srcs = ["common.nim"],
-    outs = ["test_common"],
-    cmd = "nim compile --nimcache:$(@D)/nimcache -r --out:$@ $(location common.nim)",
-    executable = True,
-)
-
-sh_test(
+nim_test(
     name = "common_test",
-    srcs = [":test_bin"],
+    main = "common.nim",
 )

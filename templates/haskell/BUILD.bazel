@@ -1,42 +1,24 @@
 """Build targets for Advent of Code Haskell solution."""
 
+load("//build:haskell.bzl", "haskell_binary", "haskell_test")
+
 # Part 1 binary - outputs only part 1 result
-genrule(
+haskell_binary(
     name = "part1",
-    srcs = [
-        "Part1.hs",
-        "Common.hs",
-    ],
-    outs = ["part1_exe"],
-    cmd = "cd $$(dirname $(location Part1.hs)) && ghc -O2 -outputdir $$OLDPWD/$(@D) -o $$OLDPWD/$@ Part1.hs",
-    executable = True,
+    main = "Part1.hs",
+    deps = ["Common.hs"],
 )
 
 # Part 2 binary - outputs only part 2 result
-genrule(
+haskell_binary(
     name = "part2",
-    srcs = [
-        "Part2.hs",
-        "Common.hs",
-    ],
-    outs = ["part2_exe"],
-    cmd = "cd $$(dirname $(location Part2.hs)) && ghc -O2 -outputdir $$OLDPWD/$(@D) -o $$OLDPWD/$@ Part2.hs",
-    executable = True,
+    main = "Part2.hs",
+    deps = ["Common.hs"],
 )
 
 # Unit tests
-genrule(
-    name = "aoc_tests_bin",
-    srcs = [
-        "Tests.hs",
-        "Common.hs",
-    ],
-    outs = ["tests_exe"],
-    cmd = "cd $$(dirname $(location Tests.hs)) && ghc -O2 -outputdir $$OLDPWD/$(@D) -o $$OLDPWD/$@ Tests.hs",
-    executable = True,
-)
-
-sh_test(
+haskell_test(
     name = "aoc_tests",
-    srcs = [":aoc_tests_bin"],
+    main = "Tests.hs",
+    deps = ["Common.hs"],
 )
