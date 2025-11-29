@@ -80,10 +80,6 @@ clean-inputs:
     rm -rf inputs/
     @echo "✓ Cleaned all cached inputs"
 
-# Generate static Nix expressions (generated.nix) for Haskell flakes using cabal2nix.
-# This will create `generated.nix` beside each `flake.nix` that uses callCabal2nix.
-generate-haskell-nix:
-    @bash scripts/generate-haskell-nix.sh
 
 # Internal: Ensure input is downloaded
 _ensure-input YEAR DAY:
@@ -116,21 +112,10 @@ _run-parts YEAR DAY INPUT:
 
     input_path="../../$INPUT"
 
-    # Detect how to run (with or without Nix flake)
-    if [ -f "flake.nix" ]; then
-        runner="nix develop --command"
-    else
-        runner=""
-    fi
-
     # Part 1
     echo -n "Part 1: "
     start=$(date +%s%N)
-    if [ -n "$runner" ]; then
-        result1=$($runner just run part1 < $input_path 2>&1) || { echo "❌ Failed"; exit 1; }
-    else
-        result1=$(just run part1 < $input_path 2>&1) || { echo "❌ Failed"; exit 1; }
-    fi
+    result1=$(just run part1 < $input_path 2>&1) || { echo "❌ Failed"; exit 1; }
     end=$(date +%s%N)
     duration1=$(echo "scale=1; ($end - $start) / 1000000" | bc)
     echo "$result1 (${duration1}ms)"
@@ -138,11 +123,7 @@ _run-parts YEAR DAY INPUT:
     # Part 2
     echo -n "Part 2: "
     start=$(date +%s%N)
-    if [ -n "$runner" ]; then
-        result2=$($runner just run part2 < $input_path 2>&1)
-    else
-        result2=$(just run part2 < $input_path 2>&1)
-    fi
+    result2=$(just run part2 < $input_path 2>&1)
 
     if [ $? -ne 0 ]; then
         echo "Not yet implemented"

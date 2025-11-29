@@ -1,0 +1,52 @@
+"""Build targets for Advent of Code 2016 Day 1 Python solution."""
+
+load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
+
+# Solution library containing the core solve functions
+py_library(
+    name = "s16e01_python",
+    srcs = [
+        "s16e01/__init__.py",
+        "s16e01/common.py",
+    ],
+    imports = ["."],
+    visibility = ["//visibility:public"],
+)
+
+# Main verification binary - runs both parts and validates results
+py_binary(
+    name = "s16e01-python",
+    srcs = ["s16e01/main.py"],
+    main = "s16e01/main.py",
+    deps = [":s16e01_python"],
+)
+
+# Part 1 binary - outputs only part 1 result
+py_binary(
+    name = "part1",
+    srcs = ["s16e01/part1.py"],
+    main = "s16e01/part1.py",
+    deps = [":s16e01_python"],
+)
+
+# Part 2 binary - outputs only part 2 result
+py_binary(
+    name = "part2",
+    srcs = ["s16e01/part2.py"],
+    main = "s16e01/part2.py",
+    deps = [":s16e01_python"],
+)
+
+# Unit tests
+py_test(
+    name = "s16e01_python_test",
+    srcs = [
+        "tests/__init__.py",
+        "tests/test_solution.py",
+    ],
+    main = "tests/test_solution.py",
+    deps = [
+        ":s16e01_python",
+        "@pip_python_template//pytest",
+    ],
+)

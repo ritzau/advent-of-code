@@ -1,12 +1,10 @@
 # Advent of Code 2025
 
-This year's focus: **Learning Nix Flakes** by solving AoC problems in different languages, each with its own reproducible Nix environment.
+**Note**: This year's solutions are pending migration to Bazel. The structure below describes the planned approach.
 
 ## Philosophy
 
 - **One language per day** - 12 problems, 12 languages
-- **Nix Flakes for everything** - Each day has its own `flake.nix` for reproducible builds
-- **Minimal devcontainer** - Only Nix installed, all languages provided by flakes
 - **Simple interface** - stdin/stdout for all solutions
 - **No fancy unification** - Keep each day self-contained
 
@@ -36,7 +34,7 @@ just new 2025 1 python
 just setup 2025 1 rust
 ```
 
-Available templates: `python`, `rust`, `go`, `kotlin`, `nim`, `zig`
+Available templates: `python`, `rust`, `go`, `kotlin`, `nim`, `zig`, `cpp`, `typescript`, `julia`, `haskell`
 
 ### Solve the Problem
 
@@ -57,8 +55,7 @@ Each day follows this pattern:
 
 ```
 day01/
-├── flake.nix      # Nix flake defining the environment
-├── flake.lock     # Locked dependencies (committed for reproducibility)
+├── BUILD.bazel    # Bazel build configuration (when migrated)
 ├── justfile       # Local commands (run, test, etc.)
 ├── part1.py       # Part 1 solution (reads stdin, prints result)
 ├── part2.py       # Part 2 solution (reads stdin, prints result)
@@ -106,43 +103,11 @@ Available commands:
 - `just format` - Format code with language-specific formatter
 - `just clean` - Remove build artifacts
 
-### Nix Flakes
-
-Each day uses Nix flakes for reproducible environments:
-
-```bash
-# Enter the environment
-cd day01
-nix develop
-
-# Now you have Python (or Rust, Go, etc.) available
-python3 part1.py < input.txt
-
-# Or run directly without entering the shell
-nix develop --command just run part1 < input.txt
-```
-
-### Optional: Pure Nix Build
-
-For Rust and Go templates, you can also build using pure Nix (instead of in a dev shell):
-
-```bash
-cd day01
-nix build              # Build using pure Nix
-./result/bin/part1     # Run the binary
-```
-
-This provides **fully reproducible** builds but is slower than the dev shell approach.
-
-See [NIX_BUILD.md](../../NIX_BUILD.md) for details on when and why to use this.
-
-**Default approach:** Use `just build` (dev shell) for development. Use `nix build` when you need reproducibility guarantees.
-
 ### Orchestration
 
 The `just` command orchestrates everything:
 - Input downloading and caching
-- Running solutions in Nix shells
+- Running solutions
 - Timing execution
 - Pretty printing results
 
@@ -163,7 +128,7 @@ just clean-inputs       # Remove all cached inputs
 Target languages for 2025 (12 days):
 - **Comfortable**: Python, Rust, Go, Kotlin, TypeScript
 - **Revisit**: Java, C++, C#
-- **New/Learning**: Nim, Zig, and more TBD
+- **New/Learning**: Nim, Zig, Julia, and more TBD
 
 Mix it up! Choose based on the problem or what you want to practice.
 

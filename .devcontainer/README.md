@@ -1,81 +1,53 @@
-# Dev Container with Multiple Nix Flakes
+# Dev Container for Advent of Code
 
-This dev container setup allows you to switch between different Nix flakes without restarting the container. It uses direnv with nix-direnv for efficient environment management.
+This dev container provides a consistent development environment for working on Advent of Code solutions.
 
 ## Setup
 
 The container includes:
-- Nix with flakes support
-- direnv for automatic environment loading
-- nix-direnv for efficient Nix integration with direnv
-- VS Code direnv extension for editor integration
+- Bazel for building solutions
+- Language-specific tools managed by Bazel
+- VS Code extensions for various languages
 
 ## Usage
 
-### Switching Between Flakes
+### Building Solutions
 
-Use the provided script to switch between different flake environments:
+All solutions use Bazel for building:
 
 ```bash
-./.devcontainer/switch-flake.sh templates/rust
+# Build all solutions
+bazel build //...
+
+# Build a specific solution
+bazel build //src/AoC16/s16e01-rust:s16e01-rust
+
+# Run a solution
+bazel run //src/AoC23:s23e01-part1
 ```
 
-Available flakes in this project:
-- `templates/python`
-- `templates/rust`
-- `templates/go`
-- `templates/kotlin`
-- `templates/nim`
-- `templates/zig`
+### Running Tests
 
-### After Switching
+```bash
+# Run all tests
+bazel test //...
 
-1. **Terminal**: The environment is automatically reloaded in your current terminal
-2. **VS Code**: Reload the window to pick up the new environment
-   - Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
-   - Type "Developer: Reload Window"
-   - Press Enter
+# Run tests for a specific solution
+bazel test //src/AoC16/s16e01-cpp/tests:solution_test
+```
 
-## How It Works
+## Language Support
 
-1. **`.flake-selection`**: This file stores the currently selected flake path
-2. **`.envrc`**: Reads the selected flake from `.flake-selection` and uses `use flake` to load it
-3. **`switch-flake.sh`**: Updates `.flake-selection` and reloads direnv
+The container supports multiple languages through Bazel's language rules:
+- Python (rules_python)
+- TypeScript (aspect_rules_ts)
+- Rust (rules_rust)
+- Go (rules_go)
+- Haskell (genrule with GHC)
+- Kotlin (rules_kotlin)
+- Julia (rules_julia)
+- C++ (rules_cc)
+- Zig (rules_zig)
+- Nim (genrule)
 
-The direnv VS Code extension ensures that the editor environment stays in sync with your terminal environment.
-
-## Manual Switching
-
-If you prefer to switch manually:
-
-1. Edit `.flake-selection` to contain the desired flake path (e.g., `templates/rust`)
-2. Run `direnv allow .` to reload the environment
-3. Reload the VS Code window
-
-## Troubleshooting
-
-### Environment not loading
-- Make sure direnv is allowed: `direnv allow .`
-- Check that `.flake-selection` contains a valid path
-- Verify the flake directory has a `flake.nix` file
-
-### VS Code not picking up changes
-- Reload the VS Code window after switching flakes
-- Check that the direnv extension is installed and enabled
-
-### Direnv taking a long time
-- First load of a flake takes time to build/download dependencies
-- Subsequent loads use nix-direnv's cache and are instant
-- The cache is stored in `.direnv/` (ignored by git)
-
-## Configuration
-
-### Adding New Flakes
-
-To add a new flake directory:
-1. Create a directory with a `flake.nix` file
-2. Use the switch script to switch to it: `./.devcontainer/switch-flake.sh path/to/new-flake`
-
-### Customizing the Default
-
-Edit `.flake-selection` to change which flake loads by default when the container starts.
+Each language's toolchain is managed by Bazel via MODULE.bazel.

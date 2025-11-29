@@ -3,3 +3,8 @@
 # This file intentionally left minimal.
 # Templates are in //templates/cpp, //templates/rust, etc.
 # Solutions are in //src/AoC16, //src/AoC21, etc.
+
+alias(
+    name = "aoc",
+    actual = "//src/aoc-cli:aoc",
+)

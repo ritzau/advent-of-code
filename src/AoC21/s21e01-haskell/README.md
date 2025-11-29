@@ -9,27 +9,18 @@ Haskell solution for AoC 2021 Day 1.
 
 ## Building and Running
 
-### Using Nix (recommended)
+### Using Bazel (recommended)
 
 ```bash
-# Build
-nix build
-
-# Run tests
-nix flake check
-# or
-just check-test
-
-# Run with sample input
-nix run < sample.txt
+# Build all parts
+bazel build //src/AoC21/s21e01-haskell:all
 
 # Run individual parts
-nix run .#s21e01-haskell-part1 < input.txt
-nix run .#s21e01-haskell-part2 < input.txt
+bazel run //src/AoC21/s21e01-haskell:part1 < input.txt
+bazel run //src/AoC21/s21e01-haskell:part2 < input.txt
 
-# Or using just
-just run part1 < input.txt
-just run part2 < input.txt
+# Run main executable (all parts)
+bazel run //src/AoC21/s21e01-haskell:s21e01-haskell < sample.txt
 ```
 
 ### Using Cabal directly
@@ -56,8 +47,7 @@ cabal run s21e01-haskell-part2 < input.txt
 ├── Main.hs            # Combined executable for all parts
 ├── Tests.hs           # Unit tests
 ├── aoc-solution.cabal # Cabal configuration
-├── flake.nix          # Nix flake for reproducible builds
-├── justfile           # Command shortcuts
+├── BUILD.bazel        # Bazel build configuration
 └── sample.txt         # Sample input data
 ```
 

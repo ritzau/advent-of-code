@@ -1,26 +1,33 @@
-"""Bazel module for Advent of Code monorepo."""
+"""Bazel module for Advent of Code monorepo.
+
+This module defines all language toolchains and dependencies for the multi-language
+Advent of Code solutions. Each language section is clearly separated for maintainability.
+"""
 
 module(
     name = "advent-of-code",
     version = "0.1.0",
 )
 
-bazel_dep(name = "apple_support", version = "1.24.1", repo_name = "build_bazel_apple_support")
-bazel_dep(name = "aspect_rules_js", version = "2.8.2")
-bazel_dep(name = "aspect_rules_ts", version = "3.7.1")
-bazel_dep(name = "gazelle", version = "0.47.0")
-bazel_dep(name = "platforms", version = "1.0.0")
-bazel_dep(name = "rules_cc", version = "0.2.14")
-bazel_dep(name = "rules_go", version = "0.59.0")
-bazel_dep(name = "rules_jvm_external", version = "6.9")
-bazel_dep(name = "rules_kotlin", version = "2.2.0")
-bazel_dep(name = "rules_python", version = "1.7.0")
-bazel_dep(name = "rules_rust", version = "0.67.0")
-bazel_dep(name = "rules_swift", version = "3.1.2")
-bazel_dep(name = "rules_zig", version = "0.12.3")
-bazel_dep(name = "rules_dotnet", version = "0.20.5")
+###############################################################################
+# Core Dependencies
+###############################################################################
 
-# Rust toolchain setup
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "gazelle", version = "0.47.0")
+
+###############################################################################
+# C/C++ Toolchain
+###############################################################################
+
+bazel_dep(name = "rules_cc", version = "0.2.14")
+
+###############################################################################
+# Rust Toolchain and Dependencies
+###############################################################################
+
+bazel_dep(name = "rules_rust", version = "0.67.0")
+
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
     edition = "2024",
@@ -32,7 +39,6 @@ register_toolchains("@rust_toolchains//:all")
 # Crate universe for Rust dependencies
 crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
 
-# Rust template dependencies
 crate.from_cargo(
     name = "crates_rust_template",
     cargo_lockfile = "//templates/rust:Cargo.lock",
@@ -40,19 +46,40 @@ crate.from_cargo(
 )
 use_repo(crate, "crates_rust_template")
 
-# Go toolchain setup
+###############################################################################
+# Go Toolchain and Dependencies
+###############################################################################
+
+bazel_dep(name = "rules_go", version = "0.59.0")
+
 go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
 go_sdk.download(version = "1.25.4")
 
-# Gazelle for Go dependency management
+# Go dependencies via Gazelle
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
-go_deps.from_file(go_mod = "//templates/go:go.mod")
+go_deps.from_file(go_mod = "//src/aoc-cli:go.mod")
+go_deps.module(
+    path = "github.com/spf13/pflag",
+    sum = "h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=",
+    version = "v1.0.5",
+)
+go_deps.module(
+    path = "gopkg.in/yaml.v3",
+    sum = "h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=",
+    version = "v3.0.1",
+)
 use_repo(
     go_deps,
-    # No external dependencies in template yet
+    "com_github_spf13_pflag",
+    "in_gopkg_yaml_v3",
 )
 
-# Python toolchain setup
+###############################################################################
+# Python Toolchain and Dependencies
+###############################################################################
+
+bazel_dep(name = "rules_python", version = "1.7.0")
+
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
     python_version = "3.13.9",
@@ -67,7 +94,14 @@ pip.parse(
 )
 use_repo(pip, "pip_python_template")
 
-# Node.js setup for TypeScript
+###############################################################################
+# TypeScript/Node.js Toolchain and Dependencies
+###############################################################################
+
+bazel_dep(name = "aspect_rules_js", version = "2.8.2")
+bazel_dep(name = "aspect_rules_ts", version = "3.7.1")
+
+# Node.js setup
 node = use_extension("@aspect_rules_js//js:extensions.bzl", "node")
 node.toolchain(node_version = "25.2.1")
 
@@ -76,27 +110,77 @@ rules_ts_ext = use_extension("@aspect_rules_ts//ts:extensions.bzl", "ext", dev_d
 rules_ts_ext.deps()
 use_repo(rules_ts_ext, "npm_typescript")
 
-# npm dependencies for TypeScript template
+# npm dependencies
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
+
 npm.npm_translate_lock(
     name = "npm_typescript_template",
     pnpm_lock = "//templates/typescript:pnpm-lock.yaml",
 )
 use_repo(npm, "npm_typescript_template")
 
-# .NET/C# toolchain setup
-dotnet = use_extension("@rules_dotnet//dotnet:extensions.bzl", "dotnet")
-dotnet.toolchain(dotnet_version = "8.0.200")
-use_repo(dotnet, "dotnet_toolchains")
-register_toolchains("@dotnet_toolchains//:all")
+npm.npm_translate_lock(
+    name = "npm_aoc23",
+    pnpm_lock = "//src/AoC23:pnpm-lock.yaml",
+)
+use_repo(npm, "npm_aoc23")
 
-# Zig toolchain setup
+npm.npm_translate_lock(
+    name = "npm_s16e01_typescript",
+    pnpm_lock = "//src/AoC16/s16e01-typescript:pnpm-lock.yaml",
+)
+use_repo(npm, "npm_s16e01_typescript")
+
+###############################################################################
+# Kotlin/JVM Toolchain and Dependencies
+###############################################################################
+
+bazel_dep(name = "rules_jvm_external", version = "6.9")
+bazel_dep(name = "rules_kotlin", version = "2.2.0")
+
+###############################################################################
+# Zig Toolchain
+###############################################################################
+
+bazel_dep(name = "rules_zig", version = "0.12.3")
+
 zig = use_extension("@rules_zig//zig:extensions.bzl", "zig")
 zig.toolchain(zig_version = "0.15.2")
 use_repo(zig, "zig_toolchains")
 register_toolchains("@zig_toolchains//:all")
 
-# Apple CC toolchain for Swift/Objective-C support
+###############################################################################
+# Julia Toolchain
+###############################################################################
+
+bazel_dep(name = "rules_julia", version = "0.1.0")
+
+julia = use_extension("@rules_julia//julia:extensions.bzl", "julia")
+julia.toolchain(
+    name = "julia_toolchains",
+    version = "1.11.2",
+)
+use_repo(julia, "julia_toolchains")
+register_toolchains("@julia_toolchains//:all")
+
+###############################################################################
+# .NET/C# Toolchain
+###############################################################################
+
+bazel_dep(name = "rules_dotnet", version = "0.20.5")
+
+dotnet = use_extension("@rules_dotnet//dotnet:extensions.bzl", "dotnet")
+dotnet.toolchain(dotnet_version = "8.0.200")
+use_repo(dotnet, "dotnet_toolchains")
+register_toolchains("@dotnet_toolchains//:all")
+
+###############################################################################
+# Swift/Apple Toolchain
+###############################################################################
+
+bazel_dep(name = "apple_support", version = "1.24.1", repo_name = "build_bazel_apple_support")
+bazel_dep(name = "rules_swift", version = "3.1.2")
+
 apple_cc_configure = use_extension("@build_bazel_apple_support//crosstool:setup.bzl", "apple_cc_configure_extension")
 use_repo(apple_cc_configure, "local_config_apple_cc", "local_config_apple_cc_toolchains")
 register_toolchains("@local_config_apple_cc_toolchains//:all")

@@ -1,0 +1,11 @@
+"""Build targets for config package."""
+
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "config",
+    srcs = ["config.go"],
+    importpath = "aoc/config",
+    visibility = ["//src/aoc-cli:__subpackages__"],
+    deps = ["@in_gopkg_yaml_v3//:yaml_v3"],
+)

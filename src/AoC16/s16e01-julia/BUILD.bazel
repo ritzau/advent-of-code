@@ -1,4 +1,4 @@
-"""Build targets for Advent of Code Julia template."""
+"""Build targets for Advent of Code 2016 Day 1 Julia solution."""
 
 load("@rules_julia//julia:defs.bzl", "julia_binary", "julia_library")
 
@@ -10,7 +10,7 @@ julia_library(
 
 # Main verification binary - runs both parts and validates results
 julia_binary(
-    name = "main",
+    name = "s16e01-julia",
     srcs = ["src/main.jl"],
     deps = [":lib"],
 )

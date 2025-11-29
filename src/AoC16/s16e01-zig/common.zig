@@ -39,8 +39,10 @@ pub const Instruction = struct {
     blocks: i32,
 };
 
-pub fn parseInput(allocator: std.mem.Allocator, input: []const u8) !std.ArrayList(Instruction) {
-    var instructions = std.ArrayList(Instruction).init(allocator);
+const InstructionList = std.array_list.Managed(Instruction);
+
+pub fn parseInput(allocator: std.mem.Allocator, input: []const u8) !InstructionList {
+    var instructions = InstructionList.init(allocator);
     errdefer instructions.deinit();
 
     var iter = std.mem.splitSequence(u8, std.mem.trim(u8, input, " \n\r\t"), ", ");

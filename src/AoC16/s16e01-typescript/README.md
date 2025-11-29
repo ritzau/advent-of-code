@@ -2,50 +2,32 @@
 
 TypeScript solution for Advent of Code 2016, Day 1.
 
-## Building with Nix
-
-The first time you build, you'll need to update the npm dependencies hash:
-
-1. Run `nix build`
-2. It will fail with an error showing the expected hash:
-   ```
-   error: hash mismatch in fixed-output derivation
-   specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-   got:       sha256-<actual-hash-here>
-   ```
-3. Copy the "got" hash and update `npmDepsHash` in `flake.nix`
-4. Run `nix build` again
-
-After the first successful build, the hash is locked and builds will be reproducible.
-
-## Running
+## Building with Bazel
 
 ```bash
 # Build
-nix build
-
-# Run verification (reads from stdin)
-cat input.txt | nix run
+bazel build //src/AoC16/s16e01-typescript:all
 
 # Run individual parts
-echo "R2, L3" | nix run .#part1  # Expected: 5
-echo "R8, R4, R4, R8" | nix run .#part2  # Expected: 4
+echo "R2, L3" | bazel run //src/AoC16/s16e01-typescript:part1  # Expected: 5
+echo "R8, R4, R4, R8" | bazel run //src/AoC16/s16e01-typescript:part2  # Expected: 4
+
+# Run verification (reads from stdin, validates both parts)
+cat input.txt | bazel run //src/AoC16/s16e01-typescript:s16e01-typescript
 ```
 
 ## Development
 
 ```bash
-# Enter dev shell
-nix develop
-
 # Install dependencies
-npm install
+cd src/AoC16/s16e01-typescript
+pnpm install
 
 # Compile
-tsc
+pnpm exec tsc
 
 # Run with ts-node
-ts-node part1.ts < input.txt
+npx ts-node part1.ts < input.txt
 ```
 
 ## Solution

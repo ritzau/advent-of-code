@@ -1,0 +1,50 @@
+"""Build targets for Advent of Code 2023 TypeScript solutions."""
+
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@npm_aoc23//:defs.bzl", "npm_link_all_packages")
+
+npm_link_all_packages(name = "node_modules")
+
+# Compile all TypeScript source files to JavaScript
+ts_project(
+    name = "typescript_sources",
+    srcs = glob(
+        [
+            "lib/**/*.ts",
+            "s23e*/**/*.ts",
+        ],
+        exclude = ["**/*.test.ts"],
+    ),
+    resolve_json_module = True,
+    tsconfig = ":tsconfig.json",
+    transpiler = "tsc",
+    deps = [
+        ":node_modules/@types/node",
+    ],
+)
+
+# Create binaries for each day's part1 and part2
+[
+    [
+        js_binary(
+            name = "s23e%s-part1" % ("0" + str(day) if day < 10 else str(day)),
+            data = [":typescript_sources"],
+            entry_point = "s23e%s/s23e%s-part1.js" % (
+                ("0" + str(day) if day < 10 else str(day)),
+                ("0" + str(day) if day < 10 else str(day)),
+            ),
+            node_options = ["--enable-source-maps"],
+        ),
+        js_binary(
+            name = "s23e%s-part2" % ("0" + str(day) if day < 10 else str(day)),
+            data = [":typescript_sources"],
+            entry_point = "s23e%s/s23e%s-part2.js" % (
+                ("0" + str(day) if day < 10 else str(day)),
+                ("0" + str(day) if day < 10 else str(day)),
+            ),
+            node_options = ["--enable-source-maps"],
+        ),
+    ]
+    for day in range(1, 20)
+]
