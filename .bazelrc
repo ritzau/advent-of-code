@@ -27,3 +27,6 @@ build --incompatible_enable_cc_toolchain_resolution
 # Rust settings - enable clippy for all builds
 build --aspects=@rules_rust//rust:defs.bzl%rust_clippy_aspect
 build --output_groups=+clippy_checks
+
+# Swift settings - minimum macOS deployment target
+build --macos_minimum_os=10.15

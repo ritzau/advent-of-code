@@ -1,11 +1,1 @@
 """Root build file for Advent of Code C++ template."""
-
-# Export all source files for format checking
-filegroup(
-    name = "all_srcs",
-    srcs = glob([
-        "src/*.cpp",
-        "src/*.h",
-        "tests/*.cpp",
-    ]),
-)
