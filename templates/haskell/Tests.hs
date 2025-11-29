@@ -12,16 +12,16 @@ main = do
 
   -- Test Part 1
   if part1Result == 0
-    then putStrLn "✓ Part 1 test passed"
+    then putStrLn "[PASS] Part 1 test passed"
     else do
-      putStrLn $ "✗ Part 1 test failed: expected 0, got " ++ show part1Result
+      putStrLn $ "[FAIL] Part 1 test failed: expected 0, got " ++ show part1Result
       exitFailure
 
   -- Test Part 2
   if part2Result == 0
-    then putStrLn "✓ Part 2 test passed"
+    then putStrLn "[PASS] Part 2 test passed"
     else do
-      putStrLn $ "✗ Part 2 test failed: expected 0, got " ++ show part2Result
+      putStrLn $ "[FAIL] Part 2 test failed: expected 0, got " ++ show part2Result
       exitFailure
 
   putStrLn "All tests passed!"
