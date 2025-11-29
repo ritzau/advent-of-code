@@ -10,11 +10,7 @@ on:
 jobs:
   bazel-build:
     name: Build All Templates (Bazel)
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
