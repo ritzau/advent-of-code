@@ -20,6 +20,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Nim
+        uses: jiro4989/setup-nim-action@v2
+        with:
+          nim-version: '2.2.0'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Mount bazel cache
         uses: actions/cache@v3
         with:
