@@ -26,11 +26,17 @@ func main() {
 
 	pflag.Parse()
 
-	// Get root directory (assume we're running from the root)
-	rootDir, err := os.Getwd()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to get working directory: %v\n", err)
-		os.Exit(1)
+	// Get root directory
+	// When running via 'bazel run', use BUILD_WORKSPACE_DIRECTORY
+	// Otherwise, use current working directory
+	rootDir := os.Getenv("BUILD_WORKSPACE_DIRECTORY")
+	if rootDir == "" {
+		var err error
+		rootDir, err = os.Getwd()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to get working directory: %v\n", err)
+			os.Exit(1)
+		}
 	}
 
 	// Check if a command was provided

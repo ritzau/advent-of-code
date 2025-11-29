@@ -1,0 +1,8 @@
+"""Test targets for Advent of Code 2016 Day 1 C++ solution."""
+
+# Unit tests
+cc_test(
+    name = "solution_test",
+    srcs = ["test_solution.cpp"],
+    deps = ["//src/AoC16/s16e01-cpp/src:solution"],
+)

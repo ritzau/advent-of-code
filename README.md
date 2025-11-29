@@ -4,166 +4,185 @@ Multi-year, multi-language solutions for [Advent of Code](https://adventofcode.c
 
 ## 🎄 Years
 
-- **[AoC 2025](src/AoC25/)** - 12 languages, 12 days, learning Nix *(in progress)*
+- **[AoC 2025](src/AoC25/)** - 12 languages, 12 days *(in progress)*
 - **[AoC 2023](src/AoC23/)** - TypeScript (19/25 days complete)
 - **[AoC 2022](src/AoC22/)** - Haskell (15/25 days complete)
 - **[AoC 2021](src/AoC21/)** - Haskell (1/25 days complete)
+- **[AoC 2016](src/AoC16/)** - 10 languages, 1 day
 
-## 🚀 Quick Start (AoC 2025+)
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- [Nix](https://nixos.org/download.html) installed
-- [just](https://github.com/casey/just) command runner (installed automatically in devcontainer)
-- Advent of Code session cookie
+**Required:**
+- [Bazel](https://bazel.build/) 7.x or later (or [Bazelisk](https://github.com/bazelbuild/bazelisk) for automatic version management)
+- [GHC](https://www.haskell.org/ghc/) (Haskell compiler) - for Haskell solutions
+- [Nim](https://nim-lang.org/) compiler - for Nim solutions
+
+**Optional:**
+- [just](https://github.com/casey/just) command runner - for convenience commands
+- Advent of Code session cookie - for automatic input downloading
+
+**Note:** All other language toolchains (Go, Rust, TypeScript/Node.js, Kotlin, Julia, Zig, C++, .NET) are automatically managed by Bazel via [MODULE.bazel](MODULE.bazel).
 
 ### Setup
 
-1. **Clone and open in GitHub Codespaces** (or locally with Nix)
-2. **Add your session cookie**:
+1. **Clone the repository**
+
+2. **Add your session cookie** (optional, for downloading inputs):
    ```bash
    echo "your_session_cookie_here" > .aoc-session
    ```
 
-3. **Create and solve a day**:
+3. **Download puzzle inputs** (optional):
    ```bash
-   # Create from template
-   just setup 2025 1 python
+   # Download input for a specific day
+   bazel run //src/aoc-cli:aoc -- download -y 2016 -d 1
+   ```
 
-   # Edit sample input and solution
-   vim src/AoC25/day01/sample.txt
-   vim src/AoC25/day01/part1.py
+4. **Build and run solutions**:
+   ```bash
+   # Build all solutions
+   bazel build //...
 
-   # Test with sample
-   just test 2025 1
+   # Build a specific solution (all parts)
+   bazel build //src/AoC16/s16e01-rust:all
 
-   # Run with real input
-   just run 2025 1
+   # Run a solution part
+   echo "R2, L3" | bazel run //src/AoC16/s16e01-rust:part1
+   echo "R8, R4, R4, R8" | bazel run //src/AoC16/s16e01-rust:part2
+
+   # Run main verification binary (validates both parts)
+   bazel run //src/AoC16/s16e01-rust:s16e01-rust < input.txt
+
+   # Run tests
+   bazel test //...
    ```
 
 ### Available Templates
 
-- `python` - Python 3
-- `typescript` - TypeScript with Node.js
-- `rust` - Rust with Cargo
-- `go` - Go
-- `haskell` - Haskell with Cabal
-- `kotlin` - Kotlin scripting
-- `nim` - Nim
-- `zig` - Zig
+- `python` - Python 3.13
+- `typescript` - TypeScript with Node.js 25
+- `rust` - Rust 1.91
+- `go` - Go 1.25
+- `haskell` - Haskell (GHC via genrule)
+- `kotlin` - Kotlin JVM
+- `nim` - Nim compiler
+- `zig` - Zig 0.15
+- `cpp` - C++ with CMake
+- `julia` - Julia 1.11
 
-Each template includes a Nix flake for reproducible builds.
+All templates include Bazel BUILD files for reproducible builds.
 
-## 📋 Commands
+## 📋 Building
 
 ```bash
-just                    # List all available commands
-just new 2025 1 python  # Create day from template
-just download 2025 1    # Download input
-just setup 2025 1 rust  # Create + download
-just test 2025 1        # Test with sample
-just run 2025 1         # Run with real input
-just run-all 2025       # Run all days for a year
-just clean-inputs       # Clear input cache
+# Build everything
+bazel build //...
+
+# Build specific year
+bazel build //src/AoC23:all
+bazel build //src/AoC16/...
+
+# Build specific solution
+bazel build //src/AoC16/s16e01-rust:all
+bazel build //src/AoC22:aoc22
+
+# Run tests
+bazel test //src/AoC16/s16e01-cpp/tests:solution_test
+bazel test //templates/rust:all
+
+# Run a solution
+bazel run //src/AoC16/s16e01-rust:s16e01-rust < input.txt
 ```
+
+## 🔧 AoC CLI
+
+The repository includes a custom CLI tool for downloading inputs, building solutions, and running tests:
+
+```bash
+# Run all solutions for a specific day
+bazel run //src/aoc-cli:aoc -- run -y 2016 -d 1
+
+# Run a specific language implementation
+bazel run //src/aoc-cli:aoc -- run -y 2016 -d 1 -l rust
+
+# Download puzzle input
+bazel run //src/aoc-cli:aoc -- download -y 2016 -d 1
+
+# Show help
+bazel run //src/aoc-cli:aoc -- --help
+```
+
+The CLI automatically:
+- Finds all language implementations for a given day
+- Builds solutions using Bazel
+- Runs both parts and validates results
+- Displays execution times and success/failure status
 
 ## 📁 Structure
 
 ```
 advent-of-code/
 ├── src/
-│   ├── AoC25/          # 2025 solutions (multi-language, Nix-based)
+│   ├── AoC25/          # 2025 solutions (multi-language)
 │   ├── AoC23/          # 2023 solutions (TypeScript)
 │   ├── AoC22/          # 2022 solutions (Haskell)
-│   └── AoC21/          # 2021 solutions (Haskell)
-├── templates/          # Language templates for new days
-├── scripts/            # Helper scripts (input downloader)
-├── inputs/             # Cached inputs (gitignored)
-├── justfile            # Command orchestration
-└── .devcontainer/      # GitHub Codespaces config
+│   ├── AoC21/          # 2021 solutions (Haskell)
+│   ├── AoC16/          # 2016 solutions (10 languages)
+│   └── aoc-cli/        # CLI test runner (Go)
+├── templates/          # Language templates for new solutions
+├── scripts/            # Helper scripts
+├── MODULE.bazel        # Bazel module configuration
+├── BUILD.bazel         # Root BUILD file
+└── justfile            # Command orchestration (optional)
 ```
 
-## 🎯 2025 Goals
+## 🎯 Build System
 
-- **12 languages in 12 days** - One different language per day
-- **Learn Nix Flakes** - Each day has its own reproducible Nix flake
-- **Minimal dependencies** - Only Nix in devcontainer, languages provided by flakes
-- **Simple interface** - All solutions use stdin/stdout
-- **GitHub Codespaces** - Develop anywhere with zero local setup
+This repository uses **Bazel** for reproducible builds across all languages:
 
-## 🔧 Legacy Solutions
+- **Hermetic builds** - All dependencies managed by Bazel
+- **Cross-language support** - Unified build system for 10+ languages
+- **Caching** - Fast incremental builds
+- **Toolchain management** - Specific language versions pinned in MODULE.bazel
 
-### AoC 2023 (TypeScript)
+### Language-Specific Notes
 
-AoC 2023 includes a Nix flake for reproducible builds using `mkYarnPackage` to respect the upstream yarn.lock file:
+**TypeScript (AoC 2023)**:
+- Uses `aspect_rules_ts` and `aspect_rules_js`
+- pnpm for dependency management
+- 19 days with part1 and part2 binaries
 
-```bash
-cd src/AoC23
+**Haskell (AoC 2021, AoC 2022)**:
+- Uses `genrule` with GHC compiler
+- Simple builds without external package dependencies
+- AoC22: Single executable for all 15 days
+- AoC21: Three executables (main, part1, part2)
 
-# Using Nix (recommended)
-nix develop        # Enter development shell with nodejs_20 and yarn
-yarn install       # Install dependencies from yarn.lock
-yarn start         # Run all solutions
+**Rust (AoC 2016)**:
+- Uses `rules_rust` with Cargo
+- Rust 1.91 toolchain
 
-# Or use just commands
-just install       # Install dependencies
-just run           # Run all solutions
+**Julia (AoC 2016)**:
+- Uses `rules_julia`
+- Julia 1.11.2 toolchain
+- Proper library and binary rules
 
-# Without Nix
-yarn install
-yarn start
-```
-
-The flake uses Node.js 20 (matching upstream) and manages dependencies via yarn.lock for reproducibility.
-
-### AoC 2022 (Haskell)
-
-AoC 2022 has 15 days completed in Haskell with a Nix flake for reproducible builds:
-
-```bash
-cd src/AoC22
-
-# Using Nix (recommended)
-nix build          # Build the project
-nix run            # Run all 15 days
-
-# Using Cabal
-cabal build
-cabal run aoc22
-
-# Using Just
-just run           # Run all solutions
-just format        # Format code with ormolu
-just lint          # Lint with hlint
-```
-
-### AoC 2021 (Haskell)
-
-AoC 2021 has 1 day completed in Haskell with a Nix flake:
-
-```bash
-cd src/AoC21
-
-# Using Nix (recommended)
-nix build          # Build the project
-nix run            # Run day 1
-
-# Using Cabal
-cabal build
-cabal run aoc21
-
-# Using Just
-just run
-```
+**Other Languages**:
+- Go: `rules_go` with gazelle
+- Python: `rules_python` with pip
+- C++: `rules_cc` with native toolchain
+- Kotlin: `rules_kotlin` with JVM
+- Zig: `rules_zig` 0.15.2
+- Nim: genrule with nim compiler
 
 ## 📝 Notes
 
 - Inputs are downloaded on demand and cached locally (gitignored)
 - Sample inputs from problem descriptions are checked into git
-- `flake.lock` files are committed for reproducibility
-- Each year may use different approaches as I experiment and learn
-- 2025+ uses Nix Flakes for reproducible environments across all languages
-- Devcontainer only installs Nix - all language tooling comes from flakes
+- All solutions use stdin/stdout for I/O
+- Each language may use different approaches for experimentation
 
 ## 🤝 Contributing
 

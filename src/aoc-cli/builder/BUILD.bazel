@@ -1,0 +1,10 @@
+"""Build targets for builder package."""
+
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "builder",
+    srcs = ["builder.go"],
+    importpath = "aoc/builder",
+    visibility = ["//src/aoc-cli:__subpackages__"],
+)

@@ -1,28 +1,25 @@
 # AoC 2016 Day 1: No Time for a Taxicab (Haskell)
 
-Solution using the Haskell Cabal template.
+Solution using Haskell with Bazel genrule build.
 
 ## Building and Running
 
-### Using Nix (recommended)
+### Using Bazel (recommended)
 
 ```bash
 # Build
-nix build
-
-# Run tests
-just test
+bazel build //src/AoC16/s16e01-haskell:all
 
 # Run part 1
-echo "R2, L3" | just run-part 1
+echo "R2, L3" | bazel run //src/AoC16/s16e01-haskell:part1
 # Expected output: 5
 
 # Run part 2
-echo "R8, R4, R4, R8" | just run-part 2
+echo "R8, R4, R4, R8" | bazel run //src/AoC16/s16e01-haskell:part2
 # Expected output: 4
 
-# Run all checks
-just check
+# Run main executable (both parts with verification)
+bazel run //src/AoC16/s16e01-haskell:s16e01-haskell < input.txt
 ```
 
 ### Using Cabal directly

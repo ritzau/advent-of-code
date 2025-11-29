@@ -1,0 +1,39 @@
+"""Build targets for Advent of Code 2016 Day 1 Go solution."""
+
+load("@rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+
+# Common library
+go_library(
+    name = "common",
+    srcs = ["common/common.go"],
+    importpath = "s16e01/common",
+    visibility = ["//visibility:public"],
+)
+
+# Tests for common library
+go_test(
+    name = "common_test",
+    srcs = ["common/common_test.go"],
+    embed = [":common"],
+)
+
+# Main binary - runs both parts and validates results
+go_binary(
+    name = "s16e01-go",
+    srcs = ["main.go"],
+    deps = [":common"],
+)
+
+# Part 1 binary - outputs only part 1 result
+go_binary(
+    name = "part1",
+    srcs = ["cmd/s16e01-go-part1/main.go"],
+    deps = [":common"],
+)
+
+# Part 2 binary - outputs only part 2 result
+go_binary(
+    name = "part2",
+    srcs = ["cmd/s16e01-go-part2/main.go"],
+    deps = [":common"],
+)

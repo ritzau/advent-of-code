@@ -7,13 +7,6 @@
 .aoc-session
 input.txt
 
-# Nix
-.direnv/
-.flake-selection
-result
-result-*
-.aoc-build/
-
 # Language-specific
 node_modules/
 target/

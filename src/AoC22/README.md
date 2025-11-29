@@ -22,14 +22,14 @@
 
 ## Building and Running
 
-### Using Nix (recommended)
+### Using Bazel (recommended)
 
 ```bash
 # Build
-nix build
+bazel build //src/AoC22:aoc22
 
 # Run all solutions
-nix run
+bazel run //src/AoC22:aoc22
 ```
 
 ### Using Cabal directly
@@ -42,29 +42,12 @@ cabal build
 cabal run aoc22
 ```
 
-### Using Just
-
-```bash
-# Build
-just build
-
-# Run all solutions
-just run
-
-# Format code
-just format
-
-# Lint code
-just lint
-```
-
 ## Project Structure
 
 ```
 src/AoC22/
 ├── aoc22.cabal       # Cabal package configuration
-├── flake.nix         # Nix flake for reproducible builds
-├── justfile          # Command shortcuts
+├── BUILD.bazel       # Bazel build configuration
 ├── Main.hs           # Main entry point that runs all days
 ├── Helpers.hs        # Shared utility functions
 ├── AoC22E01.hs       # Day 1 solution
@@ -78,9 +61,9 @@ src/AoC22/
 
 ## Dependencies
 
-- GHC 9.2+
-- Cabal 3.0+
-- Nix (optional, for reproducible builds)
+- GHC 9.2+ (managed by Bazel)
+- Cabal 3.0+ (for direct builds)
+- Bazel 7.x+ (recommended, for reproducible builds)
 
 ## Output Format
 

@@ -5,7 +5,7 @@ Test infrastructure for Advent of Code solutions - pure Go implementation.
 ## Features
 
 - Downloads and caches puzzle inputs automatically (pure Go HTTP client)
-- Builds solutions using Nix (with fallback to `go build`)
+- Builds solutions using Bazel
 - Runs solutions and captures output
 - Verifies results against expected values
 - Supports running individual days, entire years, or all solutions
@@ -53,7 +53,7 @@ Create a `results.yaml` file in the repository root:
 
 - Go 1.21 or later
 - `.aoc-session` file with your Advent of Code session cookie
-- (Optional) Nix with flakes enabled for reproducible builds
+- Bazel 7.x or later for building solutions
 
 ## Solution Structure
 
@@ -69,7 +69,7 @@ src/AoC16/s16e01-go/
 ├── common/
 │   └── common.go    # Shared solution code
 ├── main.go          # Optional: pretty output with timing
-├── flake.nix        # Nix build configuration
+├── BUILD.bazel      # Bazel build configuration
 └── go.mod
 ```
 
@@ -81,22 +81,20 @@ The `part1` and `part2` binaries must:
 ## Building
 
 ```bash
-# Build with Nix
-nix build
+# Build with Bazel
+bazel build //src/aoc-cli:aoc
 
-# Or build with Go directly
-go build
+# Run the CLI
+bazel run //src/aoc-cli:aoc -- --year 2016 --day 1
 ```
 
 ## Development
 
 ```bash
-# Enter development shell
-nix develop
-
 # Run tests
-go test ./...
+bazel test //src/aoc-cli/...
 
-# Format code
+# Or use Go directly
+go test ./...
 go fmt ./...
 ```

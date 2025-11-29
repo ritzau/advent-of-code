@@ -1,0 +1,10 @@
+"""Build targets for downloader package."""
+
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "downloader",
+    srcs = ["downloader.go"],
+    importpath = "aoc/downloader",
+    visibility = ["//src/aoc-cli:__subpackages__"],
+)

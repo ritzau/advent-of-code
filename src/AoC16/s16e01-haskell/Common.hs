@@ -10,8 +10,19 @@ module Common
 where
 
 import Data.List (foldl')
-import Data.List.Split (splitOn)
 import qualified Data.Set as Set
+
+-- | Simple splitOn implementation to avoid external dependency
+splitOn :: Eq a => [a] -> [a] -> [[a]]
+splitOn delimiter = go
+  where
+    go [] = [[]]
+    go str
+      | take len str == delimiter = [] : go (drop len str)
+      | otherwise = case go (tail str) of
+          (x : xs) -> (head str : x) : xs
+          [] -> [[head str]]
+    len = length delimiter
 
 -- | Cardinal directions
 data Direction = North | East | South | West

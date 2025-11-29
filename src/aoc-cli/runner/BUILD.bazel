@@ -1,0 +1,15 @@
+"""Build targets for runner package."""
+
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "runner",
+    srcs = ["runner.go"],
+    importpath = "aoc/runner",
+    visibility = ["//src/aoc-cli:__subpackages__"],
+    deps = [
+        "//src/aoc-cli/builder",
+        "//src/aoc-cli/config",
+        "@in_gopkg_yaml_v3//:yaml_v3",
+    ],
+)

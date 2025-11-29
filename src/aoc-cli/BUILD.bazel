@@ -1,0 +1,25 @@
+"""Build targets for AoC CLI tool."""
+
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+# Main binary
+go_binary(
+    name = "aoc",
+    embed = [":aoc_lib"],
+    visibility = ["//visibility:public"],
+)
+
+# Main library
+go_library(
+    name = "aoc_lib",
+    srcs = ["main.go"],
+    importpath = "aoc",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//src/aoc-cli/builder",
+        "//src/aoc-cli/config",
+        "//src/aoc-cli/downloader",
+        "//src/aoc-cli/runner",
+        "@com_github_spf13_pflag//:pflag",
+    ],
+)

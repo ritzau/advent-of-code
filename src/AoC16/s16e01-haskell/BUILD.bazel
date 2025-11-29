@@ -1,0 +1,58 @@
+"""Build targets for Advent of Code 2016 Day 1 Haskell solution."""
+
+# Main executable - runs both parts and validates results
+genrule(
+    name = "s16e01-haskell",
+    srcs = [
+        "Main.hs",
+        "Common.hs",
+    ],
+    outs = ["s16e01-haskell_exe"],
+    cmd = """
+        cd $$(dirname $(location Main.hs))
+        ghc -O2 \\
+            -outputdir $$OLDPWD/$(@D) \\
+            -o $$OLDPWD/$@ \\
+            Main.hs
+    """,
+    executable = True,
+)
+
+# Part 1 binary - outputs only part 1 result
+genrule(
+    name = "part1",
+    srcs = [
+        "Part1Main.hs",
+        "Common.hs",
+    ],
+    outs = ["part1_exe"],
+    cmd = """
+        cd $$(dirname $(location Part1Main.hs))
+        ghc -O2 \\
+            -outputdir $$OLDPWD/$(@D) \\
+            -o $$OLDPWD/$@ \\
+            Part1Main.hs
+    """,
+    executable = True,
+)
+
+# Part 2 binary - outputs only part 2 result
+genrule(
+    name = "part2",
+    srcs = [
+        "Part2Main.hs",
+        "Common.hs",
+    ],
+    outs = ["part2_exe"],
+    cmd = """
+        cd $$(dirname $(location Part2Main.hs))
+        ghc -O2 \\
+            -outputdir $$OLDPWD/$(@D) \\
+            -o $$OLDPWD/$@ \\
+            Part2Main.hs
+    """,
+    executable = True,
+)
+
+# TODO: Add tests once Haskell package dependencies are supported
+# The tests require the HUnit package which isn't available in simple genrule builds
