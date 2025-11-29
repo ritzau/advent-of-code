@@ -26,21 +26,46 @@ jobs:
           nim-version: '2.2.0'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Mount bazel cache
+      - name: Setup Bazel disk cache
+        run: |
+          mkdir -p ~/.cache/bazel-disk-cache
+          mkdir -p ~/.cache/bazel-repository-cache
+
+      - name: Mount bazel repository cache
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.cache/bazel
-            ~/.cache/bazelisk
-          key: ${{ runner.os }}-bazel-${{ hashFiles('.bazelversion', 'MODULE.bazel', 'MODULE.bazel.lock') }}
+          path: ~/.cache/bazel-repository-cache
+          key: ${{ runner.os }}-bazel-repo-${{ hashFiles('MODULE.bazel.lock') }}
           restore-keys: |
-            ${{ runner.os }}-bazel-
+            ${{ runner.os }}-bazel-repo-
+
+      - name: Mount bazel disk cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/bazel-disk-cache
+          key: ${{ runner.os }}-bazel-disk-${{ hashFiles('.bazelversion', 'MODULE.bazel', 'MODULE.bazel.lock', '**/BUILD.bazel') }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-disk-
+
+      - name: Mount bazelisk cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/bazelisk
+          key: ${{ runner.os }}-bazelisk-${{ hashFiles('.bazelversion') }}
+          restore-keys: |
+            ${{ runner.os }}-bazelisk-
 
       - name: Build all templates
-        run: bazel build //...
+        run: |
+          bazel build //... \
+            --repository_cache=~/.cache/bazel-repository-cache \
+            --disk_cache=~/.cache/bazel-disk-cache
 
       - name: Run all tests
-        run: bazel test //...
+        run: |
+          bazel test //... \
+            --repository_cache=~/.cache/bazel-repository-cache \
+            --disk_cache=~/.cache/bazel-disk-cache
 
       - name: Build summary
         if: always()
