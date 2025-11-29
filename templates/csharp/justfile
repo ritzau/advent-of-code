@@ -3,26 +3,26 @@
 
 # Build the solution
 build:
-    bazel build //templates/julia:part1 //templates/julia:part2
+    bazel build //templates/csharp:main
 
 # Run the main verification binary
 run:
-    bazel run //templates/julia:main
+    bazel run //templates/csharp:main
 
 # Run a specific part with input from stdin
 run-part PART:
-    bazel run //templates/julia:part{{PART}}
+    bazel run //templates/csharp:part{{PART}}
 
 # Format code
 format:
-    julia -e 'using JuliaFormatter; format(".")'
+    dotnet format
 
 # Run all checks (build + tests)
 check-all: build test
 
 # Run tests only
 test:
-    bazel test //templates/julia:aoc_tests
+    bazel test //templates/csharp:aoc_tests
 
 # Clean build artifacts
 clean:

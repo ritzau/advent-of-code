@@ -1,0 +1,30 @@
+"""Build targets for Advent of Code Zig solution."""
+
+load("@rules_zig//zig:defs.bzl", "zig_binary", "zig_library", "zig_test")
+
+# Shared solution library
+zig_library(
+    name = "common",
+    main = "common.zig",
+    visibility = ["//visibility:public"],
+)
+
+# Part 1 binary - outputs only part 1 result
+zig_binary(
+    name = "part1",
+    main = "part1.zig",
+    deps = [":common"],
+)
+
+# Part 2 binary - outputs only part 2 result
+zig_binary(
+    name = "part2",
+    main = "part2.zig",
+    deps = [":common"],
+)
+
+# Unit tests
+zig_test(
+    name = "common_test",
+    main = "common.zig",
+)

@@ -1,0 +1,113 @@
+"""Build targets for Advent of Code Julia solution."""
+
+# Part 1 binary - outputs only part 1 result
+genrule(
+    name = "part1",
+    srcs = [
+        "src/part1.jl",
+        "src/lib.jl",
+    ],
+    outs = ["part1.sh"],
+    cmd = """
+cat > $@ << 'EOF'
+#!/bin/bash
+SCRIPT_DIR=$$(cd "$$(dirname "$${BASH_SOURCE[0]}")" && pwd)
+cd $$SCRIPT_DIR/../../../templates/julia
+julia src/part1.jl
+EOF
+chmod +x $@
+    """,
+    executable = True,
+)
+
+# Part 2 binary - outputs only part 2 result
+genrule(
+    name = "part2",
+    srcs = [
+        "src/part2.jl",
+        "src/lib.jl",
+    ],
+    outs = ["part2.sh"],
+    cmd = """
+cat > $@ << 'EOF'
+#!/bin/bash
+SCRIPT_DIR=$$(cd "$$(dirname "$${BASH_SOURCE[0]}")" && pwd)
+cd $$SCRIPT_DIR/../../../templates/julia
+julia src/part2.jl
+EOF
+chmod +x $@
+    """,
+    executable = True,
+)
+
+# Main verification binary
+genrule(
+    name = "main",
+    srcs = [
+        "src/main.jl",
+        "src/lib.jl",
+    ],
+    outs = ["main.sh"],
+    cmd = """
+cat > $@ << 'EOF'
+#!/bin/bash
+SCRIPT_DIR=$$(cd "$$(dirname "$${BASH_SOURCE[0]}")" && pwd)
+cd $$SCRIPT_DIR/../../../templates/julia
+julia src/main.jl
+EOF
+chmod +x $@
+    """,
+    executable = True,
+)
+
+# Precompile Julia depot during build (cached as tarball)
+genrule(
+    name = "julia_depot",
+    srcs = ["src/lib.jl"],
+    outs = ["depot.tar.gz"],
+    cmd = """
+        DEPOT_DIR=$$(mktemp -d)
+        export JULIA_DEPOT_PATH=$$DEPOT_DIR
+        julia -e 'include("$(location src/lib.jl)"); using .AoCSolution'
+        tar -czf $@ -C $$DEPOT_DIR .
+        rm -rf $$DEPOT_DIR
+    """,
+)
+
+# Unit tests
+genrule(
+    name = "aoc_tests_bin",
+    srcs = [
+        "test/runtests.jl",
+        "src/lib.jl",
+    ],
+    outs = ["run_tests.sh"],
+    cmd = """
+cat > $@ << 'EOF'
+#!/bin/bash
+# Extract precompiled depot to temp location
+DEPOT_DIR=$$(mktemp -d)
+tar -xzf "$$(dirname "$$0")/depot.tar.gz" -C $$DEPOT_DIR
+export JULIA_DEPOT_PATH=$$DEPOT_DIR
+
+# Navigate to test directory
+cd "$$(dirname "$$0")"
+julia -e 'include("test/runtests.jl")'
+
+# Cleanup
+rm -rf $$DEPOT_DIR
+EOF
+chmod +x $@
+    """,
+    executable = True,
+)
+
+sh_test(
+    name = "aoc_tests",
+    srcs = [":aoc_tests_bin"],
+    data = [
+        "test/runtests.jl",
+        "src/lib.jl",
+        ":julia_depot",
+    ],
+)

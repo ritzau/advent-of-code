@@ -1,5 +1,9 @@
 using Test
 
+# Include the library module
+include("../src/lib.jl")
+using .AoCSolution
+
 @testset "AoC Solution Tests" begin
     @testset "Part 1" begin
         input = "sample input"

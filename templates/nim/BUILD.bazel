@@ -1,0 +1,69 @@
+"""Build targets for Advent of Code Nim solution."""
+
+# Main verification binary - runs both parts and validates results
+genrule(
+    name = "main_bin",
+    srcs = [
+        "template_nim.nim",
+        "common.nim",
+    ],
+    outs = ["template_nim"],
+    cmd = "nim compile --nimcache:$(@D)/nimcache --out:$@ $(location template_nim.nim)",
+    executable = True,
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "main",
+    srcs = [":main_bin"],
+)
+
+# Part 1 binary - outputs only part 1 result
+genrule(
+    name = "part1_bin",
+    srcs = [
+        "template_nim_part1.nim",
+        "common.nim",
+    ],
+    outs = ["template_nim_part1"],
+    cmd = "nim compile --nimcache:$(@D)/nimcache --out:$@ $(location template_nim_part1.nim)",
+    executable = True,
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "part1",
+    srcs = [":part1_bin"],
+)
+
+# Part 2 binary - outputs only part 2 result
+genrule(
+    name = "part2_bin",
+    srcs = [
+        "template_nim_part2.nim",
+        "common.nim",
+    ],
+    outs = ["template_nim_part2"],
+    cmd = "nim compile --nimcache:$(@D)/nimcache --out:$@ $(location template_nim_part2.nim)",
+    executable = True,
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "part2",
+    srcs = [":part2_bin"],
+)
+
+# Unit tests - compile and run tests from common.nim
+genrule(
+    name = "test_bin",
+    srcs = ["common.nim"],
+    outs = ["test_common"],
+    cmd = "nim compile --nimcache:$(@D)/nimcache -r --out:$@ $(location common.nim)",
+    executable = True,
+)
+
+sh_test(
+    name = "common_test",
+    srcs = [":test_bin"],
+)

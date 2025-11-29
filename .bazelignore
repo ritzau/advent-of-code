@@ -1,0 +1,4 @@
+# Swift templates disabled due to conflict with toolchains_llvm
+# Swift requires Apple's native linker, while toolchains_llvm uses LLVM's linker
+# Move to separate branch for Swift-only development
+templates/swift

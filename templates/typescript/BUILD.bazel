@@ -1,0 +1,46 @@
+"""Build targets for Advent of Code TypeScript solution."""
+
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@npm_typescript_template//:defs.bzl", "npm_link_all_packages")
+
+npm_link_all_packages(name = "node_modules")
+
+# Compile all TypeScript source files to JavaScript
+ts_project(
+    name = "typescript_sources",
+    srcs = [
+        "common.ts",
+        "main.ts",
+        "part1.ts",
+        "part2.ts",
+    ],
+    resolve_json_module = True,
+    tsconfig = ":tsconfig.json",
+    transpiler = "tsc",
+    deps = [":node_modules/@types/node"],
+)
+
+# Main verification binary - runs both parts and validates results
+js_binary(
+    name = "main",
+    data = [":typescript_sources"],
+    entry_point = "main.js",
+    node_options = ["--enable-source-maps"],
+)
+
+# Part 1 binary - outputs only part 1 result
+js_binary(
+    name = "part1",
+    data = [":typescript_sources"],
+    entry_point = "part1.js",
+    node_options = ["--enable-source-maps"],
+)
+
+# Part 2 binary - outputs only part 2 result
+js_binary(
+    name = "part2",
+    data = [":typescript_sources"],
+    entry_point = "part2.js",
+    node_options = ["--enable-source-maps"],
+)

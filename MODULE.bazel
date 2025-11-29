@@ -5,21 +5,20 @@ module(
     version = "0.1.0",
 )
 
+bazel_dep(name = "apple_support", version = "1.24.1", repo_name = "build_bazel_apple_support")
+bazel_dep(name = "aspect_rules_js", version = "2.8.2")
+bazel_dep(name = "aspect_rules_ts", version = "3.7.1")
 bazel_dep(name = "gazelle", version = "0.47.0")
+bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.14")
 bazel_dep(name = "rules_go", version = "0.59.0")
 bazel_dep(name = "rules_jvm_external", version = "6.9")
 bazel_dep(name = "rules_kotlin", version = "2.2.0")
+bazel_dep(name = "rules_python", version = "1.7.0")
 bazel_dep(name = "rules_rust", version = "0.67.0")
-bazel_dep(name = "toolchains_llvm", version = "1.5.0")
-
-# C++ toolchain
-llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
-llvm.toolchain(
-    llvm_version = "19.1.6",
-)
-use_repo(llvm, "llvm_toolchain")
-register_toolchains("@llvm_toolchain//:all")
+bazel_dep(name = "rules_swift", version = "3.1.2")
+bazel_dep(name = "rules_zig", version = "0.12.3")
+bazel_dep(name = "rules_dotnet", version = "0.20.5")
 
 # Rust toolchain setup
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
@@ -52,3 +51,52 @@ use_repo(
     go_deps,
     # No external dependencies in template yet
 )
+
+# Python toolchain setup
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.13.9",
+)
+
+# Python dependencies for template
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "pip_python_template",
+    python_version = "3.13.9",
+    requirements_lock = "//templates/python:requirements_lock.txt",
+)
+use_repo(pip, "pip_python_template")
+
+# Node.js setup for TypeScript
+node = use_extension("@aspect_rules_js//js:extensions.bzl", "node")
+node.toolchain(node_version = "25.2.1")
+
+# TypeScript toolchain
+rules_ts_ext = use_extension("@aspect_rules_ts//ts:extensions.bzl", "ext", dev_dependency = True)
+rules_ts_ext.deps()
+use_repo(rules_ts_ext, "npm_typescript")
+
+# npm dependencies for TypeScript template
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
+npm.npm_translate_lock(
+    name = "npm_typescript_template",
+    pnpm_lock = "//templates/typescript:pnpm-lock.yaml",
+)
+use_repo(npm, "npm_typescript_template")
+
+# .NET/C# toolchain setup
+dotnet = use_extension("@rules_dotnet//dotnet:extensions.bzl", "dotnet")
+dotnet.toolchain(dotnet_version = "8.0.200")
+use_repo(dotnet, "dotnet_toolchains")
+register_toolchains("@dotnet_toolchains//:all")
+
+# Zig toolchain setup
+zig = use_extension("@rules_zig//zig:extensions.bzl", "zig")
+zig.toolchain(zig_version = "0.15.2")
+use_repo(zig, "zig_toolchains")
+register_toolchains("@zig_toolchains//:all")
+
+# Apple CC toolchain for Swift/Objective-C support
+apple_cc_configure = use_extension("@build_bazel_apple_support//crosstool:setup.bzl", "apple_cc_configure_extension")
+use_repo(apple_cc_configure, "local_config_apple_cc", "local_config_apple_cc_toolchains")
+register_toolchains("@local_config_apple_cc_toolchains//:all")

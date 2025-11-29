@@ -5,43 +5,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
-    # Template flakes
-    template-haskell = {
-      url = "path:./templates/haskell";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    template-julia = {
-      url = "path:./templates/julia";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    template-kotlin-gradle = {
-      url = "path:./templates/kotlin-gradle";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    template-nim = {
-      url = "path:./templates/nim";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    template-python = {
-      url = "path:./templates/python";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    template-typescript = {
-      url = "path:./templates/typescript";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    template-zig = {
-      url = "path:./templates/zig";
-      # Don't follow nixpkgs - Zig template uses its own pinned version (24.05) for zig_0_12
-      inputs.flake-utils.follows = "flake-utils";
-    };
-
     # Legacy Haskell solutions
     aoc22 = {
       url = "path:./src/AoC22";

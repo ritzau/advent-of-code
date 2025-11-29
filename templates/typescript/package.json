@@ -2,8 +2,12 @@
   "name": "aoc-solution",
   "version": "0.1.0",
   "private": true,
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.0.0"
+  "dependencies": {
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2",
+    "@types/node": "^20.11.5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": []
   }
 }
