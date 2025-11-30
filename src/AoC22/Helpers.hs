@@ -97,7 +97,7 @@ split _ [] = []
 split sep ls =
   let (item, rest) = break (== sep) ls
   in item:split sep (drop 1 rest)
-      
+
 untilEmpty :: [String] -> [String]
 untilEmpty ("" : ls) = []
 untilEmpty (l : ls) = l : untilEmpty ls

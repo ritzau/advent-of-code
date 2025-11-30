@@ -21,16 +21,16 @@ supplyStacks = do
   printHeader "2022 Day 5: Supply Stacks"
 
   result <- endStateForCrateMover9000Of sampleFile
-  printResult "CrateMover 9000 sample end state" "CMZ" result 
+  printResult "CrateMover 9000 sample end state" "CMZ" result
 
   result <- endStateForCrateMover9000Of dataFile
-  printResult "CrateMover 9000 end state" "VRWBSFZWM" result 
+  printResult "CrateMover 9000 end state" "VRWBSFZWM" result
 
   result <- endStateForCrateMover9001Of sampleFile
-  printResult "CrateMover 9001 sample end state" "MCD" result 
+  printResult "CrateMover 9001 sample end state" "MCD" result
 
   result <- endStateForCrateMover9001Of dataFile
-  printResult "CrateMover 9001 end state" "RBTWJWMCF" result 
+  printResult "CrateMover 9001 end state" "RBTWJWMCF" result
 
 endStateForCrateMover9000Of :: FilePath -> IO Result
 endStateForCrateMover9000Of = process endStateForCrateMover9000
