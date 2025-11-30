@@ -15,6 +15,7 @@ load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
 # Configured for languages with exposed Bazel toolchains
 format_multirun(
     name = "format",
+    python = "@aspect_rules_lint//format:ruff",
     rust = "@rules_rust//tools/upstream_wrapper:rustfmt",
     starlark = "@buildifier_prebuilt//:buildifier",
     visibility = ["//visibility:public"],
