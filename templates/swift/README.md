@@ -33,6 +33,7 @@ To use this template on Linux:
 ## Building
 
 Build any target:
+
 ```bash
 bazel build //templates/swift:part1
 bazel build //templates/swift:part2
@@ -42,6 +43,7 @@ bazel build //templates/swift:main
 ## Testing
 
 Run the test suite:
+
 ```bash
 bazel test //templates/swift:aoc_test
 ```
