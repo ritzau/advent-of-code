@@ -1,0 +1,27 @@
+# Pre-commit hooks for Advent of Code repository
+
+exclude: (^|/)data/
+
+repos:
+  # Basic file hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-json
+      - id: check-yaml
+      - id: check-toml
+
+  # Bazel-based formatting via aspect_rules_lint
+  - repo: local
+    hooks:
+      - id: bazel-format
+        name: bazel format
+        entry: bazel run //tools/format
+        language: system
+        types_or: [text]

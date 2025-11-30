@@ -1,19 +1,33 @@
 """Root BUILD file for Advent of Code monorepo."""
 
-# This file intentionally left minimal.
-# Templates are in //templates/cpp, //templates/rust, etc.
-# Solutions are in //src/AoC16, //src/AoC21, etc.
+load("@aspect_rules_js//js:defs.bzl", "js_library")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+
+package(default_visibility = ["//visibility:public"])
+
+npm_link_all_packages(name = "node_modules")
 
 alias(
     name = "aoc",
     actual = "//src/aoc-cli:aoc",
 )
 
+js_library(
+    name = "prettierrc",
+    srcs = ["prettier.config.cjs"],
+    deps = [
+        ":node_modules/@prettier/plugin-xml",
+        ":node_modules/prettier-plugin-gherkin",
+        ":node_modules/prettier-plugin-sql",
+    ],
+)
+
 # Export configuration files for linters/formatters
 exports_files([
-    "ruff.toml",
-    ".prettierrc.json",
-    ".golangci.yml",
-    ".swiftformat",
-    ".editorconfig",
+    "prettier.config.cjs",
+    #     "ruff.toml",
+    #     ".prettierrc.json",
+    #     ".golangci.yml",
+    #     ".swiftformat",
+    #     ".editorconfig",
 ])
