@@ -34,11 +34,11 @@ rust.toolchain(
     versions = ["1.91.1"],
 )
 use_repo(rust, "rust_toolchains")
+
 register_toolchains("@rust_toolchains//:all")
 
 # Crate universe for Rust dependencies
 crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
-
 crate.from_cargo(
     name = "crates_rust_template",
     cargo_lockfile = "//templates/rust:Cargo.lock",
@@ -58,16 +58,6 @@ go_sdk.download(version = "1.25.4")
 # Go dependencies via Gazelle
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//src/aoc-cli:go.mod")
-go_deps.module(
-    path = "github.com/spf13/pflag",
-    sum = "h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=",
-    version = "v1.0.5",
-)
-go_deps.module(
-    path = "gopkg.in/yaml.v3",
-    sum = "h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=",
-    version = "v3.0.1",
-)
 use_repo(
     go_deps,
     "com_github_spf13_pflag",
@@ -112,19 +102,16 @@ use_repo(rules_ts_ext, "npm_typescript")
 
 # npm dependencies
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
-
 npm.npm_translate_lock(
     name = "npm_typescript_template",
     pnpm_lock = "//templates/typescript:pnpm-lock.yaml",
 )
 use_repo(npm, "npm_typescript_template")
-
 npm.npm_translate_lock(
     name = "npm_aoc23",
     pnpm_lock = "//src/AoC23:pnpm-lock.yaml",
 )
 use_repo(npm, "npm_aoc23")
-
 npm.npm_translate_lock(
     name = "npm_s16e01_typescript",
     pnpm_lock = "//src/AoC16/s16e01-typescript:pnpm-lock.yaml",
@@ -147,6 +134,7 @@ bazel_dep(name = "rules_zig", version = "0.12.3")
 zig = use_extension("@rules_zig//zig:extensions.bzl", "zig")
 zig.toolchain(zig_version = "0.15.2")
 use_repo(zig, "zig_toolchains")
+
 register_toolchains("@zig_toolchains//:all")
 
 ###############################################################################
@@ -161,6 +149,7 @@ julia.toolchain(
     version = "1.11.2",
 )
 use_repo(julia, "julia_toolchains")
+
 register_toolchains("@julia_toolchains//:all")
 
 ###############################################################################
@@ -172,6 +161,7 @@ bazel_dep(name = "rules_dotnet", version = "0.20.5")
 dotnet = use_extension("@rules_dotnet//dotnet:extensions.bzl", "dotnet")
 dotnet.toolchain(dotnet_version = "8.0.200")
 use_repo(dotnet, "dotnet_toolchains")
+
 register_toolchains("@dotnet_toolchains//:all")
 
 ###############################################################################
@@ -183,4 +173,5 @@ bazel_dep(name = "rules_swift", version = "3.1.2")
 
 apple_cc_configure = use_extension("@build_bazel_apple_support//crosstool:setup.bzl", "apple_cc_configure_extension")
 use_repo(apple_cc_configure, "local_config_apple_cc", "local_config_apple_cc_toolchains")
+
 register_toolchains("@local_config_apple_cc_toolchains//:all")
