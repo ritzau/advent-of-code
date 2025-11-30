@@ -9,7 +9,6 @@ swift_binary(
         "Common.swift",
         "Part1.swift",
     ],
-    copts = ["-target", "x86_64-apple-macos10.15"],
 )
 
 # Part 2 binary - outputs only part 2 result
@@ -19,7 +18,6 @@ swift_binary(
         "Common.swift",
         "Part2.swift",
     ],
-    copts = ["-target", "x86_64-apple-macos10.15"],
 )
 
 # Main verification binary
@@ -29,13 +27,12 @@ swift_binary(
         "Common.swift",
         "Main.swift",
     ],
-    copts = ["-target", "x86_64-apple-macos10.15"],
 )
 
-# Unit tests disabled - swift_test requires Apple CC toolchain which has
-# compatibility issues with Bazel 8 + bzlmod. The binaries work fine.
-# swift_test(
-#     name = "aoc_tests",
-#     srcs = ["Tests.swift"],
-#     deps = [":solution"],
-# )
+# Test that runs the main binary with empty input
+# The main binary exits with code 1 if tests fail, code 0 if they pass
+sh_test(
+    name = "aoc_test",
+    srcs = ["test.sh"],
+    data = [":main"],
+)

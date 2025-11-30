@@ -1,35 +1,48 @@
-# Swift Template - Temporarily Disabled
+# Swift Template
 
-This Swift template is currently disabled in `.bazelignore` due to a toolchain conflict.
+Swift template for Advent of Code solutions using Bazel.
 
-## The Issue
+## Platform Support
 
-The Swift binaries require Apple's native linker and Swift compatibility libraries, while the main repository uses `toolchains_llvm` for C++ compilation. These two toolchain configurations are incompatible in the same Bazel build:
+This template supports both **macOS** and **Linux** platforms:
 
-- **LLVM toolchain** (used for C++): Uses LLVM's `lld` linker
-- **Swift requirements**: Requires Apple's `ld` linker and Swift compatibility libraries (`swiftCompatibility51`, `swiftCompatibility56`, etc.)
+- ✅ **macOS**: Works out of the box with Xcode Command Line Tools
+- ✅ **Linux**: Requires Swift toolchain installation and `CC=clang` environment variable
 
-The linker conflict causes build failures:
-```
-ld: warning: Could not find or use auto-linked library 'swiftCompatibility51'
-Undefined symbols for architecture x86_64:
-  "__swift_FORCE_LOAD_$_swiftCompatibility51", referenced from: ...
-```
+## Linux Requirements
 
-## Future Work
+To use this template on Linux:
 
-To use the Swift template:
+1. **Install Swift toolchain**: Download from [swift.org](https://swift.org/download/) for your distribution
+2. **Install dependencies**: Ensure ICU and Clang are installed
+3. **Set environment variable**: Run Bazel with `CC=clang` because rules_swift expects clang as the linking driver:
+   ```bash
+   CC=clang bazel build //templates/swift:part1
+   ```
+4. **PATH configuration**: Bazel will use the first `swift` executable found in your PATH
 
-1. Create a separate branch without `toolchains_llvm`
-2. Use only Apple's native toolchains for all languages
-3. Or, configure Swift to work in isolation from the main build
+## Template Features
 
-## Template Status
-
-The Swift template code is complete and working:
 - ✅ Uses `@main` attribute (Swift 5.3+)
 - ✅ Proper module structure with public functions
-- ✅ Deployment target set to macOS 10.15
+- ✅ Cross-platform support (macOS and Linux)
+- ✅ No hardcoded platform-specific compiler flags
 - ✅ Apple CC toolchain configured in MODULE.bazel
 
-The template will work once the toolchain conflict is resolved.
+## Building
+
+Build any target:
+```bash
+bazel build //templates/swift:part1
+bazel build //templates/swift:part2
+bazel build //templates/swift:main
+```
+
+## Testing
+
+Run the test suite:
+```bash
+bazel test //templates/swift:aoc_test
+```
+
+The test runs the `main` binary which validates both parts of the solution and exits with code 0 on success or 1 on failure.
