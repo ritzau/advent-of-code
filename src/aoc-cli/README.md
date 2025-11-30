@@ -43,9 +43,9 @@ Create a `results.yaml` file in the repository root:
     part1: 300
     part2: 159
   2:
-    skip: true  # Skip this day
+    skip: true # Skip this day
   3:
-    part1: null  # No expected result yet (will run but not verify)
+    part1: null # No expected result yet (will run but not verify)
     part2: null
 ```
 
@@ -74,6 +74,7 @@ src/AoC16/s16e01-go/
 ```
 
 The `part1` and `part2` binaries must:
+
 - Read input from stdin
 - Output only the answer to stdout (no extra formatting)
 - Exit with code 0 on success

@@ -343,7 +343,7 @@ func (b *Builder) buildWithLanguage(solutionPath, solutionName, language string)
 func (b *Builder) buildGo(solutionPath, solutionName string) (*SolutionPaths, error) {
 	// Create build directory
 	buildDir := filepath.Join(solutionPath, ".build")
-	if err := os.MkdirAll(buildDir, 0755); err != nil {
+	if err := os.MkdirAll(buildDir, 0o755); err != nil {
 		return nil, fmt.Errorf("failed to create build directory: %w", err)
 	}
 

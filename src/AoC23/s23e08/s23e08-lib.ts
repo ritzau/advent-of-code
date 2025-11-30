@@ -38,7 +38,7 @@ function walkMap(
   direction: Direction[],
   nodes: Map<string, [string, string]>,
   start: string,
-  predicate: (node: string) => boolean,
+  predicate: (node: string) => boolean
 ): number {
   let steps = 0;
   let currentNode = start;

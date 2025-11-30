@@ -19,6 +19,7 @@ echo "your_session_cookie_here" > .aoc-session
 ```
 
 You can find your session cookie by:
+
 1. Log in to [adventofcode.com](https://adventofcode.com)
 2. Open browser dev tools (F12)
 3. Go to Application/Storage > Cookies
@@ -97,6 +98,7 @@ format:
 ```
 
 Available commands:
+
 - `just build` - Build both parts (or no-op for interpreted languages)
 - `just run part1` / `just run part2` - Run with input from stdin
 - `just test` - Test both parts with sample.txt
@@ -106,6 +108,7 @@ Available commands:
 ### Orchestration
 
 The `just` command orchestrates everything:
+
 - Input downloading and caching
 - Running solutions
 - Timing execution
@@ -126,6 +129,7 @@ just clean-inputs       # Remove all cached inputs
 ## Language Selection
 
 Target languages for 2025 (12 days):
+
 - **Comfortable**: Python, Rust, Go, Kotlin, TypeScript
 - **Revisit**: Java, C++, C#
 - **New/Learning**: Nim, Zig, Julia, and more TBD

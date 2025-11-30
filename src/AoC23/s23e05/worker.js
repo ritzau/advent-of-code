@@ -33,29 +33,33 @@
  */
 
 const {
-    Worker: WorkerX, isMainThread, parentPort, workerData, threadId,
-} = require('node:worker_threads')
+  Worker: WorkerX,
+  isMainThread,
+  parentPort,
+  workerData,
+  threadId,
+} = require("node:worker_threads");
 
 if (isMainThread) {
-    module.exports = function (input, start, length) {
-        return new Promise((resolve, reject) => {
-            const worker = new WorkerX(__filename, {
-                workerData: { input, start, length },
-            });
-            worker.on('message', resolve);
-            worker.on('error', reject);
-            worker.on('exit', (code) => {
-                if (code !== 0)
-                    reject(new Error(`Worker stopped with exit code ${code}`));
-            });
-        });
-    };
+  module.exports = function (input, start, length) {
+    return new Promise((resolve, reject) => {
+      const worker = new WorkerX(__filename, {
+        workerData: { input, start, length },
+      });
+      worker.on("message", resolve);
+      worker.on("error", reject);
+      worker.on("exit", (code) => {
+        if (code !== 0)
+          reject(new Error(`Worker stopped with exit code ${code}`));
+      });
+    });
+  };
 } else {
-    require('ts-node').register()
-    const { minLocationForRange, SeedMapMap, parseMaps } = require("./lib")
-    const { input, start, length } = workerData;
+  require("ts-node").register();
+  const { minLocationForRange, SeedMapMap, parseMaps } = require("./lib");
+  const { input, start, length } = workerData;
 
-    const maps = new SeedMapMap(parseMaps(input));
-    const result = minLocationForRange(maps, start, length);
-    parentPort?.postMessage(result);
+  const maps = new SeedMapMap(parseMaps(input));
+  const result = minLocationForRange(maps, start, length);
+  parentPort?.postMessage(result);
 }

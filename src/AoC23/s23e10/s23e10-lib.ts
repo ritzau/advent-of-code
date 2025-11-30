@@ -237,7 +237,7 @@ function floodFill(
   map: TileMap,
   row: number,
   col: number,
-  position: TilePosition,
+  position: TilePosition
 ) {
   const queue: number[][] = [];
   enqueue(row, col);
@@ -276,8 +276,8 @@ export function solvePart1(input: string): number {
   const map = walkMap(parseMap(input));
   return Math.max(
     ...map.flatMap((r) =>
-      r.map((t) => t.distance).filter((x) => !Number.isNaN(x)),
-    ),
+      r.map((t) => t.distance).filter((x) => !Number.isNaN(x))
+    )
   );
 }
 
@@ -299,7 +299,7 @@ export function solvePart2(input: string): number {
       expandedMap,
       row,
       expandedMap[row].length - 1,
-      TilePosition.OUTSIDE,
+      TilePosition.OUTSIDE
     );
   }
 

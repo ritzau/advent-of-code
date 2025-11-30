@@ -39,15 +39,18 @@ cabal run part2 < input.txt
 ## Expected Results
 
 With the actual puzzle input:
+
 - Part 1: 300
 - Part 2: 159
 
 ## Test Cases
 
 Part 1:
+
 - `R2, L3` → 5 (2 blocks East, 3 blocks North)
 - `R2, R2, R2` → 2 (2 blocks South)
 - `R5, L5, R5, R3` → 12
 
 Part 2:
+
 - `R8, R4, R4, R8` → 4 (first location visited twice is 4 blocks away)

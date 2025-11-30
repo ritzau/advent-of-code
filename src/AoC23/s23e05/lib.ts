@@ -52,7 +52,7 @@ class MapRange {
   constructor(
     readonly destinationRangeStart: number,
     readonly sourceRangeStart: number,
-    readonly rangeLength: number,
+    readonly rangeLength: number
   ) {}
 
   get(source: number): number | undefined {
@@ -138,7 +138,7 @@ export class SeedMapMap {
 export function minLocationForRange(
   maps: SeedMapMap,
   start: number,
-  length: number,
+  length: number
 ): number {
   let minLocation = Number.POSITIVE_INFINITY;
   for (let seed = start; seed < start + length; ++seed) {

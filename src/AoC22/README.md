@@ -68,11 +68,13 @@ src/AoC22/
 ## Output Format
 
 Each solution prints:
+
 - A header with the day and problem title
 - Sample results compared against expected values (with ✅/❌)
 - Actual results compared against expected values (with ✅/❌)
 
 Example:
+
 ```
 --- 2022 Day 1: Calorie Counting ---
 

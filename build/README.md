@@ -1,6 +1,6 @@
 # Custom Bazel Build Rules
 
-This directory contains custom Bazel macros for languages that don't have official rules_* packages or where simpler custom rules are more appropriate.
+This directory contains custom Bazel macros for languages that don't have official rules\_\* packages or where simpler custom rules are more appropriate.
 
 ## Available Rules
 
@@ -13,12 +13,14 @@ Macros for building Nim programs using the Nim compiler.
 Compiles a Nim source file into an executable binary.
 
 **Parameters:**
+
 - `name`: The name of the target (also used as the output binary name)
 - `main`: The main .nim source file to compile
 - `deps`: List of additional .nim files that the main file depends on (optional)
 - `**kwargs`: Additional arguments passed to sh_binary (e.g., visibility)
 
 **Example:**
+
 ```python
 load("//build:nim.bzl", "nim_binary")
 
@@ -35,12 +37,14 @@ nim_binary(
 Compiles and runs a Nim test file.
 
 **Parameters:**
+
 - `name`: The name of the test target
 - `main`: The main .nim test file to compile and run
 - `deps`: List of additional .nim files that the test file depends on (optional)
 - `**kwargs`: Additional arguments passed to sh_test (e.g., size, timeout)
 
 **Example:**
+
 ```python
 nim_test(
     name = "common_test",
@@ -57,6 +61,7 @@ Macros for building Haskell programs using GHC.
 Compiles a Haskell source file into an executable binary.
 
 **Parameters:**
+
 - `name`: The name of the target
 - `main`: The main .hs source file to compile
 - `deps`: List of additional .hs files that the main file depends on (optional)
@@ -64,6 +69,7 @@ Compiles a Haskell source file into an executable binary.
 - `**kwargs`: Additional arguments passed to genrule (e.g., visibility, executable)
 
 **Example:**
+
 ```python
 load("//build:haskell.bzl", "haskell_binary")
 
@@ -87,6 +93,7 @@ haskell_binary(
 Compiles and runs a Haskell test file.
 
 **Parameters:**
+
 - `name`: The name of the test target
 - `main`: The main .hs test file to compile
 - `deps`: List of additional .hs files that the test file depends on (optional)
@@ -94,6 +101,7 @@ Compiles and runs a Haskell test file.
 - `**kwargs`: Additional arguments passed to sh_test (e.g., size, timeout)
 
 **Example:**
+
 ```python
 haskell_test(
     name = "aoc_tests",

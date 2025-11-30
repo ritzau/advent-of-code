@@ -4,7 +4,7 @@ Multi-year, multi-language solutions for [Advent of Code](https://adventofcode.c
 
 ## 🎄 Years
 
-- **[AoC 2025](src/AoC25/)** - 12 languages, 12 days *(in progress)*
+- **[AoC 2025](src/AoC25/)** - 12 languages, 12 days _(in progress)_
 - **[AoC 2023](src/AoC23/)** - TypeScript (19/25 days complete)
 - **[AoC 2022](src/AoC22/)** - Haskell (15/25 days complete)
 - **[AoC 2021](src/AoC21/)** - Haskell (1/25 days complete)
@@ -15,11 +15,13 @@ Multi-year, multi-language solutions for [Advent of Code](https://adventofcode.c
 ### Prerequisites
 
 **Required:**
+
 - [Bazel](https://bazel.build/) 7.x or later (or [Bazelisk](https://github.com/bazelbuild/bazelisk) for automatic version management)
 - [GHC](https://www.haskell.org/ghc/) (Haskell compiler) - for Haskell solutions
 - [Nim](https://nim-lang.org/) compiler - for Nim solutions
 
 **Optional:**
+
 - [just](https://github.com/casey/just) command runner - for convenience commands
 - Advent of Code session cookie - for automatic input downloading
 
@@ -30,17 +32,20 @@ Multi-year, multi-language solutions for [Advent of Code](https://adventofcode.c
 1. **Clone the repository**
 
 2. **Add your session cookie** (optional, for downloading inputs):
+
    ```bash
    echo "your_session_cookie_here" > .aoc-session
    ```
 
 3. **Download puzzle inputs** (optional):
+
    ```bash
    # Download input for a specific day
    bazel run //src/aoc-cli:aoc -- download -y 2016 -d 1
    ```
 
 4. **Build and run solutions**:
+
    ```bash
    # Build all solutions
    bazel build //...
@@ -115,6 +120,7 @@ bazel run //src/aoc-cli:aoc -- --help
 ```
 
 The CLI automatically:
+
 - Finds all language implementations for a given day
 - Builds solutions using Bazel
 - Runs both parts and validates results
@@ -151,26 +157,31 @@ This repository uses **Bazel** for reproducible builds across all languages:
 ### Language-Specific Notes
 
 **TypeScript (AoC 2023)**:
+
 - Uses `aspect_rules_ts` and `aspect_rules_js`
 - pnpm for dependency management
 - 19 days with part1 and part2 binaries
 
 **Haskell (AoC 2021, AoC 2022)**:
+
 - Uses custom `haskell_binary` and `haskell_test` macros (see `build/haskell.bzl`)
 - Simple builds without external package dependencies
 - AoC22: Single executable for all 15 days
 - AoC21: Three executables (main, part1, part2)
 
 **Rust (AoC 2016)**:
+
 - Uses `rules_rust` with Cargo
 - Rust 1.91 toolchain
 
 **Julia (AoC 2016)**:
+
 - Uses `rules_julia`
 - Julia 1.11.2 toolchain
 - Proper library and binary rules
 
 **Other Languages**:
+
 - Go: `rules_go` with gazelle
 - Python: `rules_python` with pip
 - C++: `rules_cc` with native toolchain
@@ -188,6 +199,7 @@ This repository uses **Bazel** for reproducible builds across all languages:
 ## 🤝 Contributing
 
 This is a personal learning repository, but feel free to:
+
 - Browse solutions for ideas
 - Open issues for discussions
 - Suggest improvements to the setup
@@ -198,4 +210,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-*Happy Advent of Code! 🎄⭐*
+_Happy Advent of Code! 🎄⭐_

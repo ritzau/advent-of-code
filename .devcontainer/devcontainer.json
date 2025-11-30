@@ -14,10 +14,7 @@
 
   "customizations": {
     "vscode": {
-      "extensions": [
-        "skellock.just",
-        "bazelbuild.vscode-bazel"
-      ],
+      "extensions": ["skellock.just", "bazelbuild.vscode-bazel"],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
         "files.watcherExclude": {

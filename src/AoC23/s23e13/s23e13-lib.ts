@@ -65,7 +65,7 @@ type SimilarPair = { indexA: number; indexB: number; distance: number };
 function testSmudgedReflection(
   n: number,
   items: SimilarPair[],
-  candidate: SimilarPair,
+  candidate: SimilarPair
 ): boolean {
   let sum = 0;
   let delta = 0;
@@ -73,7 +73,7 @@ function testSmudgedReflection(
 
   while (0 <= index - 1 - delta && index + delta < n) {
     const pair = items.find(
-      (p) => p.indexA === index - 1 - delta && p.indexB === index + delta,
+      (p) => p.indexA === index - 1 - delta && p.indexB === index + delta
     );
     if (pair === undefined) {
       return false;

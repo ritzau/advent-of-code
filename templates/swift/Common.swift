@@ -3,7 +3,7 @@ import Foundation
 // Common utilities for this day's solution
 
 public func parseInput(_ input: String) -> [String] {
-    return input.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: .newlines)
+    input.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: .newlines)
 }
 
 public func solvePart1(_ input: String) -> Int {
