@@ -11,10 +11,11 @@ Usage:
 
 load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
 
-# Buildifier (Starlark/Bazel) is directly available
-# For other languages, use system-installed formatters
+# Multi-language formatter using aspect_rules_lint
+# Configured for languages with exposed Bazel toolchains
 format_multirun(
     name = "format",
+    rust = "@rules_rust//tools/upstream_wrapper:rustfmt",
     starlark = "@buildifier_prebuilt//:buildifier",
     visibility = ["//visibility:public"],
 )
