@@ -6,7 +6,7 @@ what we can and handle the rest via system formatters.
 
 Usage:
   bazel run //tools:format                # Format all files
-  bazel run //tools:format.check.         # Check formatting without modifying
+  bazel run //tools:format.check          # Check formatting without modifying
 """
 
 load("@aspect_rules_js//js:defs.bzl", "js_library")
