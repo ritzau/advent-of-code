@@ -1,0 +1,20 @@
+"""Multi-language formatting with aspect_rules_lint.
+
+This package provides unified formatting using format_multirun from aspect_rules_lint.
+Since we have 12 languages and limited Bazel toolchain exposure, we configure
+what we can and handle the rest via system formatters.
+
+Usage:
+  bazel run //tools/format                # Format all files
+  bazel run //tools/format -- --mode=check  # Check formatting without modifying
+"""
+
+load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
+
+# Buildifier (Starlark/Bazel) is directly available
+# For other languages, use system-installed formatters
+format_multirun(
+    name = "format",
+    starlark = "@buildifier_prebuilt//:buildifier",
+    visibility = ["//visibility:public"],
+)

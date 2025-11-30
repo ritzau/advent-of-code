@@ -8,3 +8,12 @@ alias(
     name = "aoc",
     actual = "//src/aoc-cli:aoc",
 )
+
+# Export configuration files for linters/formatters
+exports_files([
+    "ruff.toml",
+    ".prettierrc.json",
+    ".golangci.yml",
+    ".swiftformat",
+    ".editorconfig",
+])

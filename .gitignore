@@ -13,3 +13,6 @@
 
 # Agents
 /.claude/
+
+# Pre-commit
+.pre-commit-cache/

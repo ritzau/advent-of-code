@@ -1,5 +1,7 @@
 """Test targets for Advent of Code solution."""
 
+load("@rules_cc//cc:defs.bzl", "cc_test")
+
 cc_test(
     name = "solution_test",
     srcs = ["test_solution.cpp"],

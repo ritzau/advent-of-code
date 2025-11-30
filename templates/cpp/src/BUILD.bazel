@@ -1,5 +1,7 @@
 """Build targets for Advent of Code solution."""
 
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
 # Solution library containing the core solve functions
 cc_library(
     name = "solution",

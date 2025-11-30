@@ -9,6 +9,10 @@ swift_binary(
         "Common.swift",
         "Part1.swift",
     ],
+    copts = [
+        "-target",
+        "x86_64-apple-macos10.15",
+    ],
 )
 
 # Part 2 binary - outputs only part 2 result
@@ -18,6 +22,10 @@ swift_binary(
         "Common.swift",
         "Part2.swift",
     ],
+    copts = [
+        "-target",
+        "x86_64-apple-macos10.15",
+    ],
 )
 
 # Main verification binary
@@ -26,6 +34,10 @@ swift_binary(
     srcs = [
         "Common.swift",
         "Main.swift",
+    ],
+    copts = [
+        "-target",
+        "x86_64-apple-macos10.15",
     ],
 )
 
