@@ -1,7 +1,5 @@
 """Test targets for Advent of Code 2016 Day 1 C++ solution."""
 
-load("@rules_cc//cc:defs.bzl", "cc_test")
-
 # Unit tests
 cc_test(
     name = "solution_test",

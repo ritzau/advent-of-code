@@ -17,8 +17,8 @@ ts_project(
         exclude = ["**/*.test.ts"],
     ),
     resolve_json_module = True,
-    transpiler = "tsc",
     tsconfig = ":tsconfig.json",
+    transpiler = "tsc",
     deps = [
         ":node_modules/@types/node",
     ],

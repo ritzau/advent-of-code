@@ -1,7 +1,7 @@
 import Foundation
 
 @main
-enum Tests {
+struct Tests {
     static func main() {
         print("Running tests...")
         var allPassed = true

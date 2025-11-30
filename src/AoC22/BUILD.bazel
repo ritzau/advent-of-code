@@ -6,11 +6,8 @@ load("//build:haskell.bzl", "haskell_binary")
 haskell_binary(
     name = "aoc22",
     main = "Main.hs",
-    deps = glob(
-        [
-            "*.hs",
-            "data/*.txt",
-        ],
-        exclude = ["Main.hs"],
-    ),
+    deps = glob([
+        "*.hs",
+        "data/*.txt",
+    ], exclude = ["Main.hs"]),
 )

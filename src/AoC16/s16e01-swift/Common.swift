@@ -9,11 +9,11 @@ enum Direction: Int {
     case west = 3
 
     func turnRight() -> Direction {
-        Direction(rawValue: (rawValue + 1) % 4)!
+        return Direction(rawValue: (self.rawValue + 1) % 4)!
     }
 
     func turnLeft() -> Direction {
-        Direction(rawValue: (rawValue + 3) % 4)!
+        return Direction(rawValue: (self.rawValue + 3) % 4)!
     }
 
     func delta() -> (x: Int, y: Int) {
@@ -36,7 +36,7 @@ struct Instruction {
 }
 
 func parseInput(_ input: String) -> [Instruction] {
-    input.trimmingCharacters(in: .whitespacesAndNewlines)
+    return input.trimmingCharacters(in: .whitespacesAndNewlines)
         .split(separator: ",")
         .map { s in
             let trimmed = s.trimmingCharacters(in: .whitespaces)
@@ -86,7 +86,7 @@ public func solvePart2(_ input: String) -> Int {
 
         let (dx, dy) = direction.delta()
 
-        for _ in 0 ..< instruction.blocks {
+        for _ in 0..<instruction.blocks {
             x += dx
             y += dy
 

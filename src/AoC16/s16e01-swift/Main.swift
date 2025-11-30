@@ -1,7 +1,7 @@
 import Foundation
 
 @main
-enum Main {
+struct Main {
     static func main() {
         var input = ""
         while let line = readLine() {
@@ -34,7 +34,7 @@ enum Main {
 
         print("Total: \(String(format: "%.2f", duration1 + duration2))ms")
 
-        if pass1, pass2 {
+        if pass1 && pass2 {
             print("")
             print("🌟🌟 All tests passed!")
         } else {

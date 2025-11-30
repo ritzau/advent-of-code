@@ -16,8 +16,8 @@ ts_project(
         "s16e01-typescript-part2.ts",
     ],
     resolve_json_module = True,
-    transpiler = "tsc",
     tsconfig = ":tsconfig.json",
+    transpiler = "tsc",
     deps = [":node_modules/@types/node"],
 )
 

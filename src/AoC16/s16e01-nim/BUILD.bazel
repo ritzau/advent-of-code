@@ -6,24 +6,24 @@ load("//build:nim.bzl", "nim_binary", "nim_test")
 nim_binary(
     name = "s16e01-nim",
     main = "s16e01_nim.nim",
-    visibility = ["//visibility:public"],
     deps = ["common.nim"],
+    visibility = ["//visibility:public"],
 )
 
 # Part 1 binary - outputs only part 1 result
 nim_binary(
     name = "part1",
     main = "s16e01_nim_part1.nim",
-    visibility = ["//visibility:public"],
     deps = ["common.nim"],
+    visibility = ["//visibility:public"],
 )
 
 # Part 2 binary - outputs only part 2 result
 nim_binary(
     name = "part2",
     main = "s16e01_nim_part2.nim",
-    visibility = ["//visibility:public"],
     deps = ["common.nim"],
+    visibility = ["//visibility:public"],
 )
 
 # Unit tests - compile and run tests from common.nim
