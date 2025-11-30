@@ -30,3 +30,5 @@ build --output_groups=+clippy_checks
 
 # Swift settings - minimum macOS deployment target
 build --macos_minimum_os=10.15
+
+coverage --combined_report=lcov
