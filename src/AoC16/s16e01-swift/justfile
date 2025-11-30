@@ -1,0 +1,21 @@
+# Advent of Code 2016 Day 1 - Swift Solution
+
+# Build all targets
+build:
+    bazel build //src/AoC16/s16e01-swift:all
+
+# Run the main verification binary with actual input
+run:
+    cat ../../../inputs/2016/day01.txt | bazel run //src/AoC16/s16e01-swift:s16e01-swift
+
+# Run a specific part with input from stdin
+run-part PART:
+    bazel run //src/AoC16/s16e01-swift:part{{PART}}
+
+# Run tests
+test:
+    bazel test //src/AoC16/s16e01-swift:s16e01_swift_test
+
+# Clean build artifacts
+clean:
+    bazel clean

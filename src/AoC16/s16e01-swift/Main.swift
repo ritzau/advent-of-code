@@ -9,14 +9,14 @@ struct Main {
         }
         input = input.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        print("AoC Solution")
-        print("============")
+        print("AoC 2016 Day 1: No Time for a Taxicab")
+        print("======================================")
 
         // Part 1
         let start1 = Date()
         let result1 = solvePart1(input)
         let duration1 = Date().timeIntervalSince(start1) * 1000
-        let expectedPart1 = 0 // TODO: Set expected value
+        let expectedPart1 = 300
         let pass1 = result1 == expectedPart1
 
         let emoji1 = pass1 ? "✅" : "❌"
@@ -26,7 +26,7 @@ struct Main {
         let start2 = Date()
         let result2 = solvePart2(input)
         let duration2 = Date().timeIntervalSince(start2) * 1000
-        let expectedPart2 = 0 // TODO: Set expected value
+        let expectedPart2 = 159
         let pass2 = result2 == expectedPart2
 
         let emoji2 = pass2 ? "✅" : "❌"

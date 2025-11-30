@@ -1,4 +1,4 @@
-"""Build targets for Advent of Code Swift solution."""
+"""Build targets for AoC 2016 Day 1 Swift solution."""
 
 load("@rules_swift//swift:swift_binary.bzl", "swift_binary")
 
@@ -22,17 +22,26 @@ swift_binary(
 
 # Main verification binary
 swift_binary(
-    name = "main",
+    name = "s16e01-swift",
     srcs = [
         "Common.swift",
         "Main.swift",
     ],
 )
 
-# Test that runs the main binary with empty input
-# The main binary exits with code 1 if tests fail, code 0 if they pass
+# Unit test binary - runs sample tests
+swift_binary(
+    name = "s16e01_swift_test_bin",
+    srcs = [
+        "Common.swift",
+        "Tests.swift",
+    ],
+    testonly = True,
+)
+
+# Wrapper test that runs the unit test binary
 sh_test(
-    name = "aoc_test",
-    srcs = ["test.sh"],
-    data = [":main"],
+    name = "s16e01_swift_test",
+    srcs = ["run_tests.sh"],
+    data = [":s16e01_swift_test_bin"],
 )

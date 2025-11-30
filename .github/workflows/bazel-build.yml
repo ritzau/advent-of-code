@@ -9,7 +9,7 @@ on:
 
 jobs:
   bazel-build:
-    name: Build All Templates (Bazel)
+    name: Build and Test (Bazel)
     runs-on: ubuntu-latest
 
     steps:
@@ -21,6 +21,11 @@ jobs:
         with:
           nim-version: '2.2.0'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Swift
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.0'
 
       - name: Setup Bazel repository cache
         run: mkdir -p ~/.cache/bazel-repository-cache
@@ -41,11 +46,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bazelisk-
 
-      - name: Build all templates
-        run: bazel build //... --repository_cache=~/.cache/bazel-repository-cache
+      - name: Build all targets
+        run: CC=clang bazel build //... --repository_cache=~/.cache/bazel-repository-cache
+        env:
+          CC: clang
 
       - name: Run all tests
-        run: bazel test //... --repository_cache=~/.cache/bazel-repository-cache
+        run: CC=clang bazel test //... --repository_cache=~/.cache/bazel-repository-cache
+        env:
+          CC: clang
 
       - name: Build summary
         if: always()
@@ -56,15 +65,14 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Languages tested:" >> $GITHUB_STEP_SUMMARY
           echo "- C++" >> $GITHUB_STEP_SUMMARY
-          echo "- Rust" >> $GITHUB_STEP_SUMMARY
-          echo "- Go" >> $GITHUB_STEP_SUMMARY
-          echo "- Python" >> $GITHUB_STEP_SUMMARY
-          echo "- TypeScript" >> $GITHUB_STEP_SUMMARY
-          echo "- Kotlin" >> $GITHUB_STEP_SUMMARY
-          echo "- Haskell" >> $GITHUB_STEP_SUMMARY
-          echo "- Nim" >> $GITHUB_STEP_SUMMARY
-          echo "- Julia" >> $GITHUB_STEP_SUMMARY
           echo "- C#" >> $GITHUB_STEP_SUMMARY
+          echo "- Go" >> $GITHUB_STEP_SUMMARY
+          echo "- Haskell" >> $GITHUB_STEP_SUMMARY
+          echo "- Julia" >> $GITHUB_STEP_SUMMARY
+          echo "- Kotlin" >> $GITHUB_STEP_SUMMARY
+          echo "- Nim" >> $GITHUB_STEP_SUMMARY
+          echo "- Python" >> $GITHUB_STEP_SUMMARY
+          echo "- Rust" >> $GITHUB_STEP_SUMMARY
+          echo "- Swift" >> $GITHUB_STEP_SUMMARY
+          echo "- TypeScript" >> $GITHUB_STEP_SUMMARY
           echo "- Zig" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Note: Swift is disabled (see .bazelignore)" >> $GITHUB_STEP_SUMMARY
