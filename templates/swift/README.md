@@ -27,6 +27,7 @@ To use this template on Linux:
 - ✅ Proper module structure with public functions
 - ✅ Cross-platform support (macOS and Linux)
 - ✅ No hardcoded platform-specific compiler flags
+- ✅ Uses `Date()` for cross-platform timing (works on both macOS and Linux)
 - ✅ Apple CC toolchain configured in MODULE.bazel
 
 ## Building
