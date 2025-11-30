@@ -23,7 +23,7 @@ noSpaceLeftOnDevice = do
 
   let sampleInput = parseInput sampleContent
   let input = parseInput content
-  
+
   printHeader "2022 Day 7: No Space Left On Device"
   printResult "Sum small samples" 95437 $ sumOfSmallDirectories sampleInput
   printResult "Sum small directories" 1297683 $ sumOfSmallDirectories input

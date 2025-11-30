@@ -29,9 +29,9 @@ beaconExclusionZone = do
   printResult "Count covered sample cells" 26 $ countCoveredCells sampleSensors 10
   printResult "Count covered cells" 5688618 $ countCoveredCells sensors 2000000
 
-  printResult "Sample tuning frequency" 56000011 $ 
+  printResult "Sample tuning frequency" 56000011 $
     fromJust $ tuningFrequency sampleSensors 20
-  printResult "Sample tuning frequency" 12625383204261 $ 
+  printResult "Sample tuning frequency" 12625383204261 $
     fromJust $ tuningFrequency sensors 4000000
 
 countCoveredCells :: [Sensor] -> Int -> Int

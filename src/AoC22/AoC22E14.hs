@@ -14,12 +14,12 @@ simulateRegolithSand = do
   let sampleScan = parseRegolithReservoir sampleContent
   let scan = parseRegolithReservoir content
 
-  printResult "Sample units before falling out" 24 $ 
+  printResult "Sample units before falling out" 24 $
     countUntilFallingOut sampleScan
-    
-  -- printResult "Units before falling out" 696 $ 
+
+  -- printResult "Units before falling out" 696 $
   --   countUntilFallingOut scan
-    
+
   printResult "Sample count until filled" 93 $
     countUntilFilled sampleScan
 
@@ -96,7 +96,7 @@ stepSandUnit (s, Falling p@(px, py)) =
     moveOut = (setMaterial s Air p, Outside p)
     moveTo to = (s, Falling to)
     place at = (setMaterial s Sand at, Resting at)
-    
+
 stepSandUnit (_, _) = undefined
 
 simulateUnit2 :: (Scan, SandPosition) -> (Scan, SandPosition)
@@ -126,7 +126,7 @@ stepSandUnit2 (s, Falling p@(px, py)) =
   where
     place at = (setMaterial s Sand at, Resting at)
     moveTo to = (s, Falling to)
-    
+
 stepSandUnit2 (_, _) = undefined
 
 parseRegolithReservoir :: String -> Scan
