@@ -1,0 +1,206 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    devDependencies:
+      '@prettier/plugin-xml':
+        specifier: ^0.10.0
+        version: 0.10.0
+      prettier:
+        specifier: ^2.8.7
+        version: 2.8.8
+      prettier-plugin-gherkin:
+        specifier: ^1.1.0
+        version: 1.1.1
+      prettier-plugin-sql:
+        specifier: ^0.14.0
+        version: 0.14.0(prettier@2.8.8)
+
+packages:
+
+  '@cucumber/gherkin@24.1.0':
+    resolution: {integrity: sha512-B48XrUod4y3SoXe6mv12q7U1zThUNSK3yHSm/hBJCJZ6RJUJhFk3FVMN/83qOEbsYZe6iG9v+4L1Myf8/q8C6g==}
+
+  '@cucumber/messages@19.1.4':
+    resolution: {integrity: sha512-Pksl0pnDz2l1+L5Ug85NlG6LWrrklN9qkMxN5Mv+1XZ3T6u580dnE6mVaxjJRdcOq4tR17Pc0RqIDZMyVY1FlA==}
+
+  '@prettier/plugin-xml@0.10.0':
+    resolution: {integrity: sha512-8Pmkik2wH4sT6cVdeRN3MpzniFxzOWH0fLRnLJwMXSPMyz9ZKdVm4bg5oAWG96LABue0/W4cCr+oXuEslTTAUA==}
+
+  '@types/uuid@8.3.4':
+    resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
+
+  '@xml-tools/parser@1.0.11':
+    resolution: {integrity: sha512-aKqQ077XnR+oQtHJlrAflaZaL7qZsulWc/i/ZEooar5JiWj1eLt0+Wg28cpa+XLney107wXqneC+oG1IZvxkTA==}
+
+  argparse@2.0.1:
+    resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
+
+  big-integer@1.6.52:
+    resolution: {integrity: sha512-QxD8cf2eVqJOOz63z6JIN9BzvVs/dlySa5HGSBH5xtR8dPteIRQnBxxKqkNTiT6jbDTF6jAfrd4oMcND9RGbQg==}
+    engines: {node: '>=0.6'}
+
+  chevrotain@7.1.1:
+    resolution: {integrity: sha512-wy3mC1x4ye+O+QkEinVJkPf5u2vsrDIYW9G7ZuwFl6v/Yu0LwUuT2POsb+NUWApebyxfkQq6+yDfRExbnI5rcw==}
+
+  class-transformer@0.5.1:
+    resolution: {integrity: sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==}
+
+  commander@2.20.3:
+    resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
+
+  discontinuous-range@1.0.0:
+    resolution: {integrity: sha512-c68LpLbO+7kP/b1Hr1qs8/BJ09F5khZGTxqxZuhzxpmwJKOgRFHJWIb9/KmqnqHhLdO55aOxFH/EGBvUQbL/RQ==}
+
+  get-stdin@8.0.0:
+    resolution: {integrity: sha512-sY22aA6xchAzprjyqmSEQv4UbAAzRN0L2dQB0NlN5acTTK9Don6nhoc3eAbUnpZiCANAMfd/+40kVdKfFygohg==}
+    engines: {node: '>=10'}
+
+  moo@0.5.2:
+    resolution: {integrity: sha512-iSAJLHYKnX41mKcJKjqvnAN9sf0LMDTXDEvFv+ffuRR9a1MIuXLjMNL6EsnDHSkKLTWNqQQ5uo61P4EbU4NU+Q==}
+
+  nearley@2.20.1:
+    resolution: {integrity: sha512-+Mc8UaAebFzgV+KpI5n7DasuuQCHA89dmwm7JXw3TV43ukfNQ9DnBH3Mdb2g/I4Fdxc26pwimBWvjIw0UAILSQ==}
+    hasBin: true
+
+  node-sql-parser@4.18.0:
+    resolution: {integrity: sha512-2YEOR5qlI1zUFbGMLKNfsrR5JUvFg9LxIRVE+xJe962pfVLH0rnItqLzv96XVs1Y1UIR8FxsXAuvX/lYAWZ2BQ==}
+    engines: {node: '>=8'}
+
+  prettier-plugin-gherkin@1.1.1:
+    resolution: {integrity: sha512-mOV7Us8mtR8NubLfObPWwUFX9ly5R6tTXZoIgY+Vem9b66aZ6avdWSFE14lKHPr72G3qwlL3mUHtBZfc4Isbew==}
+
+  prettier-plugin-sql@0.14.0:
+    resolution: {integrity: sha512-dRgINgNd3ZhBDuO/+EFalJjSlAqNXvXv9XDtSCeMufXaP6O64HHLBo1Szo+l+cfvXFxwvkTSGrS+sjpEpSchNA==}
+    engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      prettier: ^2.0.0
+
+  prettier@2.8.8:
+    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+
+  railroad-diagrams@1.0.0:
+    resolution: {integrity: sha512-cz93DjNeLY0idrCNOH6PviZGRN9GJhsdm9hpn1YCS879fj4W+x5IFJhhkRZcwVgMmFF7R82UA/7Oh+R8lLZg6A==}
+
+  randexp@0.4.6:
+    resolution: {integrity: sha512-80WNmd9DA0tmZrw9qQa62GPPWfuXJknrmVmLcxvq4uZBdYqb1wYoKTmnlGUchvVWe0XiLupYkBoXVOxz3C8DYQ==}
+    engines: {node: '>=0.12'}
+
+  reflect-metadata@0.1.13:
+    resolution: {integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==}
+
+  regexp-to-ast@0.5.0:
+    resolution: {integrity: sha512-tlbJqcMHnPKI9zSrystikWKwHkBqu2a/Sgw01h3zFjvYrMxEDYHzzoMZnUrbIfpTFEsoRnnviOXNCzFiSc54Qw==}
+
+  ret@0.1.15:
+    resolution: {integrity: sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==}
+    engines: {node: '>=0.12'}
+
+  sql-formatter@12.2.4:
+    resolution: {integrity: sha512-Qj45LEHSfgrdYDOrAtIkR8SdS10SWcqCIM2WZwQwMKF2v9sM0K2dlThWPS7eYCUrhttZIrU1WwuIwHk7MjsWOw==}
+    hasBin: true
+
+  tslib@2.8.1:
+    resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
+  uuid@9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+
+snapshots:
+
+  '@cucumber/gherkin@24.1.0':
+    dependencies:
+      '@cucumber/messages': 19.1.4
+
+  '@cucumber/messages@19.1.4':
+    dependencies:
+      '@types/uuid': 8.3.4
+      class-transformer: 0.5.1
+      reflect-metadata: 0.1.13
+      uuid: 9.0.0
+
+  '@prettier/plugin-xml@0.10.0':
+    dependencies:
+      '@xml-tools/parser': 1.0.11
+      prettier: 2.8.8
+
+  '@types/uuid@8.3.4': {}
+
+  '@xml-tools/parser@1.0.11':
+    dependencies:
+      chevrotain: 7.1.1
+
+  argparse@2.0.1: {}
+
+  big-integer@1.6.52: {}
+
+  chevrotain@7.1.1:
+    dependencies:
+      regexp-to-ast: 0.5.0
+
+  class-transformer@0.5.1: {}
+
+  commander@2.20.3: {}
+
+  discontinuous-range@1.0.0: {}
+
+  get-stdin@8.0.0: {}
+
+  moo@0.5.2: {}
+
+  nearley@2.20.1:
+    dependencies:
+      commander: 2.20.3
+      moo: 0.5.2
+      railroad-diagrams: 1.0.0
+      randexp: 0.4.6
+
+  node-sql-parser@4.18.0:
+    dependencies:
+      big-integer: 1.6.52
+
+  prettier-plugin-gherkin@1.1.1:
+    dependencies:
+      '@cucumber/gherkin': 24.1.0
+      '@cucumber/messages': 19.1.4
+      prettier: 2.8.8
+
+  prettier-plugin-sql@0.14.0(prettier@2.8.8):
+    dependencies:
+      node-sql-parser: 4.18.0
+      prettier: 2.8.8
+      sql-formatter: 12.2.4
+      tslib: 2.8.1
+
+  prettier@2.8.8: {}
+
+  railroad-diagrams@1.0.0: {}
+
+  randexp@0.4.6:
+    dependencies:
+      discontinuous-range: 1.0.0
+      ret: 0.1.15
+
+  reflect-metadata@0.1.13: {}
+
+  regexp-to-ast@0.5.0: {}
+
+  ret@0.1.15: {}
+
+  sql-formatter@12.2.4:
+    dependencies:
+      argparse: 2.0.1
+      get-stdin: 8.0.0
+      nearley: 2.20.1
+
+  tslib@2.8.1: {}
+
+  uuid@9.0.0: {}
