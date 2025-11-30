@@ -46,12 +46,17 @@ prettier.prettier_binary(
     ],
 )
 
+sh_binary(
+    name = "swiftformat_noop",
+    srcs = ["swiftformat_noop.sh"],
+)
+
 alias(
     name = "swiftformat",
     actual = select({
         # Skip swift formatting on Linux due to symbol errors with swiftformat_linux
         # Swift builds work fine, but the formatter has Foundation dependency issues
-        "@platforms//os:linux": "@aspect_rules_lint//format:noop",
+        "@platforms//os:linux": ":swiftformat_noop",
         "@platforms//os:macos": "@swiftformat_mac//:swiftformat_mac",
     }),
 )
