@@ -1,6 +1,6 @@
 # AoC 2016 Day 1: No Time for a Taxicab (Haskell)
 
-Solution using Haskell with Bazel genrule build.
+Solution using Haskell with custom Bazel build rules.
 
 ## Building and Running
 

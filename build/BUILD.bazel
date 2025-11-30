@@ -1,0 +1,6 @@
+"""Bazel rules and macros for Advent of Code."""
+
+exports_files([
+    "nim.bzl",
+    "haskell.bzl",
+])

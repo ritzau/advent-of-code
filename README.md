@@ -65,9 +65,9 @@ Multi-year, multi-language solutions for [Advent of Code](https://adventofcode.c
 - `typescript` - TypeScript with Node.js 25
 - `rust` - Rust 1.91
 - `go` - Go 1.25
-- `haskell` - Haskell (GHC via genrule)
+- `haskell` - Haskell (GHC with custom build rules)
 - `kotlin` - Kotlin JVM
-- `nim` - Nim compiler
+- `nim` - Nim (with custom build rules)
 - `zig` - Zig 0.15
 - `cpp` - C++ with CMake
 - `julia` - Julia 1.11
@@ -132,6 +132,7 @@ advent-of-code/
 │   ├── AoC16/          # 2016 solutions (10 languages)
 │   └── aoc-cli/        # CLI test runner (Go)
 ├── templates/          # Language templates for new solutions
+├── build/              # Custom Bazel rules (nim.bzl, haskell.bzl)
 ├── scripts/            # Helper scripts
 ├── MODULE.bazel        # Bazel module configuration
 ├── BUILD.bazel         # Root BUILD file
@@ -155,7 +156,7 @@ This repository uses **Bazel** for reproducible builds across all languages:
 - 19 days with part1 and part2 binaries
 
 **Haskell (AoC 2021, AoC 2022)**:
-- Uses `genrule` with GHC compiler
+- Uses custom `haskell_binary` and `haskell_test` macros (see `build/haskell.bzl`)
 - Simple builds without external package dependencies
 - AoC22: Single executable for all 15 days
 - AoC21: Three executables (main, part1, part2)
@@ -175,7 +176,7 @@ This repository uses **Bazel** for reproducible builds across all languages:
 - C++: `rules_cc` with native toolchain
 - Kotlin: `rules_kotlin` with JVM
 - Zig: `rules_zig` 0.15.2
-- Nim: genrule with nim compiler
+- Nim: Custom `nim_binary` and `nim_test` macros (see `build/nim.bzl`)
 
 ## 📝 Notes
 
