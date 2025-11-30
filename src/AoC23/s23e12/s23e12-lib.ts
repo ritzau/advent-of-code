@@ -95,7 +95,7 @@ function combo3(state: Combo3State, prefix = ""): number {
                 runLengthCount: 1,
                 runLengths: runLengths.slice(runLengthIndex),
               },
-              prefix + template.slice(0, position).join("") + "#",
+              prefix + template.slice(0, position).join("") + "#"
             ) +
             combo3(
               {
@@ -103,7 +103,7 @@ function combo3(state: Combo3State, prefix = ""): number {
                 runLengthCount: 0,
                 runLengths: runLengths.slice(runLengthIndex),
               },
-              prefix + template.slice(0, position).join("") + ".",
+              prefix + template.slice(0, position).join("") + "."
             );
 
           combo3Memo.set(memoKey, result);

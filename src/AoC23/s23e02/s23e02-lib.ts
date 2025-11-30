@@ -36,7 +36,7 @@ export function solvePart2(input: string): number {
 function possible(bag: CubeSet, { game, sets }: CubeGame): boolean {
   return sets.every(
     ({ red, green, blue }) =>
-      red <= bag.red && green <= bag.green && blue <= bag.blue,
+      red <= bag.red && green <= bag.green && blue <= bag.blue
   );
 }
 

@@ -111,12 +111,12 @@ func (d *Downloader) GetInput(year, day int) (string, error) {
 
 	// Create cache directory
 	cacheDir := filepath.Join(d.rootDir, "inputs", fmt.Sprintf("%d", year))
-	if err := os.MkdirAll(cacheDir, 0755); err != nil {
+	if err := os.MkdirAll(cacheDir, 0o755); err != nil {
 		return "", fmt.Errorf("failed to create cache directory: %w", err)
 	}
 
 	// Save to cache
-	if err := os.WriteFile(inputPath, []byte(content), 0644); err != nil {
+	if err := os.WriteFile(inputPath, []byte(content), 0o644); err != nil {
 		return "", fmt.Errorf("failed to save input to cache: %w", err)
 	}
 

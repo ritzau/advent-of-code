@@ -16,8 +16,8 @@ ts_project(
         "part2.ts",
     ],
     resolve_json_module = True,
-    tsconfig = ":tsconfig.json",
     transpiler = "tsc",
+    tsconfig = ":tsconfig.json",
     deps = [":node_modules/@types/node"],
 )
 

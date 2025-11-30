@@ -44,7 +44,7 @@ class EngineSchematic {
 
     if (this.lines.length >= 3) {
       const symbolIndices = Array.from(this.lines[1]).flatMap((c, i) =>
-        this.isSymbol(c) ? i : [],
+        this.isSymbol(c) ? i : []
       );
       for (const g of symbolIndices) {
         yield* this.findNeighbours(g);
@@ -71,7 +71,7 @@ class EngineSchematic {
 
   private findNumber(row: number, col: number) {
     return this.numbers[row].find(
-      (n) => n.startIndex <= col && col <= n.lastIndex,
+      (n) => n.startIndex <= col && col <= n.lastIndex
     );
   }
 

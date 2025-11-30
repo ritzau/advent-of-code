@@ -32,11 +32,11 @@ swift_binary(
 # Unit test binary - runs sample tests
 swift_binary(
     name = "s16e01_swift_test_bin",
+    testonly = True,
     srcs = [
         "Common.swift",
         "Tests.swift",
     ],
-    testonly = True,
 )
 
 # Wrapper test that runs the unit test binary

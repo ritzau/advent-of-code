@@ -17,7 +17,7 @@ function runPart(
   name: string,
   solver: (input: string) => number,
   input: string,
-  expected: number,
+  expected: number
 ): TestResult {
   const start = performance.now();
   const result = solver(input);
@@ -39,14 +39,18 @@ function main() {
   const part1 = runPart("Part 1", solvePart1, input, 0); // TODO: Update expected value
   const status1 = part1.passed ? "✅" : "❌";
   console.log(
-    `Part 1: ${status1} ${part1.result} (expected: ${part1.expected}) [${part1.duration.toFixed(2)}ms]`,
+    `Part 1: ${status1} ${part1.result} (expected: ${
+      part1.expected
+    }) [${part1.duration.toFixed(2)}ms]`
   );
 
   // Part 2
   const part2 = runPart("Part 2", solvePart2, input, 0); // TODO: Update expected value
   const status2 = part2.passed ? "✅" : "❌";
   console.log(
-    `Part 2: ${status2} ${part2.result} (expected: ${part2.expected}) [${part2.duration.toFixed(2)}ms]`,
+    `Part 2: ${status2} ${part2.result} (expected: ${
+      part2.expected
+    }) [${part2.duration.toFixed(2)}ms]`
   );
 
   console.log(`Total: ${(part1.duration + part2.duration).toFixed(2)}ms`);

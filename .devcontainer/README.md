@@ -5,6 +5,7 @@ This dev container provides a consistent development environment for working on 
 ## Setup
 
 The container includes:
+
 - Bazel for building solutions
 - Language-specific tools managed by Bazel
 - VS Code extensions for various languages
@@ -39,6 +40,7 @@ bazel test //src/AoC16/s16e01-cpp/tests:solution_test
 ## Language Support
 
 The container supports multiple languages through Bazel's language rules:
+
 - Python (rules_python)
 - TypeScript (aspect_rules_ts)
 - Rust (rules_rust)

@@ -34,10 +34,10 @@ function expandMap(map: Galaxy[], multiplier: number): Galaxy[] {
   const maxCol = Math.max(...cols);
 
   const expandRows = Array.from({ length: maxRow }, (_, i) => i).filter(
-    (x) => !rows.has(x),
+    (x) => !rows.has(x)
   );
   const expandCols = Array.from({ length: maxCol }, (_, i) => i).filter(
-    (x) => !cols.has(x),
+    (x) => !cols.has(x)
   );
 
   return map.map(({ row, col }) => {
@@ -74,7 +74,7 @@ export function solvePart1(input: string): number {
 
 export function solvePart2(
   input: string,
-  multiplier: number = 1000000,
+  multiplier: number = 1000000
 ): number {
   const map = parseMap(input);
   const expanded = expandMap(map, multiplier);

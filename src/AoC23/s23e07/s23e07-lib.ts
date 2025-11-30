@@ -45,7 +45,7 @@ function parseLineWithJokers(line: string): Bid {
 function parseHand(handString: string): Hand {
   const frequency = Array.from(handString).reduce(
     (m, c) => m.set(c, (m.get(c) ?? 0) + 1),
-    new Map<string, number>(),
+    new Map<string, number>()
   );
   const frequencyString = Array.from(frequency.values())
     .sort()
@@ -61,7 +61,7 @@ function parseHand(handString: string): Hand {
 function parseHandWithJokers(handString: string): Hand {
   const frequency = Array.from(handString).reduce(
     (m, c) => m.set(c, (m.get(c) ?? 0) + 1),
-    new Map<string, number>(),
+    new Map<string, number>()
   );
 
   const jokerCount = frequency.get("J") ?? 0;

@@ -16,7 +16,7 @@ export function logResult(message: string, actual: number, expected: number) {
   }
   console.log(
     `${message} `.padEnd(24, "_") + ` ${actual}`.padStart(16, "_"),
-    passed ? "✅" : "❌",
+    passed ? "✅" : "❌"
   );
 }
 
@@ -37,7 +37,7 @@ export function exitWithTestStatus() {
  * Sum values from an async generator
  */
 export async function asyncSum(
-  generator: AsyncGenerator<number, void, unknown>,
+  generator: AsyncGenerator<number, void, unknown>
 ) {
   let sum = 0;
 
@@ -60,7 +60,7 @@ export type ReadLineResult = {
  * Read a single line from readline interface
  */
 export async function readLine(
-  input: readline.Interface,
+  input: readline.Interface
 ): Promise<ReadLineResult> {
   for await (const line of input) {
     return { done: false, line };

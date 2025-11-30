@@ -1,7 +1,7 @@
 import Foundation
 
 @main
-struct Part1 {
+enum Part1 {
     static func main() {
         var input = ""
         while let line = readLine() {
