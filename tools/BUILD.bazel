@@ -5,25 +5,20 @@ Since we have 12 languages and limited Bazel toolchain exposure, we configure
 what we can and handle the rest via system formatters.
 
 Usage:
-  bazel run //tools/format                # Format all files
-  bazel run //tools/format -- --mode=check  # Check formatting without modifying
+  bazel run //tools:format                # Format all files
+  bazel run //tools:format.check.         # Check formatting without modifying
 """
 
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
-load("@npm_format//:defs.bzl", "npm_link_all_packages")
-load("@npm_format//tools/format:prettier/package_json.bzl", prettier = "bin")
+load("@npm_tools//:defs.bzl", "npm_link_all_packages")
+load("@npm_tools//tools:prettier/package_json.bzl", prettier = "bin")
 
 npm_link_all_packages(name = "node_modules")
 
 js_library(
     name = "prettierrc",
     srcs = ["prettier.config.cjs"],
-    deps = [
-        ":node_modules/@prettier/plugin-xml",
-        ":node_modules/prettier-plugin-gherkin",
-        ":node_modules/prettier-plugin-sql",
-    ],
 )
 
 java_binary(

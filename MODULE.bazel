@@ -124,10 +124,10 @@ npm.npm_translate_lock(
 )
 use_repo(npm, "npm_s16e01_typescript")
 npm.npm_translate_lock(
-    name = "npm_format",
-    pnpm_lock = "//tools/format:pnpm-lock.yaml",
+    name = "npm_tools",
+    pnpm_lock = "//tools:pnpm-lock.yaml",
 )
-use_repo(npm, "npm_format")
+use_repo(npm, "npm_tools")
 
 ###############################################################################
 # Kotlin/JVM Toolchain and Dependencies

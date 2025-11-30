@@ -1,6 +1,8 @@
 """Root BUILD file for Advent of Code monorepo."""
 
-package(default_visibility = ["//visibility:public"])
+# This file intentionally left minimal.
+# Templates are in //templates/cpp, //templates/rust, etc.
+# Solutions are in //src/AoC16, //src/AoC21, etc.
 
 alias(
     name = "aoc",
