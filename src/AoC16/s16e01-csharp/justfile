@@ -1,0 +1,22 @@
+# Advent of Code 2016 Day 1 C# Solution
+# All commands use Bazel for reproducible builds
+
+# Build all targets
+build:
+    bazel build //src/AoC16/s16e01-csharp:all
+
+# Run the main verification binary
+run:
+    bazel run //src/AoC16/s16e01-csharp:s16e01-csharp
+
+# Run a specific part with input from stdin
+run-part PART:
+    bazel run //src/AoC16/s16e01-csharp:part{{PART}}
+
+# Run tests
+test:
+    bazel test //src/AoC16/s16e01-csharp:aoc_tests
+
+# Clean build artifacts
+clean:
+    bazel clean

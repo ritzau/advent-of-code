@@ -1,0 +1,43 @@
+"""Build targets for AoC 2016 Day 1 C# solution."""
+
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_binary", "csharp_library", "csharp_nunit_test")
+
+# Shared solution library
+csharp_library(
+    name = "solution",
+    srcs = ["Common.cs"],
+    target_frameworks = ["net8.0"],
+    visibility = ["//visibility:public"],
+)
+
+# Part 1 binary - outputs only part 1 result
+csharp_binary(
+    name = "part1",
+    srcs = ["Part1.cs"],
+    target_frameworks = ["net8.0"],
+    deps = [":solution"],
+)
+
+# Part 2 binary - outputs only part 2 result
+csharp_binary(
+    name = "part2",
+    srcs = ["Part2.cs"],
+    target_frameworks = ["net8.0"],
+    deps = [":solution"],
+)
+
+# Main verification binary
+csharp_binary(
+    name = "s16e01-csharp",
+    srcs = ["Main.cs"],
+    target_frameworks = ["net8.0"],
+    deps = [":solution"],
+)
+
+# Unit tests
+csharp_nunit_test(
+    name = "aoc_tests",
+    srcs = ["Tests.cs"],
+    target_frameworks = ["net8.0"],
+    deps = [":solution"],
+)
