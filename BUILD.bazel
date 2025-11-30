@@ -21,13 +21,3 @@ js_library(
         ":node_modules/prettier-plugin-sql",
     ],
 )
-
-# Export configuration files for linters/formatters
-exports_files([
-    "prettier.config.cjs",
-    #     "ruff.toml",
-    #     ".prettierrc.json",
-    #     ".golangci.yml",
-    #     ".swiftformat",
-    #     ".editorconfig",
-])
