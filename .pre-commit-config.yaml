@@ -22,6 +22,6 @@ repos:
     hooks:
       - id: bazel-format
         name: bazel format
-        entry: bazel run //tools/format
+        entry: bazel run //tools:format
         language: system
         types_or: [text]
