@@ -11,8 +11,8 @@ function main()
     # Read input from stdin
     input = read(stdin, String)
 
-    println("Advent of Code - Day X")
-    println("======================")
+    println("Advent of Code 2025 - Day 1")
+    println("===========================")
 
     # Part 1
     start_time = time()
@@ -22,7 +22,9 @@ function main()
     pass1 = result1 == expected_part1
 
     emoji1 = pass1 ? "✅" : "❌"
-    println("Part 1: $emoji1 $result1 (expected: $expected_part1) [$(round(duration1 * 1000, digits=2))ms]")
+    println(
+        "Part 1: $emoji1 $result1 (expected: $expected_part1) [$(round(duration1 * 1000, digits=2))ms]",
+    )
 
     # Part 2
     start_time = time()
@@ -32,7 +34,9 @@ function main()
     pass2 = result2 == expected_part2
 
     emoji2 = pass2 ? "✅" : "❌"
-    println("Part 2: $emoji2 $result2 (expected: $expected_part2) [$(round(duration2 * 1000, digits=2))ms]")
+    println(
+        "Part 2: $emoji2 $result2 (expected: $expected_part2) [$(round(duration2 * 1000, digits=2))ms]",
+    )
 
     println("Total: $(round((duration1 + duration2) * 1000, digits=2))ms")
 
