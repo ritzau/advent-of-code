@@ -1,0 +1,37 @@
+"""Build targets for Advent of Code Julia template."""
+
+load("@rules_julia//julia:defs.bzl", "julia_binary", "julia_library", "julia_test")
+
+# Solution library
+julia_library(
+    name = "lib",
+    srcs = ["src/lib.jl"],
+)
+
+# Main verification binary - runs both parts and validates results
+julia_binary(
+    name = "main",
+    srcs = ["src/main.jl"],
+    deps = [":lib"],
+)
+
+# Part 1 binary - outputs only part 1 result
+julia_binary(
+    name = "part1",
+    srcs = ["src/part1.jl"],
+    deps = [":lib"],
+)
+
+# Part 2 binary - outputs only part 2 result
+julia_binary(
+    name = "part2",
+    srcs = ["src/part2.jl"],
+    deps = [":lib"],
+)
+
+julia_test(
+    name = "test",
+    size = "small",
+    srcs = ["test/runtests.jl"],
+    deps = [":lib"],
+)

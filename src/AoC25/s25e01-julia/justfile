@@ -1,0 +1,23 @@
+# Build the solution
+build:
+    bazel build :all
+
+# Run the main verification binary
+run:
+    bazel run :main
+
+# Run a specific part with input from stdin
+run-part PART:
+    bazel run :part{{PART}}
+
+# Format code
+format:
+    julia -e 'using JuliaFormatter; format(".")'
+
+# Run tests only
+test:
+    bazel test :all
+
+# Clean build artifacts
+clean:
+    bazel clean
