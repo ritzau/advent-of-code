@@ -7,6 +7,7 @@
       "installZsh": true,
       "upgradePackages": true
     },
+    "ghcr.io/devcontainers-community/features/bazel:1": {},
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.13"
     }
