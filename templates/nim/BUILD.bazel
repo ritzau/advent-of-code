@@ -1,40 +1,39 @@
 """Build targets for Advent of Code Nim solution."""
 
-load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_cc_test", "nim_module")
-
-# Common module
-nim_module(
-    name = "common_module",
-    srcs = ["common.nim"],
-    visibility = ["//visibility:public"],
-)
+load("@rules_nim//nim:defs.bzl", "nim_cc_binary")
 
 # Main verification binary - runs both parts and validates results
 nim_cc_binary(
     name = "main",
+    srcs = ["common.nim"],
     main = "template_nim.nim",
-    deps = [":common_module"],
     visibility = ["//visibility:public"],
 )
 
 # Part 1 binary - outputs only part 1 result
 nim_cc_binary(
     name = "part1",
+    srcs = ["common.nim"],
     main = "template_nim_part1.nim",
-    deps = [":common_module"],
     visibility = ["//visibility:public"],
 )
 
 # Part 2 binary - outputs only part 2 result
 nim_cc_binary(
     name = "part2",
+    srcs = ["common.nim"],
     main = "template_nim_part2.nim",
-    deps = [":common_module"],
     visibility = ["//visibility:public"],
 )
 
-# Unit tests - compile and run tests from common.nim
-nim_cc_test(
-    name = "common_test",
+# Unit tests - run with Nim's unittest
+nim_cc_binary(
+    name = "common_test_bin",
     main = "common.nim",
+)
+
+# Wrap test binary as sh_test for Bazel test infrastructure
+sh_test(
+    name = "common_test",
+    srcs = [":common_test_bin"],
 )
