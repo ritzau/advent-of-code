@@ -1,6 +1,6 @@
 # Custom Bazel Build Rules
 
-This directory contains custom Bazel macros for languages that don't have official rules_* packages or where simpler custom rules are more appropriate.
+This directory contains custom Bazel macros for languages that don't have official rules\_\* packages or where simpler custom rules are more appropriate.
 
 ## Available Rules
 
@@ -74,6 +74,7 @@ These custom rules follow these principles:
 ## Why Custom Rules?
 
 **Haskell**: While `rules_haskell` exists, it is complex for simple builds without external packages. Our custom rules provide:
+
 - Zero external dependencies
 - Simple GHC-only compilation
 - Easy integration with existing code
@@ -82,12 +83,14 @@ These custom rules follow these principles:
 ## Implementation Notes
 
 The Haskell rules use Bazel's `genrule` under the hood:
+
 - Uses `ghc` with `-outputdir` and `-O2` optimization by default
 - Tests use `sh_test` wrappers to integrate with Bazel's test infrastructure
 
 ## Officially Supported Languages
 
 For other languages, use the official Bazel rules:
+
 - **Nim**: Use `@rules_nim` (see MODULE.bazel)
 - **C/C++**: Use `@rules_cc`
 - **Rust**: Use `@rules_rust`
