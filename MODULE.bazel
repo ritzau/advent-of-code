@@ -14,6 +14,7 @@ module(
 ###############################################################################
 
 bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "gazelle", version = "0.47.0")
 bazel_dep(name = "aspect_rules_lint", version = "1.2.1")
 bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
@@ -210,15 +211,14 @@ http_archive(
 ###############################################################################
 
 bazel_dep(name = "rules_nim")
-
 git_override(
     module_name = "rules_nim",
-    commit = "fa35a98e0b8e5dfbf7d66d26b51f9c11a01fb7fb",  # v0.0.1
+    commit = "ce93254e89c0f224dfa5245f732509dfe944f5d1",
     remote = "https://github.com/kczulko/rules_nim",
 )
 
 nim = use_extension("@rules_nim//nim:extensions.bzl", "nim")
-nim.toolchain(nim_version = "2.2.0")
+nim.toolchain(nim_version = "2.2.6")
 use_repo(nim, "nim_toolchains")
 
 register_toolchains("@nim_toolchains//:all")

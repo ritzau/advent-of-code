@@ -1,39 +1,58 @@
 """Build targets for Advent of Code Nim solution."""
 
-load("@rules_nim//nim:defs.bzl", "nim_cc_binary")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_cc_test", "nim_module")
+
+# Configuration for release builds
+write_file(
+    name = "release",
+    out = "release.cfg",
+    content = ["-d:release"],
+)
+
+# Common module - Nim sources that can be imported
+nim_module(
+    name = "common",
+    srcs = ["common.nim"],
+    strip_import_prefix = "templates/nim",
+)
 
 # Main verification binary - runs both parts and validates results
 nim_cc_binary(
     name = "main",
-    srcs = ["common.nim"],
     main = "template_nim.nim",
+    proj_cfg = ":release",
     visibility = ["//visibility:public"],
+    deps = [":common"],
 )
 
 # Part 1 binary - outputs only part 1 result
 nim_cc_binary(
     name = "part1",
-    srcs = ["common.nim"],
     main = "template_nim_part1.nim",
+    proj_cfg = ":release",
     visibility = ["//visibility:public"],
+    deps = [":common"],
 )
 
 # Part 2 binary - outputs only part 2 result
 nim_cc_binary(
     name = "part2",
-    srcs = ["common.nim"],
     main = "template_nim_part2.nim",
+    proj_cfg = ":release",
     visibility = ["//visibility:public"],
+    deps = [":common"],
 )
 
-# Unit tests - run with Nim's unittest
-nim_cc_binary(
-    name = "common_test_bin",
-    main = "common.nim",
-)
-
-# Wrap test binary as sh_test for Bazel test infrastructure
-sh_test(
+# Unit tests using nim_cc_test
+nim_cc_test(
     name = "common_test",
-    srcs = [":common_test_bin"],
+    copts = [
+        "-Wno-unused-label",
+        "-Wno-unused-but-set-variable",
+        "-Wno-discarded-qualifiers",
+        "-Wno-parentheses",
+    ],
+    main = "common.nim",
+    proj_cfg = ":release",
 )

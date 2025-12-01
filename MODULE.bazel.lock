@@ -670,6 +670,74 @@
         "recordedRepoMappingEntries": []
       }
     },
+    "@@rules_nim+//nim:extensions.bzl%nim": {
+      "general": {
+        "bzlTransitiveDigest": "vAtuWHabeUAKBEQROeSqBoSIzICrH9lFmm0l8AC7W1E=",
+        "usagesDigest": "uG7CeK51LBmzGd2AJvDUSEhXhaSiQQY/Xv3hZWBgVao=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "nim_linux_x64": {
+            "repoRuleId": "@@rules_nim+//nim:repositories.bzl%nim_repositories",
+            "attributes": {
+              "platform": "linux_x64",
+              "nim_version": "2.2.6"
+            }
+          },
+          "nim_macosx_x64": {
+            "repoRuleId": "@@rules_nim+//nim:repositories.bzl%nim_repositories",
+            "attributes": {
+              "platform": "macosx_x64",
+              "nim_version": "2.2.6"
+            }
+          },
+          "nim_macosx_arm64": {
+            "repoRuleId": "@@rules_nim+//nim:repositories.bzl%nim_repositories",
+            "attributes": {
+              "platform": "macosx_arm64",
+              "nim_version": "2.2.6"
+            }
+          },
+          "nim_linux_armv7l": {
+            "repoRuleId": "@@rules_nim+//nim:repositories.bzl%nim_repositories",
+            "attributes": {
+              "platform": "linux_armv7l",
+              "nim_version": "2.2.6"
+            }
+          },
+          "nim_toolchains": {
+            "repoRuleId": "@@rules_nim+//nim/private:toolchains_repo.bzl%toolchains_repo",
+            "attributes": {
+              "user_repository_name": "nim",
+              "platforms": [
+                "linux_x64",
+                "macosx_x64",
+                "macosx_arm64",
+                "linux_armv7l"
+              ]
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_nim+",
+            "bazel_skylib",
+            "bazel_skylib+"
+          ],
+          [
+            "rules_nim+",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_nim+",
+            "rules_nim",
+            "rules_nim+"
+          ]
+        ]
+      }
+    },
     "@@rules_nodejs+//nodejs:extensions.bzl%node": {
       "general": {
         "bzlTransitiveDigest": "SqbzUarOVzAfK28Ca5+NIU3LUwnW/b3h0xXBUS97oyI=",
