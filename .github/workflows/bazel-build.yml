@@ -46,12 +46,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bazelisk-
 
-      - name: Install Nim
-        uses: jiro4989/setup-nim-action@v2
-        with:
-          nim-version: '2.2.0'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Install Swift
         uses: swift-actions/setup-swift@v2
         with:

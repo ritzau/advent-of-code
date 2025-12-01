@@ -1,33 +1,49 @@
 """Build targets for Advent of Code 2016 Day 1 Nim solution."""
 
-load("//build:nim.bzl", "nim_binary", "nim_test")
+load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_cc_test", "nim_module")
+
+# Common compiler options to suppress warnings in generated C code
+NIM_COPTS = [
+    "-Wno-unused-label",
+    "-Wno-unused-but-set-variable",
+    "-Wno-parentheses",
+    "-Wno-sometimes-uninitialized",
+]
+
+# Common module - Nim sources that can be imported
+nim_module(
+    name = "common",
+    srcs = ["common.nim"],
+    strip_import_prefix = "src/AoC16/s16e01-nim",
+)
 
 # Main verification binary - runs both parts and validates results
-nim_binary(
-    name = "s16e01-nim",
+nim_cc_binary(
+    name = "main",
+    copts = NIM_COPTS,
     main = "s16e01_nim.nim",
-    visibility = ["//visibility:public"],
-    deps = ["common.nim"],
+    deps = [":common"],
 )
 
 # Part 1 binary - outputs only part 1 result
-nim_binary(
+nim_cc_binary(
     name = "part1",
+    copts = NIM_COPTS,
     main = "s16e01_nim_part1.nim",
-    visibility = ["//visibility:public"],
-    deps = ["common.nim"],
+    deps = [":common"],
 )
 
 # Part 2 binary - outputs only part 2 result
-nim_binary(
+nim_cc_binary(
     name = "part2",
+    copts = NIM_COPTS,
     main = "s16e01_nim_part2.nim",
-    visibility = ["//visibility:public"],
-    deps = ["common.nim"],
+    deps = [":common"],
 )
 
-# Unit tests - compile and run tests from common.nim
-nim_test(
-    name = "common_test",
+# Unit tests using nim_cc_test
+nim_cc_test(
+    name = "test",
+    copts = NIM_COPTS,
     main = "common.nim",
 )
