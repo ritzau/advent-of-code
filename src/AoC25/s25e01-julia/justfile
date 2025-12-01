@@ -1,0 +1,29 @@
+# Advent of Code Solution
+# All commands use Bazel for reproducible builds
+
+# Build the solution
+build:
+    bazel build //templates/julia:part1 //templates/julia:part2
+
+# Run the main verification binary
+run:
+    bazel run //templates/julia:main
+
+# Run a specific part with input from stdin
+run-part PART:
+    bazel run //templates/julia:part{{PART}}
+
+# Format code
+format:
+    julia -e 'using JuliaFormatter; format(".")'
+
+# Run all checks (build + tests)
+check-all: build test
+
+# Run tests only
+test:
+    bazel test //templates/julia:aoc_tests
+
+# Clean build artifacts
+clean:
+    bazel clean
