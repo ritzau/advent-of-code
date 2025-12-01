@@ -46,6 +46,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bazelisk-
 
+      - name: Install Swift
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.0'
+
       - name: Build all targets
         run: CC=clang bazel build //... --repository_cache=~/.cache/bazel-repository-cache
         env:
