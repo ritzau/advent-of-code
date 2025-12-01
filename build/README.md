@@ -1,56 +1,8 @@
 # Custom Bazel Build Rules
 
-This directory contains custom Bazel macros for languages that don't have official rules\_\* packages or where simpler custom rules are more appropriate.
+This directory contains custom Bazel macros for languages that don't have official rules_* packages or where simpler custom rules are more appropriate.
 
 ## Available Rules
-
-### Nim (`nim.bzl`)
-
-Macros for building Nim programs using the Nim compiler.
-
-#### `nim_binary`
-
-Compiles a Nim source file into an executable binary.
-
-**Parameters:**
-
-- `name`: The name of the target (also used as the output binary name)
-- `main`: The main .nim source file to compile
-- `deps`: List of additional .nim files that the main file depends on (optional)
-- `**kwargs`: Additional arguments passed to sh_binary (e.g., visibility)
-
-**Example:**
-
-```python
-load("//build:nim.bzl", "nim_binary")
-
-nim_binary(
-    name = "my-solution",
-    main = "solution.nim",
-    deps = ["common.nim"],
-    visibility = ["//visibility:public"],
-)
-```
-
-#### `nim_test`
-
-Compiles and runs a Nim test file.
-
-**Parameters:**
-
-- `name`: The name of the test target
-- `main`: The main .nim test file to compile and run
-- `deps`: List of additional .nim files that the test file depends on (optional)
-- `**kwargs`: Additional arguments passed to sh_test (e.g., size, timeout)
-
-**Example:**
-
-```python
-nim_test(
-    name = "common_test",
-    main = "common.nim",
-)
-```
 
 ### Haskell (`haskell.bzl`)
 
@@ -121,18 +73,29 @@ These custom rules follow these principles:
 
 ## Why Custom Rules?
 
-- **Nim**: No official `rules_nim` exists, and Nim's simple compilation model works well with genrules
-- **Haskell**: `rules_haskell` exists but is complex for simple builds without external packages. Our custom rules provide:
-  - Zero external dependencies
-  - Simple GHC-only compilation
-  - Easy integration with existing code
-  - No need for Cabal/Stack in the build process
+**Haskell**: While `rules_haskell` exists, it is complex for simple builds without external packages. Our custom rules provide:
+- Zero external dependencies
+- Simple GHC-only compilation
+- Easy integration with existing code
+- No need for Cabal/Stack in the build process
 
 ## Implementation Notes
 
-Both rule sets use Bazel's `genrule` under the hood:
+The Haskell rules use Bazel's `genrule` under the hood:
+- Uses `ghc` with `-outputdir` and `-O2` optimization by default
+- Tests use `sh_test` wrappers to integrate with Bazel's test infrastructure
 
-- **Nim**: Uses `nim compile` with `--nimcache` to isolate build artifacts
-- **Haskell**: Uses `ghc` with `-outputdir` and `-O2` optimization by default
+## Officially Supported Languages
 
-Tests use `sh_test` wrappers to integrate with Bazel's test infrastructure.
+For other languages, use the official Bazel rules:
+- **Nim**: Use `@rules_nim` (see MODULE.bazel)
+- **C/C++**: Use `@rules_cc`
+- **Rust**: Use `@rules_rust`
+- **Go**: Use `@rules_go`
+- **Python**: Use `@rules_python`
+- **TypeScript**: Use `@aspect_rules_ts`
+- **Kotlin**: Use `@rules_kotlin`
+- **Zig**: Use `@rules_zig`
+- **Julia**: Use `@rules_julia`
+- **C#**: Use `@rules_dotnet`
+- **Swift**: Use `@rules_swift`

@@ -1,33 +1,40 @@
 """Build targets for Advent of Code 2016 Day 1 Nim solution."""
 
-load("//build:nim.bzl", "nim_binary", "nim_test")
+load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_cc_test", "nim_module")
+
+# Common module
+nim_module(
+    name = "common_module",
+    srcs = ["common.nim"],
+    visibility = ["//visibility:public"],
+)
 
 # Main verification binary - runs both parts and validates results
-nim_binary(
+nim_cc_binary(
     name = "s16e01-nim",
     main = "s16e01_nim.nim",
     visibility = ["//visibility:public"],
-    deps = ["common.nim"],
+    deps = [":common_module"],
 )
 
 # Part 1 binary - outputs only part 1 result
-nim_binary(
+nim_cc_binary(
     name = "part1",
     main = "s16e01_nim_part1.nim",
     visibility = ["//visibility:public"],
-    deps = ["common.nim"],
+    deps = [":common_module"],
 )
 
 # Part 2 binary - outputs only part 2 result
-nim_binary(
+nim_cc_binary(
     name = "part2",
     main = "s16e01_nim_part2.nim",
     visibility = ["//visibility:public"],
-    deps = ["common.nim"],
+    deps = [":common_module"],
 )
 
 # Unit tests - compile and run tests from common.nim
-nim_test(
+nim_cc_test(
     name = "common_test",
     main = "common.nim",
 )
