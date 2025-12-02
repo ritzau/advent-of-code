@@ -1,6 +1,6 @@
-alias bb="bazel build ..."
+alias bb="bazel build '...'"
 alias bba="bazel build //..."
-alias bt="bazel test ..."
+alias bt="bazel test '...' --test_output=all"
 alias bta="bazel test //..."
 alias aoc="bazel run //:aoc --"
 alias bf="bazel run //tools:format"
