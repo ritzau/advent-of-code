@@ -1,0 +1,30 @@
+# Advent of Code Solution
+# All commands use Bazel for reproducible builds
+
+# Build the solution
+build:
+    bazel build //templates/haskell:part1 //templates/haskell:part2
+
+# Run a specific part with input from stdin
+run-part PART:
+    bazel run //templates/haskell:part{{PART}}
+
+# Format code
+format:
+    ormolu -i *.hs
+
+# Lint code
+lint:
+    hlint .
+
+# Run all checks (build + tests)
+check-all: build test
+
+# Run tests only
+test:
+    bazel test //templates/haskell:aoc_tests
+
+# Clean build artifacts
+clean:
+    bazel clean
+    rm -rf dist-newstyle/ .ghc.environment.*

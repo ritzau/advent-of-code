@@ -1,0 +1,24 @@
+"""Build targets for Advent of Code Haskell solution."""
+
+load("//build:haskell.bzl", "haskell_binary", "haskell_test")
+
+# Part 1 binary - outputs only part 1 result
+haskell_binary(
+    name = "part1",
+    main = "Part1.hs",
+    deps = ["Common.hs"],
+)
+
+# Part 2 binary - outputs only part 2 result
+haskell_binary(
+    name = "part2",
+    main = "Part2.hs",
+    deps = ["Common.hs"],
+)
+
+# Unit tests
+haskell_test(
+    name = "aoc_tests",
+    main = "Tests.hs",
+    deps = ["Common.hs"],
+)
