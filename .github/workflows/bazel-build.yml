@@ -54,7 +54,7 @@ jobs:
       - name: Install Haskell dependencies
         run: |
           cabal update
-          cabal install --lib MemoTrie
+          cabal install --lib MemoTrie containers array HUnit
 
       - name: Install Swift
         uses: swift-actions/setup-swift@v2
