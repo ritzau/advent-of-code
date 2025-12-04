@@ -46,6 +46,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bazelisk-
 
+      - name: Set up Haskell
+        uses: haskell-actions/setup@v2
+        with:
+          enable-stack: false
+
+      - name: Install Haskell dependencies
+        run: |
+          cabal update
+          cabal install --lib MemoTrie
+
       - name: Install Swift
         uses: swift-actions/setup-swift@v2
         with:
