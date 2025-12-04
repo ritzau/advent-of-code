@@ -1,5 +1,5 @@
 cabal-version:      3.0
-name:               template-haskell
+name:               s25e03-haskell
 version:            0.1.0.0
 synopsis:           Advent of Code solution
 author:             AoC Solver
@@ -10,25 +10,26 @@ common shared-properties
     ghc-options:      -Wall -O2
     build-depends:    base >= 4.14 && < 5
                     , containers
+                    , MemoTrie
 
 library
     import:           shared-properties
     hs-source-dirs:   .
     exposed-modules:  Common
 
-executable template-haskell-part1
+executable s25e03-haskell-part1
     import:           shared-properties
     main-is:          Part1.hs
-    build-depends:    template-haskell
+    build-depends:    s25e03-haskell
 
-executable template-haskell-part2
+executable s25e03-haskell-part2
     import:           shared-properties
     main-is:          Part2.hs
-    build-depends:    template-haskell
+    build-depends:    s25e03-haskell
 
 test-suite aoc-tests
     import:           shared-properties
     type:             exitcode-stdio-1.0
     main-is:          Tests.hs
-    build-depends:    template-haskell
+    build-depends:    s25e03-haskell
                     , HUnit
