@@ -6,22 +6,22 @@ load("//build:haskell.bzl", "haskell_binary", "haskell_test")
 haskell_binary(
     name = "part1",
     main = "Part1.hs",
-    deps = ["Common.hs"],
     packages = ["MemoTrie"],
+    deps = ["Common.hs"],
 )
 
 # Part 2 binary - outputs only part 2 result
 haskell_binary(
     name = "part2",
     main = "Part2.hs",
-    deps = ["Common.hs"],
     packages = ["MemoTrie"],
+    deps = ["Common.hs"],
 )
 
 # Unit tests
 haskell_test(
-    name = "aoc_tests",
+    name = "test",
     main = "Tests.hs",
-    deps = ["Common.hs"],
     packages = ["MemoTrie"],
+    deps = ["Common.hs"],
 )

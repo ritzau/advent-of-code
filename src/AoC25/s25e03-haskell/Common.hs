@@ -1,52 +1,32 @@
 module Common (solvePart1, solvePart2) where
 
-import Data.Char
-import Data.Array
+import Data.Array (Array, listArray, (!))
+import Data.Char (digitToInt)
+import Data.MemoTrie (memo2)
 
-maxJoltN :: Int -> String -> Maybe Int
-maxJoltN maxDigits str
-  | null str = Nothing
-  | maxDigits <= 0 = Nothing
-  | otherwise =
-    let
-      n = length str
-      digits = map digitToInt str
-      bounds = ((0, 0), (n, maxDigits))
+maxJolt :: Int -> String -> Maybe Int
+maxJolt n str = go n 0
+  where
+    len = length str
+    digits = listArray (0, len - 1) (map digitToInt str)
 
-      dp :: Array (Int, Int) (Maybe Int)
-      dp = array bounds [((i, j), compute i j) | i <- [0..n], j <- [0..maxDigits]]
+    go :: Int -> Int -> Maybe Int
+    go = memo2 go'
 
-      compute :: Int -> Int -> Maybe Int
-      compute pos remaining
-        | remaining == 0 = Just 0  -- Successfully selected all digits
-        | pos >= n = Nothing       -- Out of string, but still need more digits
-        | otherwise =
-          let
-            digitsLeft = n - pos
-            -- If we can't possibly select enough digits, fail early
-            canFinish = digitsLeft >= remaining
+    go' :: Int -> Int -> Maybe Int
+    go' 1 pos
+      | pos >= len = Nothing
+      | otherwise = Just $ maximum [digits ! i | i <- [pos .. len - 1]]
 
-            -- Option 1: Skip this digit
-            skipThis = if canFinish then dp ! (pos + 1, remaining) else Nothing
-
-            -- Option 2: Use this digit
-            -- When we use a digit, it contributes: digit * 10^(remaining - 1)
-            -- because we're selecting the (maxDigits - remaining + 1)th digit
-            useThis = case dp ! (pos + 1, remaining - 1) of
-                        Just rest -> Just $ (10 ^ (remaining - 1)) * (digits !! pos) + rest
-                        Nothing -> Nothing
-          in
-            if not canFinish
-            then Nothing
-            else case (skipThis, useThis) of
-              (Nothing, x) -> x
-              (x, Nothing) -> x
-              (Just s, Just u) -> Just $ max s u
-    in
-      dp ! (0, maxDigits)
+    go' n pos
+      | pos >= len = Nothing
+      | otherwise = maxJolt (10 ^ (n - 1)) (digits ! pos) (go (n - 1) (pos + 1)) (go n (pos + 1))
+      where
+        maxJolt f digit maxJoltNext skipThis =
+          max skipThis (fmap (\j -> f * digit + j) maxJoltNext)
 
 sumMaxJolts :: Int -> [String] -> Int
-sumMaxJolts n = sum . map (maybe 0 id . maxJoltN n)
+sumMaxJolts n = sum . map (maybe 0 id . maxJolt n)
 
 solvePart1 :: String -> Int
 solvePart1 = sumMaxJolts 2 . lines
