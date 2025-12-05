@@ -1,5 +1,5 @@
 import std/strutils
-import common
+import lib
 
 proc main() =
   let input = stdin.readAll().strip()

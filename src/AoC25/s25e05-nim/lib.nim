@@ -1,4 +1,5 @@
 ## Common utilities for this day's solution
+
 import std/algorithm
 import std/math
 import std/sequtils
@@ -24,14 +25,9 @@ proc parseInput*(input: string): (seq[(int64, int64)], seq[int64]) =
 proc solvePart1*(input: string): int =
   let (intervalls, ids) = parseInput(input)
 
-  # echo "Parsed Intervalls: ", intervalls
-  # echo "Parsed IDs: ", ids
-
   let count = ids.filter(id =>
     intervalls.any(intervall => id >= intervall[0] and id <= intervall[1])
   ).len
-
-  # echo "Count of IDs not in any intervall: ", count
 
   return count
 
@@ -39,30 +35,17 @@ proc solvePart2*(input: string): int =
   let (intervalls, _) = parseInput(input)
   var merged: seq[(int64, int64)] = @[];
 
-  # sort(intervalls)
-
-  # echo "Intervalls: ", intervalls
-
   for (low, high) in intervalls:
-    # echo "Adding: ", low, "-", high
-
     let firstIntervall = filterIt(merged, it[0] <= low and low <= it[1])
     let lastIntervall = filterIt(merged, it[0] <= high and high <= it[1])
     merged = filterIt(merged, it[1] < low or high < it[0])
-    # echo "  first: ", firstIntervall, " last: ", lastIntervall
 
     let newLow = if firstIntervall.len > 0: firstIntervall[0][0] else: low
     let newHigh = if lastIntervall.len > 0: lastIntervall[0][1] else: high
 
     merged.add((newLow, newHigh))
-    # echo "  Merged: ", merged
 
-  # echo "Merged: ", merged
-
-  let sizes = merged.mapIt(it[1] - it[0] + 1)
-  # echo "Sizes: ", sizes
-
-  return sizes.foldl(a + b)
+  return merged.mapIt(it[1] - it[0] + 1).sum
 
 when isMainModule:
   import unittest
@@ -82,8 +65,8 @@ when isMainModule:
 """
 
   suite "AoC Solution Tests":
-    test "part1_sample_1":
+    test "part1":
       check solvePart1(sampleInput) == 3
 
-    test "part2_sample_1":
+    test "part2":
       check solvePart2(sampleInput) == 14
