@@ -290,19 +290,26 @@ func (b *Builder) queryBazelOutput(target string) (string, error) {
 	// Find the first line that doesn't end with a known check extension
 	lines := strings.Split(strings.TrimSpace(string(output)), "\n")
 	var jarFile string
+	var dllFile string
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
 		if line == "" {
 			continue
 		}
 		// Skip dependency and check files
-		if strings.HasSuffix(line, ".jdeps") || strings.HasSuffix(line, ".clippy.ok") || strings.HasSuffix(line, ".rustfmt.ok") {
+		if strings.HasSuffix(line, ".jdeps") || strings.HasSuffix(line, ".clippy.ok") || strings.HasSuffix(line, ".rustfmt.ok") || strings.HasSuffix(line, ".xml") {
 			continue
 		}
 
 		// For JVM binaries (JAR files), we need to use the wrapper script instead
 		if strings.HasSuffix(line, ".jar") {
 			jarFile = line
+			continue
+		}
+
+		// For C# binaries (DLL files), we need to use the wrapper script instead
+		if strings.HasSuffix(line, ".dll") {
+			dllFile = line
 			continue
 		}
 
@@ -318,6 +325,16 @@ func (b *Builder) queryBazelOutput(target string) (string, error) {
 	if jarFile != "" {
 		// Remove .jar extension and convert to absolute path
 		scriptPath := strings.TrimSuffix(jarFile, ".jar")
+		if !filepath.IsAbs(scriptPath) {
+			scriptPath = filepath.Join(b.rootDir, scriptPath)
+		}
+		return scriptPath, nil
+	}
+
+	// If we only found a DLL file, return the wrapper script path
+	if dllFile != "" {
+		// Add .sh extension and convert to absolute path
+		scriptPath := dllFile + ".sh"
 		if !filepath.IsAbs(scriptPath) {
 			scriptPath = filepath.Join(b.rootDir, scriptPath)
 		}

@@ -47,6 +47,7 @@ func (r *Runner) RunPart(paths *builder.SolutionPaths, part int, input string) R
 		binaryPath = paths.Part2
 	}
 	cmd := exec.Command(binaryPath)
+	cmd.Dir = r.rootDir // Set working directory to repo root for relative path resolution
 
 	cmd.Stdin = strings.NewReader(input)
 
