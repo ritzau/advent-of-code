@@ -1,0 +1,29 @@
+# Advent of Code Solution
+# All commands use Bazel for reproducible builds
+
+# Build the solution
+build:
+    bazel build //templates/nim:main
+
+# Run the main verification binary
+run:
+    bazel run //templates/nim:main
+
+# Run a specific part with input from stdin
+run-part PART:
+    bazel run //templates/nim:part{{PART}}
+
+# Format code
+format:
+    nimpretty *.nim
+
+# Run all checks (build + tests)
+check-all: build test
+
+# Run tests only
+test:
+    bazel test //templates/nim:common_test
+
+# Clean build artifacts
+clean:
+    bazel clean
