@@ -27,25 +27,6 @@ jobs:
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure
 
-      - name: Setup Bazel repository cache
-        run: mkdir -p ~/.cache/bazel-repository-cache
-
-      - name: Mount bazel repository cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/bazel-repository-cache
-          key: ${{ runner.os }}-bazel-repo-${{ hashFiles('MODULE.bazel.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-bazel-repo-
-
-      - name: Mount bazelisk cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/bazelisk
-          key: ${{ runner.os }}-bazelisk-${{ hashFiles('.bazelversion') }}
-          restore-keys: |
-            ${{ runner.os }}-bazelisk-
-
       - name: Set up Haskell
         uses: haskell-actions/setup@v2
         with:
@@ -62,12 +43,12 @@ jobs:
           swift-version: '6.0'
 
       - name: Build all targets
-        run: CC=clang bazel build //... --repository_cache=~/.cache/bazel-repository-cache
+        run: bazel build //...
         env:
           CC: clang
 
       - name: Run all tests
-        run: CC=clang bazel test //... --repository_cache=~/.cache/bazel-repository-cache
+        run: bazel test //...
         env:
           CC: clang
 
