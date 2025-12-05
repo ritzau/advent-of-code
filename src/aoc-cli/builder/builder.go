@@ -223,6 +223,93 @@ func (b *Builder) Build(year, day int) (*SolutionPaths, error) {
 	return b.BuildSolution(solutionPath)
 }
 
+// findBinariesFast tries to find built binaries using glob patterns without querying bazel
+// This is much faster than running bazel cquery
+func (b *Builder) findBinariesFast(pkgPath, solutionPath string) (string, string, error) {
+	// Convert package path to filesystem path
+	// Example: //src/AoC25/s25e04-csharp -> src/AoC25/s25e04-csharp
+	relPath := strings.TrimPrefix(pkgPath, "//")
+
+	// Search in bazel-out for the binaries
+	// Pattern: bazel-out/*/bin/<relPath>/part1/**/part1.*
+	// We need to find wrapper scripts or executables
+
+	basePath := filepath.Join(b.rootDir, "bazel-out")
+
+	// Find all configuration directories (e.g., darwin_x86_64-fastbuild, darwin_x86_64-fastbuild-ST-*)
+	entries, err := os.ReadDir(basePath)
+	if err != nil {
+		return "", "", fmt.Errorf("failed to read bazel-out: %w", err)
+	}
+
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+
+		// Try to find part1 and part2 binaries
+		configPath := filepath.Join(basePath, entry.Name(), "bin", relPath)
+
+		part1Path, err := b.findBinaryInDir(filepath.Join(configPath, "part1"))
+		if err != nil {
+			continue
+		}
+
+		part2Path, err := b.findBinaryInDir(filepath.Join(configPath, "part2"))
+		if err != nil {
+			continue
+		}
+
+		return part1Path, part2Path, nil
+	}
+
+	return "", "", fmt.Errorf("binaries not found in bazel-out")
+}
+
+// findBinaryInDir finds an executable binary in a directory
+// Looks for wrapper scripts (.sh), native executables, or known patterns
+func (b *Builder) findBinaryInDir(dir string) (string, error) {
+	// Walk the directory to find executables
+	var candidates []string
+
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return nil // Skip errors
+		}
+		if info.IsDir() {
+			return nil
+		}
+
+		// Look for wrapper scripts (preferred for JVM/CLR)
+		if strings.HasSuffix(path, ".sh") && !strings.Contains(path, ".runfiles") {
+			// Prioritize .sh files as they're the wrappers
+			candidates = append([]string{path}, candidates...)
+			return nil
+		}
+
+		// Look for executables
+		if info.Mode()&0o111 != 0 && !strings.Contains(path, ".runfiles") {
+			// It's executable
+			ext := filepath.Ext(path)
+			// Skip known non-binary files
+			if ext != ".sh" && ext != ".dll" && ext != ".jar" && ext != ".xml" && ext != ".json" {
+				candidates = append(candidates, path)
+			}
+		}
+
+		return nil
+	})
+	if err != nil {
+		return "", err
+	}
+
+	if len(candidates) == 0 {
+		return "", fmt.Errorf("no executable found in %s", dir)
+	}
+
+	return candidates[0], nil
+}
+
 // buildWithBazel builds using Bazel and returns paths to binaries
 func (b *Builder) buildWithBazel(year, day int, solutionPath, solutionName string) (*SolutionPaths, error) {
 	// Find the Bazel target
@@ -235,6 +322,23 @@ func (b *Builder) buildWithBazel(year, day int, solutionPath, solutionName strin
 	part1Target := fmt.Sprintf("%s:part1", pkgPath)
 	part2Target := fmt.Sprintf("%s:part2", pkgPath)
 
+	// Try to find binaries using fast path first (glob pattern matching)
+	part1Path, part2Path, err := b.findBinariesFast(pkgPath, solutionPath)
+	if err == nil {
+		// Verify binaries exist
+		if _, err := os.Stat(part1Path); err == nil {
+			if _, err := os.Stat(part2Path); err == nil {
+				return &SolutionPaths{
+					Part1:       part1Path,
+					Part2:       part2Path,
+					SolutionDir: solutionPath,
+					BuildDir:    filepath.Join(b.rootDir, "bazel-bin"),
+				}, nil
+			}
+		}
+	}
+
+	// Fall back to slow path: build and query
 	// Check if we've already built these targets
 	targetKey := fmt.Sprintf("%s+%s", part1Target, part2Target)
 	if !b.builtTargets[targetKey] {
@@ -251,12 +355,12 @@ func (b *Builder) buildWithBazel(year, day int, solutionPath, solutionName strin
 	}
 
 	// Query Bazel for the output paths
-	part1Path, err := b.queryBazelOutput(part1Target)
+	part1Path, err = b.queryBazelOutput(part1Target)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get part1 binary path: %w", err)
 	}
 
-	part2Path, err := b.queryBazelOutput(part2Target)
+	part2Path, err = b.queryBazelOutput(part2Target)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get part2 binary path: %w", err)
 	}

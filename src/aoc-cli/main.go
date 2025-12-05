@@ -448,13 +448,13 @@ const langWidth = 10 // Default width for language column
 
 func printTableHeader(singleDay bool) {
 	if singleDay {
-		fmt.Printf("\n┌─%s─┬──────────────┬──────────────┬──────────────┐\n", repeatStr("─", langWidth))
-		fmt.Printf("│ %-*s │ Part 1       │ Part 2       │ Total        │\n", langWidth, "Language")
-		fmt.Printf("├─%s─┼──────────────┼──────────────┼──────────────┤\n", repeatStr("─", langWidth))
+		fmt.Printf("\n┌─%s─┬────────────────────────────┬────────────────────────────┬──────────────┐\n", repeatStr("─", langWidth))
+		fmt.Printf("│ %-*s │ Part 1                     │ Part 2                     │ Total        │\n", langWidth, "Language")
+		fmt.Printf("├─%s─┼────────────────────────────┼────────────────────────────┼──────────────┤\n", repeatStr("─", langWidth))
 	} else {
-		fmt.Printf("\n┌─────┬─%s─┬──────────────┬──────────────┬──────────────┐\n", repeatStr("─", langWidth))
-		fmt.Printf("│ Day │ %-*s │ Part 1       │ Part 2       │ Total        │\n", langWidth, "Lang")
-		fmt.Printf("├─────┼─%s─┼──────────────┼──────────────┼──────────────┤\n", repeatStr("─", langWidth))
+		fmt.Printf("\n┌─────┬─%s─┬────────────────────────────┬────────────────────────────┬──────────────┐\n", repeatStr("─", langWidth))
+		fmt.Printf("│ Day │ %-*s │ Part 1                     │ Part 2                     │ Total        │\n", langWidth, "Lang")
+		fmt.Printf("├─────┼─%s─┼────────────────────────────┼────────────────────────────┼──────────────┤\n", repeatStr("─", langWidth))
 	}
 }
 
@@ -462,9 +462,9 @@ func printTableRow(day int, language string, result *runner.DayResult, results *
 	if result == nil {
 		// Build error
 		if singleDay {
-			fmt.Printf("│ %-*s │ Build Error  │              │              │\n", langWidth, language)
+			fmt.Printf("│ %-*s │ Build Error                │                            │              │\n", langWidth, language)
 		} else {
-			fmt.Printf("│ %-3d │ %-*s │ Build Error  │              │              │\n", day, langWidth, language)
+			fmt.Printf("│ %-3d │ %-*s │ Build Error                │                            │              │\n", day, langWidth, language)
 		}
 		return
 	}
@@ -490,32 +490,33 @@ func printTableRow(day int, language string, result *runner.DayResult, results *
 
 func printTableFooter(singleDay bool) {
 	if singleDay {
-		fmt.Printf("└─%s─┴──────────────┴──────────────┴──────────────┘\n", repeatStr("─", langWidth))
+		fmt.Printf("└─%s─┴────────────────────────────┴────────────────────────────┴──────────────┘\n", repeatStr("─", langWidth))
 	} else {
-		fmt.Printf("└─────┴─%s─┴──────────────┴──────────────┴──────────────┘\n", repeatStr("─", langWidth))
+		fmt.Printf("└─────┴─%s─┴────────────────────────────┴────────────────────────────┴──────────────┘\n", repeatStr("─", langWidth))
 	}
 }
 
 func formatPartResult(r runner.Result, expectedResult string, hasExpected bool) string {
 	if r.Error != nil {
-		return "    Error   "
+		return "    Error                   "
 	}
 
 	output := r.Output
-	if len(output) > 8 {
-		output = output[:8] + "…"
+	if len(output) > 24 {
+		output = output[:24] + "…"
 	}
 
-	// Checkmarks take 2 visual columns, so we pad to 9 chars + space + checkmark (2 visual) = 12 visual columns
-	// Without checkmark, we pad to 12 chars
+	// Checkmarks take 2 visual columns, so we pad to 24 chars + space + checkmark (2 visual) = 27 visual columns
+	// We need to add one more space after checkmark to reach 28 total
+	// Without checkmark, we pad to 28 chars
 	if hasExpected {
 		if r.Output == expectedResult {
-			return fmt.Sprintf("%-9s ✅", output)
+			return fmt.Sprintf("%-22s ✅ ", output)
 		}
-		return fmt.Sprintf("%-9s ❌", output)
+		return fmt.Sprintf("%-22s ❌ ", output)
 	}
 
-	return fmt.Sprintf("%-12s", output)
+	return fmt.Sprintf("%-28s", output)
 }
 
 func formatDuration(d time.Duration) string {
