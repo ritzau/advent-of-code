@@ -1,6 +1,6 @@
 """Bazel rules for building Haskell programs."""
 
-def haskell_binary(name, main, deps = [], ghc_flags = ["-O2"], **kwargs):
+def haskell_binary(name, main, deps = [], ghc_flags = ["-O2"], packages = [], **kwargs):
     """Compiles a Haskell source file into an executable binary.
 
     Args:
@@ -8,9 +8,11 @@ def haskell_binary(name, main, deps = [], ghc_flags = ["-O2"], **kwargs):
         main: The main .hs source file to compile
         deps: List of additional .hs files that the main file depends on
         ghc_flags: List of GHC compiler flags (default: ["-O2"])
+        packages: List of Haskell packages to make available (e.g., ["MemoTrie", "split"])
         **kwargs: Additional arguments passed to genrule (e.g., visibility, executable)
     """
-    flags_str = " ".join(ghc_flags)
+    package_flags = " ".join(["-package " + pkg for pkg in packages])
+    flags_str = " ".join(ghc_flags + ([package_flags] if package_flags else []))
 
     native.genrule(
         name = name,
@@ -31,7 +33,7 @@ def haskell_binary(name, main, deps = [], ghc_flags = ["-O2"], **kwargs):
         **kwargs
     )
 
-def haskell_test(name, main, deps = [], ghc_flags = ["-O2"], **kwargs):
+def haskell_test(name, main, deps = [], ghc_flags = ["-O2"], packages = [], **kwargs):
     """Compiles and runs a Haskell test file.
 
     Args:
@@ -39,10 +41,12 @@ def haskell_test(name, main, deps = [], ghc_flags = ["-O2"], **kwargs):
         main: The main .hs test file to compile
         deps: List of additional .hs files that the test file depends on
         ghc_flags: List of GHC compiler flags (default: ["-O2"])
+        packages: List of Haskell packages to make available (e.g., ["MemoTrie", "split"])
         **kwargs: Additional arguments passed to sh_test (e.g., size, timeout)
     """
     bin_name = name + "_bin"
-    flags_str = " ".join(ghc_flags)
+    package_flags = " ".join(["-package " + pkg for pkg in packages])
+    flags_str = " ".join(ghc_flags + ([package_flags] if package_flags else []))
 
     native.genrule(
         name = bin_name,
