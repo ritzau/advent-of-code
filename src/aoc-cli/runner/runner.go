@@ -3,7 +3,9 @@ package runner
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -46,7 +48,27 @@ func (r *Runner) RunPart(paths *builder.SolutionPaths, part int, input string) R
 	if part == 2 {
 		binaryPath = paths.Part2
 	}
-	cmd := exec.Command(binaryPath)
+
+	// Optimize Julia execution: use system Julia if available to avoid --compiled-modules=no overhead
+	var cmd *exec.Cmd
+	if paths.Language == "julia" && strings.HasSuffix(binaryPath, ".sh") {
+		if juliaPath, err := exec.LookPath("julia"); err == nil {
+			// Extract the Julia source file from the wrapper script
+			// The wrapper sets MAIN="$(rlocation ...part1.jl)"
+			// We can find the source file in the solution directory
+			juliaScript := r.findJuliaScript(paths.SolutionDir, part)
+			if juliaScript != "" {
+				cmd = exec.Command(juliaPath, juliaScript)
+			}
+		}
+	}
+
+	// Fall back to bazel wrapper if Julia optimization didn't work
+	if cmd == nil {
+		cmd = exec.Command(binaryPath)
+	}
+
+	cmd.Dir = r.rootDir // Set working directory to repo root for relative path resolution
 
 	cmd.Stdin = strings.NewReader(input)
 
@@ -75,6 +97,19 @@ func (r *Runner) RunPart(paths *builder.SolutionPaths, part int, input string) R
 		Duration: duration,
 		Error:    nil,
 	}
+}
+
+// findJuliaScript finds the Julia source file for a given part
+func (r *Runner) findJuliaScript(solutionDir string, part int) string {
+	partFile := fmt.Sprintf("part%d.jl", part)
+	scriptPath := filepath.Join(solutionDir, "src", partFile)
+
+	// Check if file exists
+	if _, err := os.Stat(scriptPath); err == nil {
+		return scriptPath
+	}
+
+	return ""
 }
 
 // RunDay runs both parts of a day's solution
