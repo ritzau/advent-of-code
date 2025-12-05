@@ -1,0 +1,50 @@
+"""Build targets for Advent of Code Nim solution."""
+
+load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_cc_test", "nim_module")
+
+# Common compiler options to suppress warnings in generated C code
+NIM_COPTS = [
+    "-Wno-discarded-qualifiers",
+    "-Wno-unused-label",
+    "-Wno-unused-but-set-variable",
+    "-Wno-parentheses",
+]
+
+# Common module - Nim sources that can be imported
+nim_module(
+    name = "lib",
+    srcs = ["lib.nim"],
+    strip_import_prefix = "src/AoC25/s25e05-nim",
+)
+
+# Main verification binary - runs both parts and validates results
+nim_cc_binary(
+    name = "main",
+    copts = NIM_COPTS,
+    main = "s25e05.nim",
+    deps = [":lib"],
+)
+
+# Part 1 binary - outputs only part 1 result
+nim_cc_binary(
+    name = "part1",
+    copts = NIM_COPTS,
+    main = "s25e05_part1.nim",
+    deps = [":lib"],
+)
+
+# Part 2 binary - outputs only part 2 result
+nim_cc_binary(
+    name = "part2",
+    copts = NIM_COPTS,
+    main = "s25e05_part2.nim",
+    deps = [":lib"],
+)
+
+# Unit tests using nim_cc_test
+nim_cc_test(
+    name = "test",
+    size = "small",
+    copts = NIM_COPTS,
+    main = "lib.nim",
+)
