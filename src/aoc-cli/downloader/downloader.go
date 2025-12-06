@@ -7,16 +7,51 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 // Downloader handles downloading AoC inputs
 type Downloader struct {
-	rootDir string
+	rootDir         string
+	lastRequestTime time.Time
+	minRequestDelay time.Duration
 }
 
 // New creates a new Downloader
 func New(rootDir string) *Downloader {
-	return &Downloader{rootDir: rootDir}
+	d := &Downloader{
+		rootDir:         rootDir,
+		minRequestDelay: time.Minute, // As per automation guidelines: max 1 request per minute
+	}
+	// Load last request time from cache
+	d.loadLastRequestTime()
+	return d
+}
+
+// loadLastRequestTime loads the last request timestamp from cache file
+func (d *Downloader) loadLastRequestTime() {
+	timestampFile := filepath.Join(d.rootDir, ".aoc-last-request")
+	data, err := os.ReadFile(timestampFile)
+	if err != nil {
+		// File doesn't exist or can't be read - not an error, just means no previous requests
+		return
+	}
+
+	timestamp, err := time.Parse(time.RFC3339, strings.TrimSpace(string(data)))
+	if err != nil {
+		// Invalid timestamp - ignore it
+		return
+	}
+
+	d.lastRequestTime = timestamp
+}
+
+// saveLastRequestTime saves the last request timestamp to cache file
+func (d *Downloader) saveLastRequestTime() {
+	timestampFile := filepath.Join(d.rootDir, ".aoc-last-request")
+	timestamp := d.lastRequestTime.Format(time.RFC3339)
+	// Ignore errors - not critical if we can't save
+	_ = os.WriteFile(timestampFile, []byte(timestamp), 0o644)
 }
 
 // getSessionCookie reads the session cookie from AOC_SESSION env variable or .aoc-session file
@@ -47,6 +82,17 @@ func (d *Downloader) getSessionCookie() (string, error) {
 
 // downloadInput downloads the input from adventofcode.com
 func (d *Downloader) downloadInput(year, day int) (string, error) {
+	// Rate limiting: ensure we don't make requests more frequently than minRequestDelay
+	// As per https://www.reddit.com/r/adventofcode/wiki/faqs/automation/
+	if !d.lastRequestTime.IsZero() {
+		timeSinceLastRequest := time.Since(d.lastRequestTime)
+		if timeSinceLastRequest < d.minRequestDelay {
+			waitTime := d.minRequestDelay - timeSinceLastRequest
+			fmt.Fprintf(os.Stderr, "Rate limiting: waiting %v before making request...\n", waitTime.Round(time.Second))
+			time.Sleep(waitTime)
+		}
+	}
+
 	session, err := d.getSessionCookie()
 	if err != nil {
 		return "", err
@@ -62,7 +108,8 @@ func (d *Downloader) downloadInput(year, day int) (string, error) {
 
 	// Add headers
 	req.Header.Set("Cookie", fmt.Sprintf("session=%s", session))
-	req.Header.Set("User-Agent", "github.com/ritzau/advent-of-code by contact@example.com")
+	// User-Agent as per https://www.reddit.com/r/adventofcode/wiki/faqs/automation/
+	req.Header.Set("User-Agent", "github.com/ritzau/advent-of-code by https://github.com/ritzau")
 
 	// Make request
 	client := &http.Client{}
@@ -89,6 +136,10 @@ func (d *Downloader) downloadInput(year, day int) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to read response: %w", err)
 	}
+
+	// Update last request time for rate limiting
+	d.lastRequestTime = time.Now()
+	d.saveLastRequestTime()
 
 	return string(body), nil
 }

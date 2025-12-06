@@ -18,14 +18,15 @@ import (
 func main() {
 	// Define flags
 	var (
-		year        = pflag.IntP("year", "y", 0, "Year to run (e.g., 2016)")
-		day         = pflag.IntP("day", "d", 0, "Day to run (1-25)")
 		all         = pflag.BoolP("all", "a", false, "Run all available solutions")
 		lang        = pflag.StringSliceP("lang", "l", nil, "Filter by language (can be specified multiple times)")
 		resultsFile = pflag.StringP("results", "r", "results.yaml", "Path to results.yaml file")
 	)
 
 	pflag.Parse()
+
+	// Variables to hold parsed year and day
+	var year, day int
 
 	// Get root directory
 	// When running via 'bazel run', use BUILD_WORKSPACE_DIRECTORY
@@ -47,10 +48,10 @@ func main() {
 		// Check if first argument is a solution string (sYYeDD) or a year string (e.g., "2025")
 		if parsedYear, parsedDay, ok := parseSolutionString(args[0]); ok {
 			// It's a solution string like s25e03
-			*year = parsedYear
-			*day = parsedDay
+			year = parsedYear
+			day = parsedDay
 			command = "run"
-		} else if y, err := fmt.Sscanf(args[0], "%d", year); err == nil && y == 1 && *year >= 2000 {
+		} else if y, err := fmt.Sscanf(args[0], "%d", &year); err == nil && y == 1 && year >= 2000 {
 			// It's a year string like "2025"
 			command = "run"
 		} else {
@@ -59,8 +60,8 @@ func main() {
 			// Check if the second argument is a solution string (for download command)
 			if len(args) > 1 {
 				if parsedYear, parsedDay, ok := parseSolutionString(args[1]); ok {
-					*year = parsedYear
-					*day = parsedDay
+					year = parsedYear
+					day = parsedDay
 				}
 			}
 		}
@@ -69,9 +70,9 @@ func main() {
 	// Execute the appropriate command
 	switch command {
 	case "run":
-		runCommand(rootDir, *year, *day, *all, *lang, *resultsFile)
-	case "download":
-		downloadCommand(rootDir, *year, *day)
+		runCommand(rootDir, year, day, *all, *lang, *resultsFile)
+	case "input", "download": // "download" kept for backwards compatibility
+		inputCommand(rootDir, year, day)
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown command: %s\n\n", command)
 		pflag.Usage()
@@ -295,11 +296,30 @@ func runCommand(rootDir string, year, day int, all bool, langSlice []string, res
 	}
 }
 
-func downloadCommand(rootDir string, year, day int) {
+func inputCommand(rootDir string, year, day int) {
+	// If year/day not specified, try to detect from current directory
 	if year == 0 || day == 0 {
-		fmt.Fprintf(os.Stderr, "Error: --year and --day are required for the download command\n\n")
-		pflag.Usage()
-		os.Exit(1)
+		cwd := os.Getenv("BUILD_WORKING_DIRECTORY")
+		if cwd == "" {
+			var err error
+			cwd, err = os.Getwd()
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error: Failed to get current directory: %v\n\n", err)
+				pflag.Usage()
+				os.Exit(1)
+			}
+		}
+
+		detectedYear, detectedDay, _, ok := detectSolutionFromPath(rootDir, cwd)
+		if ok && detectedDay != 0 {
+			year = detectedYear
+			day = detectedDay
+		} else {
+			fmt.Fprintf(os.Stderr, "Error: Could not determine year and day\n")
+			fmt.Fprintf(os.Stderr, "Either specify them (e.g., 'aoc input s25e03') or run from a solution directory\n\n")
+			pflag.Usage()
+			os.Exit(1)
+		}
 	}
 
 	dl := downloader.New(rootDir)
@@ -738,24 +758,21 @@ func init() {
 		fmt.Fprintf(os.Stderr, "Run Advent of Code solutions and verify results.\n\n")
 		fmt.Fprintf(os.Stderr, "Commands:\n")
 		fmt.Fprintf(os.Stderr, "  run       Run solutions (default command)\n")
-		fmt.Fprintf(os.Stderr, "  download  Download puzzle input to stdout\n\n")
+		fmt.Fprintf(os.Stderr, "  input     Get puzzle input (downloads if needed, outputs to stdout)\n\n")
 		fmt.Fprintf(os.Stderr, "Options:\n")
 		pflag.PrintDefaults()
 		fmt.Fprintf(os.Stderr, "\nExamples:\n")
-		fmt.Fprintf(os.Stderr, "  # Short syntax (recommended):\n")
+		fmt.Fprintf(os.Stderr, "  # Run solutions:\n")
 		fmt.Fprintf(os.Stderr, "  %s s25e03                         # Run day 3 of 2025\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "  %s s16e01 -l go                   # Run day 1 of 2016 (go only)\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  %s s16e01 -l go -l rust           # Run multiple languages\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "  %s 2025                           # Run all days in 2025\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "\n  # Long syntax:\n")
-		fmt.Fprintf(os.Stderr, "  %s --year 2016 --day 1            # Run a specific day\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "  %s -y 2016 -d 1 -l go -l rust     # Run multiple languages\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "  %s --year 2016                    # Run all days in 2016\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "  %s --all                          # Run all available solutions\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "\n  # Auto-detect from directory:\n")
 		fmt.Fprintf(os.Stderr, "  cd src/AoC16/s16e01-go && %s      # Run day 1 (go only)\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "  cd src/AoC16 && %s                # Run all days in 2016\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "\n  # Download input:\n")
-		fmt.Fprintf(os.Stderr, "  %s download s25e03                # Download input for day 3 of 2025\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "  %s download -y 2016 -d 1 | wc -l  # Pipe input to other commands\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "\n  # Get puzzle input:\n")
+		fmt.Fprintf(os.Stderr, "  %s input s25e03                   # Get input for day 3 of 2025\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  cd src/AoC25/s25e03-haskell && %s input  # Auto-detect from directory\n", filepath.Base(os.Args[0]))
 	}
 }
