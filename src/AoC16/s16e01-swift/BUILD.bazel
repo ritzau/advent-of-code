@@ -1,6 +1,6 @@
 """Build targets for AoC 2016 Day 1 Swift solution."""
 
-load("@rules_swift//swift:swift_binary.bzl", "swift_binary")
+load("@build_bazel_rules_swift//swift:swift_binary.bzl", "swift_binary")
 
 # Part 1 binary - outputs only part 1 result
 swift_binary(

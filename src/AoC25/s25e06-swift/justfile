@@ -22,7 +22,7 @@ check-all: build test
 
 # Run tests only
 test:
-    bazel test //templates/swift:test
+    bazel test //templates/swift:aoc_tests
 
 # Clean build artifacts
 clean:
