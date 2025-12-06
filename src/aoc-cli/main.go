@@ -44,7 +44,26 @@ func main() {
 	args := pflag.Args()
 	command := "run" // default command for backwards compatibility
 	if len(args) > 0 {
-		command = args[0]
+		// Check if first argument is a solution string (sYYeDD) or a year string (e.g., "2025")
+		if parsedYear, parsedDay, ok := parseSolutionString(args[0]); ok {
+			// It's a solution string like s25e03
+			*year = parsedYear
+			*day = parsedDay
+			command = "run"
+		} else if y, err := fmt.Sscanf(args[0], "%d", year); err == nil && y == 1 && *year >= 2000 {
+			// It's a year string like "2025"
+			command = "run"
+		} else {
+			// It's a command
+			command = args[0]
+			// Check if the second argument is a solution string (for download command)
+			if len(args) > 1 {
+				if parsedYear, parsedDay, ok := parseSolutionString(args[1]); ok {
+					*year = parsedYear
+					*day = parsedDay
+				}
+			}
+		}
 	}
 
 	// Execute the appropriate command
@@ -93,6 +112,41 @@ func findRepoRoot() (string, error) {
 	}
 
 	return "", fmt.Errorf("could not find repository root (no WORKSPACE, WORKSPACE.bazel, or .git found)")
+}
+
+// parseSolutionString parses a solution string in the format sYYeDD (e.g., s25e03)
+// Returns (year, day, ok) where ok is true if parsing succeeded
+func parseSolutionString(s string) (int, int, bool) {
+	// Check if it matches the pattern sXXeXX
+	if !strings.HasPrefix(s, "s") {
+		return 0, 0, false
+	}
+
+	// Find the 'e' separator
+	eIndex := strings.Index(s, "e")
+	if eIndex < 2 {
+		return 0, 0, false
+	}
+
+	// Parse year
+	yearStr := s[1:eIndex]
+	year := 0
+	if _, err := fmt.Sscanf(yearStr, "%d", &year); err != nil {
+		return 0, 0, false
+	}
+	// Convert YY to full year (assuming 20YY)
+	if year < 100 {
+		year += 2000
+	}
+
+	// Parse day
+	dayStr := s[eIndex+1:]
+	day := 0
+	if _, err := fmt.Sscanf(dayStr, "%d", &day); err != nil {
+		return 0, 0, false
+	}
+
+	return year, day, true
 }
 
 // detectSolutionFromPath tries to detect year, day, and language from a path
@@ -688,18 +742,20 @@ func init() {
 		fmt.Fprintf(os.Stderr, "Options:\n")
 		pflag.PrintDefaults()
 		fmt.Fprintf(os.Stderr, "\nExamples:\n")
-		fmt.Fprintf(os.Stderr, "  %s run --year 2016 --day 1        # Run a specific day\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "  %s -y 2016 -d 1                   # Run a specific day (default command)\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "  %s run -y 2016 -d 1 -l go         # Run only Go implementation\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "  %s run -y 2016 -d 1 -l go -l rust # Run Go and Rust implementations\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "  %s run --year 2016                # Run all days in 2016\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "  %s run --all                      # Run all available solutions\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "  %s run -a -l default              # Run all default implementations\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  # Short syntax (recommended):\n")
+		fmt.Fprintf(os.Stderr, "  %s s25e03                         # Run day 3 of 2025\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  %s s16e01 -l go                   # Run day 1 of 2016 (go only)\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  %s 2025                           # Run all days in 2025\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "\n  # Long syntax:\n")
+		fmt.Fprintf(os.Stderr, "  %s --year 2016 --day 1            # Run a specific day\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  %s -y 2016 -d 1 -l go -l rust     # Run multiple languages\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  %s --year 2016                    # Run all days in 2016\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  %s --all                          # Run all available solutions\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "\n  # Auto-detect from directory:\n")
 		fmt.Fprintf(os.Stderr, "  cd src/AoC16/s16e01-go && %s      # Run day 1 (go only)\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "  cd src/AoC16 && %s                # Run all days in 2016\n", filepath.Base(os.Args[0]))
-		fmt.Fprintf(os.Stderr, "\n")
-		fmt.Fprintf(os.Stderr, "  %s download -y 2016 -d 1          # Download input to stdout\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "\n  # Download input:\n")
+		fmt.Fprintf(os.Stderr, "  %s download s25e03                # Download input for day 3 of 2025\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "  %s download -y 2016 -d 1 | wc -l  # Pipe input to other commands\n", filepath.Base(os.Args[0]))
 	}
 }
