@@ -1,0 +1,29 @@
+# Advent of Code Solution
+# All commands use Bazel for reproducible builds
+
+# Build the solution
+build:
+    bazel build //templates/swift:main
+
+# Run the main verification binary
+run:
+    bazel run //templates/swift:main
+
+# Run a specific part with input from stdin
+run-part PART:
+    bazel run //templates/swift:part{{PART}}
+
+# Format code
+format:
+    swift-format -i *.swift
+
+# Run all checks (build + tests)
+check-all: build test
+
+# Run tests only
+test:
+    bazel test //templates/swift:aoc_tests
+
+# Clean build artifacts
+clean:
+    bazel clean
