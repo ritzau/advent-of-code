@@ -97,6 +97,7 @@ func findRepoRoot() (string, error) {
 
 // detectSolutionFromPath tries to detect year, day, and language from a path
 // Returns (year, day, language, ok) where ok is true if detection succeeded
+// If day is 0, it means run all days for that year
 func detectSolutionFromPath(rootDir, cwd string) (int, int, string, bool) {
 	// Try to get relative path from rootDir
 	relPath, err := filepath.Rel(rootDir, cwd)
@@ -112,8 +113,8 @@ func detectSolutionFromPath(rootDir, cwd string) (int, int, string, bool) {
 	// Split the path into components
 	parts := strings.Split(relPath, string(filepath.Separator))
 
-	// We need at least src/AoCXX/sXXeXX[-lang]
-	if len(parts) < 3 {
+	// We need at least src/AoCXX
+	if len(parts) < 2 {
 		return 0, 0, "", false
 	}
 
@@ -130,6 +131,11 @@ func detectSolutionFromPath(rootDir, cwd string) (int, int, string, bool) {
 	// Convert YY to full year (assuming 20YY)
 	if year < 100 {
 		year += 2000
+	}
+
+	// If we're just in the year directory (src/AoCXX), return year with day=0
+	if len(parts) == 2 {
+		return year, 0, "", true
 	}
 
 	// Parse solution directory (sXXeXX or sXXeXX-lang)
@@ -221,7 +227,12 @@ func runCommand(rootDir string, year, day int, all bool, langSlice []string, res
 			if detectedLang != "" && len(langFilter) == 0 {
 				langFilter[detectedLang] = true
 			}
-			runDay(detectedYear, detectedDay, results, dl, b, r, langFilter)
+			// If day is 0, run the whole year
+			if detectedDay == 0 {
+				runYear(detectedYear, results, dl, b, r, langFilter)
+			} else {
+				runDay(detectedYear, detectedDay, results, dl, b, r, langFilter)
+			}
 			return
 		}
 
@@ -684,6 +695,10 @@ func init() {
 		fmt.Fprintf(os.Stderr, "  %s run --year 2016                # Run all days in 2016\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "  %s run --all                      # Run all available solutions\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "  %s run -a -l default              # Run all default implementations\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "\n  # Auto-detect from directory:\n")
+		fmt.Fprintf(os.Stderr, "  cd src/AoC16/s16e01-go && %s      # Run day 1 (go only)\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "  cd src/AoC16 && %s                # Run all days in 2016\n", filepath.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "\n")
 		fmt.Fprintf(os.Stderr, "  %s download -y 2016 -d 1          # Download input to stdout\n", filepath.Base(os.Args[0]))
 		fmt.Fprintf(os.Stderr, "  %s download -y 2016 -d 1 | wc -l  # Pipe input to other commands\n", filepath.Base(os.Args[0]))
 	}
