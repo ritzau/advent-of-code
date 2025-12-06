@@ -1,6 +1,6 @@
 """Build targets for Advent of Code Swift solution."""
 
-load("@rules_swift//swift:swift_binary.bzl", "swift_binary")
+load("@build_bazel_rules_swift//swift:swift_binary.bzl", "swift_binary")
 
 # Part 1 binary - outputs only part 1 result
 swift_binary(
@@ -29,10 +29,19 @@ swift_binary(
     ],
 )
 
-# Test that runs the main binary with empty input
-# The main binary exits with code 1 if tests fail, code 0 if they pass
+# Test binary - runs sample tests
+swift_binary(
+    name = "test_bin",
+    testonly = True,
+    srcs = [
+        "Common.swift",
+        "Tests.swift",
+    ],
+)
+
+# Test wrapper that runs the test binary
 sh_test(
-    name = "aoc_test",
+    name = "test",
     srcs = ["test.sh"],
-    data = [":main"],
+    data = [":test_bin"],
 )

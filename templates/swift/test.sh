@@ -1,11 +1,11 @@
 #!/bin/bash
 # Test runner for Swift solution
-# Runs the main binary with empty input and checks exit code
+# Runs the test binary and checks exit code
 
 set -e
 
-# Find the main binary
-MAIN_BINARY="$(dirname "$0")/main"
+# Find the test binary
+TEST_BINARY="$(dirname "$0")/test_bin"
 
-# Run the binary with empty input
-echo "" | "$MAIN_BINARY"
+# Run the test binary
+"$TEST_BINARY"
