@@ -1,6 +1,7 @@
 # AoC inputs and session (downloaded on demand)
 /inputs/
 /.aoc-session
+/.aoc-last-request
 /.aoc-build
 
 # IDE

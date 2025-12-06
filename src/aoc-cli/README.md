@@ -15,22 +15,20 @@ Test infrastructure for Advent of Code solutions - pure Go implementation.
 ## Usage
 
 ```bash
-# Run a specific day (long form)
-aoc --year 2016 --day 1
+# Run solutions
+aoc s25e03                      # Run day 3 of 2025
+aoc s16e01 -l go                # Run day 1 of 2016 (go only)
+aoc s16e01 -l go -l rust        # Run multiple languages
+aoc 2025                        # Run all days in 2025
+aoc --all                       # Run all available solutions
 
-# Run a specific day (short form)
-aoc -y 2016 -d 1
+# Auto-detect from directory
+cd src/AoC16/s16e01-go && aoc   # Run day 1 (go only)
+cd src/AoC16 && aoc             # Run all days in 2016
 
-# Run all days in a year
-aoc --year 2016
-
-# Run all available solutions
-aoc --all
-aoc -a
-
-# Use a custom results file
-aoc --year 2016 --day 1 --results path/to/results.yaml
-aoc -y 2016 -d 1 -r path/to/results.yaml
+# Get puzzle input
+aoc input s25e03                         # Get input for day 3 of 2025
+cd src/AoC25/s25e03-haskell && aoc input # Auto-detect from directory
 ```
 
 ## Results Configuration
@@ -49,11 +47,34 @@ Create a `results.yaml` file in the repository root:
     part2: null
 ```
 
+## Advent of Code Automation Guidelines Compliance
+
+This tool complies with the [Advent of Code automation guidelines](https://www.reddit.com/r/adventofcode/wiki/faqs/automation/):
+
+- ✅ **User-Agent header**: Includes repository URL and contact information
+- ✅ **Rate limiting**: Enforces a minimum of 1 minute between requests to adventofcode.com
+- ✅ **Input caching**: Downloads each input only once and stores it locally in `inputs/`
+- ✅ **Minimal requests**: Only downloads puzzle inputs when needed, no unnecessary API calls
+
+The tool will automatically throttle requests if multiple inputs are downloaded in quick succession.
+
 ## Requirements
 
 - Go 1.21 or later
-- `.aoc-session` file with your Advent of Code session cookie
+- `.aoc-session` file with your Advent of Code session cookie (see below)
 - Bazel 7.x or later for building solutions
+
+### Setting up your session cookie
+
+Create a `.aoc-session` file in the repository root with your session cookie from adventofcode.com:
+
+1. Log in to [Advent of Code](https://adventofcode.com/)
+2. Open your browser's developer tools (F12)
+3. Go to the Application/Storage tab
+4. Find the `session` cookie under Cookies
+5. Copy its value to `.aoc-session` in the repository root
+
+Alternatively, set the `AOC_SESSION` environment variable.
 
 ## Solution Structure
 
