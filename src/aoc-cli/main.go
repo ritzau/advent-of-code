@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/spf13/pflag"
@@ -28,13 +29,13 @@ func main() {
 
 	// Get root directory
 	// When running via 'bazel run', use BUILD_WORKSPACE_DIRECTORY
-	// Otherwise, use current working directory
+	// Otherwise, try to find the repository root
 	rootDir := os.Getenv("BUILD_WORKSPACE_DIRECTORY")
 	if rootDir == "" {
 		var err error
-		rootDir, err = os.Getwd()
+		rootDir, err = findRepoRoot()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to get working directory: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Failed to find repository root: %v\n", err)
 			os.Exit(1)
 		}
 	}
@@ -57,6 +58,113 @@ func main() {
 		pflag.Usage()
 		os.Exit(1)
 	}
+}
+
+// findRepoRoot finds the repository root by looking for characteristic files
+// Searches upwards from the current directory
+func findRepoRoot() (string, error) {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+
+	dir := cwd
+	for {
+		// Check for characteristic files that indicate repo root
+		// Check for WORKSPACE or WORKSPACE.bazel (Bazel workspace)
+		if _, err := os.Stat(filepath.Join(dir, "WORKSPACE")); err == nil {
+			return dir, nil
+		}
+		if _, err := os.Stat(filepath.Join(dir, "WORKSPACE.bazel")); err == nil {
+			return dir, nil
+		}
+		// Check for .git directory
+		if _, err := os.Stat(filepath.Join(dir, ".git")); err == nil {
+			return dir, nil
+		}
+
+		// Move up one directory
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			// Reached root without finding repo markers
+			break
+		}
+		dir = parent
+	}
+
+	return "", fmt.Errorf("could not find repository root (no WORKSPACE, WORKSPACE.bazel, or .git found)")
+}
+
+// detectSolutionFromPath tries to detect year, day, and language from a path
+// Returns (year, day, language, ok) where ok is true if detection succeeded
+func detectSolutionFromPath(rootDir, cwd string) (int, int, string, bool) {
+	// Try to get relative path from rootDir
+	relPath, err := filepath.Rel(rootDir, cwd)
+	if err != nil {
+		return 0, 0, "", false
+	}
+
+	// Check if we're inside the src directory
+	if !strings.HasPrefix(relPath, "src") {
+		return 0, 0, "", false
+	}
+
+	// Split the path into components
+	parts := strings.Split(relPath, string(filepath.Separator))
+
+	// We need at least src/AoCXX/sXXeXX[-lang]
+	if len(parts) < 3 {
+		return 0, 0, "", false
+	}
+
+	// Parse year from AoCXX
+	yearDir := parts[1]
+	if !strings.HasPrefix(yearDir, "AoC") || len(yearDir) < 5 {
+		return 0, 0, "", false
+	}
+	yearStr := yearDir[3:]
+	year := 0
+	if _, err := fmt.Sscanf(yearStr, "%d", &year); err != nil {
+		return 0, 0, "", false
+	}
+	// Convert YY to full year (assuming 20YY)
+	if year < 100 {
+		year += 2000
+	}
+
+	// Parse solution directory (sXXeXX or sXXeXX-lang)
+	solutionDir := parts[2]
+
+	// Parse day from sXXeXX
+	if !strings.HasPrefix(solutionDir, "s") {
+		return 0, 0, "", false
+	}
+
+	// Find the 'e' separator
+	eIndex := strings.Index(solutionDir, "e")
+	if eIndex < 2 {
+		return 0, 0, "", false
+	}
+
+	// Parse day number
+	dayStr := solutionDir[eIndex+1:]
+	// Remove language suffix if present
+	if hyphenIndex := strings.Index(dayStr, "-"); hyphenIndex > 0 {
+		dayStr = dayStr[:hyphenIndex]
+	}
+
+	day := 0
+	if _, err := fmt.Sscanf(dayStr, "%d", &day); err != nil {
+		return 0, 0, "", false
+	}
+
+	// Extract language if present
+	language := ""
+	if hyphenIndex := strings.Index(solutionDir, "-"); hyphenIndex > 0 {
+		language = solutionDir[hyphenIndex+1:]
+	}
+
+	return year, day, language, true
 }
 
 func runCommand(rootDir string, year, day int, all bool, langSlice []string, resultsFile string) {
@@ -94,6 +202,29 @@ func runCommand(rootDir string, year, day int, all bool, langSlice []string, res
 	} else if year != 0 {
 		runYear(year, results, dl, b, r, langFilter)
 	} else {
+		// Try to detect solution from current working directory
+		// When running via 'bazel run', use BUILD_WORKING_DIRECTORY (where bazel was invoked)
+		// Otherwise, use current working directory
+		cwd := os.Getenv("BUILD_WORKING_DIRECTORY")
+		if cwd == "" {
+			var err error
+			cwd, err = os.Getwd()
+			if err != nil {
+				pflag.Usage()
+				os.Exit(1)
+			}
+		}
+
+		detectedYear, detectedDay, detectedLang, ok := detectSolutionFromPath(rootDir, cwd)
+		if ok {
+			// If language was detected and no language filter was set, use the detected language
+			if detectedLang != "" && len(langFilter) == 0 {
+				langFilter[detectedLang] = true
+			}
+			runDay(detectedYear, detectedDay, results, dl, b, r, langFilter)
+			return
+		}
+
 		pflag.Usage()
 		os.Exit(1)
 	}
