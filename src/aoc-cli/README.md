@@ -33,19 +33,38 @@ cd src/AoC25/s25e03-haskell && aoc input # Auto-detect from directory
 
 ## Results Configuration
 
-Create a `results.yaml` file in the repository root:
+Create a `results.yaml` file in the repository root. The format supports both compact array syntax and detailed object syntax:
 
 ```yaml
 2016:
-  1:
-    part1: 300
-    part2: 159
+  1: [300, 159] # Compact: [part1, part2]
+
   2:
-    skip: true # Skip this day
+    skip: true # Skip entire day
+
   3:
-    part1: null # No expected result yet (will run but not verify)
-    part2: null
+    results: [42, 123] # Results with skip options
+    skip: ["go"] # Skip only specific languages
+
+  4:
+    part1: 100 # Traditional object syntax
+    part2: 200
+    languages: # Language-specific configuration
+      haskell:
+        skip: true
 ```
+
+**Syntax options:**
+
+- **Compact array**: `day: [part1, part2]` - simplest form for expected results
+- **Partial results**: `day: [part1]` - only part1 has expected result
+- **Empty array**: `day: []` - no expected results yet (will run but not verify)
+- **Object with results**: `{results: [part1, part2], skip: ["lang1"]}` - results with selective skip
+- **Full object**: `{part1: X, part2: Y, skip: true/[langs], languages: {...}}` - maximum flexibility
+- **Skip options**:
+  - `skip: true` - skip entire day
+  - `skip: ["go", "rust"]` - skip only specific languages
+  - `null` in array - run that part but don't verify (e.g., `[part1, null]`)
 
 ## Advent of Code Automation Guidelines Compliance
 

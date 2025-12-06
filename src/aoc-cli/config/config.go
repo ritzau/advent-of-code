@@ -16,10 +16,91 @@ type LanguageConfig struct {
 
 // DayConfig represents the configuration for a single day
 type DayConfig struct {
-	Skip      bool                      `yaml:"skip"`
-	Part1     interface{}               `yaml:"part1"`
-	Part2     interface{}               `yaml:"part2"`
-	Languages map[string]LanguageConfig `yaml:"languages"`
+	Skip          interface{}               `yaml:"skip"` // Can be bool or []string (list of languages to skip)
+	Part1         interface{}               `yaml:"part1"`
+	Part2         interface{}               `yaml:"part2"`
+	Results       []interface{}             `yaml:"results"` // Alternative to part1/part2
+	Languages     map[string]LanguageConfig `yaml:"languages"`
+	skipAll       bool                      // Cached: true if skip is boolean true
+	skipLanguages map[string]bool           // Cached: set of languages to skip
+}
+
+// UnmarshalYAML implements custom unmarshaling to support both array and object syntax
+func (dc *DayConfig) UnmarshalYAML(node *yaml.Node) error {
+	// Handle array syntax: [part1, part2]
+	if node.Kind == yaml.SequenceNode {
+		var parts []interface{}
+		if err := node.Decode(&parts); err != nil {
+			return err
+		}
+
+		if len(parts) > 0 {
+			dc.Part1 = parts[0]
+		}
+		if len(parts) > 1 {
+			dc.Part2 = parts[1]
+		}
+		dc.processSkip()
+		return nil
+	}
+
+	// Handle object syntax
+	// Use a temporary struct to avoid infinite recursion
+	type dayConfigTemp struct {
+		Skip      interface{}               `yaml:"skip"`
+		Part1     interface{}               `yaml:"part1"`
+		Part2     interface{}               `yaml:"part2"`
+		Results   []interface{}             `yaml:"results"`
+		Languages map[string]LanguageConfig `yaml:"languages"`
+	}
+
+	var temp dayConfigTemp
+	if err := node.Decode(&temp); err != nil {
+		return err
+	}
+
+	dc.Skip = temp.Skip
+	dc.Part1 = temp.Part1
+	dc.Part2 = temp.Part2
+	dc.Results = temp.Results
+	dc.Languages = temp.Languages
+
+	// If results array is provided, use it to set part1/part2
+	if len(dc.Results) > 0 {
+		if dc.Part1 == nil && len(dc.Results) > 0 {
+			dc.Part1 = dc.Results[0]
+		}
+		if dc.Part2 == nil && len(dc.Results) > 1 {
+			dc.Part2 = dc.Results[1]
+		}
+	}
+
+	dc.processSkip()
+	return nil
+}
+
+// processSkip processes the skip field and caches the results
+func (dc *DayConfig) processSkip() {
+	dc.skipLanguages = make(map[string]bool)
+
+	if dc.Skip == nil {
+		return
+	}
+
+	// Handle boolean skip
+	if skipBool, ok := dc.Skip.(bool); ok {
+		dc.skipAll = skipBool
+		return
+	}
+
+	// Handle string array skip (list of languages)
+	if skipList, ok := dc.Skip.([]interface{}); ok {
+		for _, lang := range skipList {
+			if langStr, ok := lang.(string); ok {
+				dc.skipLanguages[langStr] = true
+			}
+		}
+	}
 }
 
 // Results represents the entire results configuration
@@ -53,13 +134,13 @@ func (r *Results) GetDayConfig(year, day int) (DayConfig, bool) {
 	return dayData, ok
 }
 
-// ShouldSkip returns true if the day should be skipped
+// ShouldSkip returns true if the day should be skipped entirely
 func (r *Results) ShouldSkip(year, day int) bool {
 	dayConfig, exists := r.GetDayConfig(year, day)
 	if !exists {
 		return false
 	}
-	return dayConfig.Skip
+	return dayConfig.skipAll
 }
 
 // ShouldSkipLanguage returns true if the specific language should be skipped for this day
@@ -69,12 +150,17 @@ func (r *Results) ShouldSkipLanguage(year, day int, language string) bool {
 		return false
 	}
 
-	// Check day-level skip first
-	if dayConfig.Skip {
+	// Check if the entire day is skipped
+	if dayConfig.skipAll {
 		return true
 	}
 
-	// Check language-specific skip
+	// Check if this specific language should be skipped
+	if dayConfig.skipLanguages[language] {
+		return true
+	}
+
+	// Check language-specific skip in the old format
 	if langConfig, ok := dayConfig.Languages[language]; ok {
 		return langConfig.Skip
 	}

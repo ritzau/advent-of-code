@@ -1,149 +1,65 @@
 # Advent of Code Expected Results
-# This file contains expected results for AoC solutions
-# Format:
-#   <year>:
-#     <day>:
-#       skip: true/false (optional, defaults to false)
-#       part1: expected result (string or number)
-#       part2: expected result (string or number)
-#       languages:
-#         <language>:
-#           skip: true/false (optional)
-#           part1: expected result (optional, overrides day-level result)
-#           part2: expected result (optional, overrides day-level result)
+#
+# Compact array syntax: day: [part1, part2]
+# Object syntax: day: {results: [part1, part2], skip: true/["lang1"]}
+#
+# Skip options:
+#   skip: true              - skip entire day
+#   skip: ["go", "rust"]    - skip only specific languages
+#
+# Empty/incomplete results:
+#   []                      - no expected results yet (will run but not verify)
+#   [part1]                 - only part1 has expected result
+#   [part1, null]           - part1 expected, part2 will run but not verify
 
 2016:
-  1:
-    part1: 300
-    part2: 159
+  1: [300, 159]
 
 2021:
-  1:
-    part1: 1581
-    part2: 1618
+  1: [1581, 1618]
 
 2022:
-  1:
-    part1: 74711
-    part2: 209481
-  2:
-    part1: 11603
-    part2: 12725
-  3:
-    part1: 7990
-    part2: 2602
-  4:
-    part1: 483
-    part2: 874
-  5:
-    part1: "VRWBSFZWM"
-    part2: "RBTWJWMCF"
-  6:
-    part1: 1262
-    part2: 3444
-  7:
-    part1: 1297683
-    part2: 5756764
-  8:
-    part1: 1801
-    part2: 209880
-  9:
-    part1: 6339
-    part2: 2541
-  10:
-    part1: 14780
-    part2: null  # Visual output - screen render
-  11:
-    part1: 62491
-    part2: 17408399184
-  12:
-    part1: null  # TODO: Add expected results
-    part2: null
-  13:
-    part1: 5330
-    part2: 27648
-  14:
-    part1: null  # TODO: Add expected results
-    part2: null
-  15:
-    part1: 5688618
-    part2: 12625383204261
+  1: [74711, 209481]
+  2: [11603, 12725]
+  3: [7990, 2602]
+  4: [483, 874]
+  5: ["VRWBSFZWM", "RBTWJWMCF"]
+  6: [1262, 3444]
+  7: [1297683, 5756764]
+  8: [1801, 209880]
+  9: [6339, 2541]
+  10: [14780, null]  # Visual output - screen render
+  11: [62491, 17408399184]
+  12: [490, 488]
+  13: [5330, 27648]
+  14: [696, 23610]
+  15: [5688618, 12625383204261]
 
 2023:
-  1:
-    part1: 54159
-    part2: 53866
-  2:
-    part1: 2632
-    part2: 69629
-  3:
-    part1: null
-    part2: null
-  4:
-    part1: null
-    part2: null
-  5:
-    skip: true
-    part1: null
-    part2: null
-  6:
-    part1: null
-    part2: null
-  7:
-    part1: null
-    part2: null
-  8:
-    part1: null
-    part2: null
-  9:
-    part1: null
-    part2: null
-  10:
-    part1: null
-    part2: null
-  11:
-    part1: null
-    part2: null
-  12:
-    part1: null
-    part2: null
-  13:
-    part1: null
-    part2: null
-  14:
-    part1: null
-    part2: null
-  15:
-    part1: null
-    part2: null
-  16:
-    part1: null
-    part2: null
-  17:
-    part1: null
-    part2: null
-  18:
-    part1: null
-    part2: null
-  19:
-    part1: null
-    part2: null
+  1: [54159, 53866]
+  2: [2632, 69629]
+  3: []
+  4: []
+  5: {skip: true}
+  6: []
+  7: []
+  8: []
+  9: []
+  10: []
+  11: []
+  12: []
+  13: []
+  14: []
+  15: []
+  16: []
+  17: []
+  18: []
+  19: []
+
 2025:
-  1:
-    part1: 980
-    part2: 5961
-  2:
-    part1: 23560874270
-    part2: 44143124633
-  3:
-    part1: 17144
-    part2: 170371185255900
-  4:
-    part1: 1505
-    part2: 9182
-  5:
-    part1: 868
-    part2: 354143734113772
-  6:
-    part1: 5977759036837
-    part2: 9630000828442
+  1: [980, 5961]
+  2: [23560874270, 44143124633]
+  3: [17144, 170371185255900]
+  4: [1505, 9182]
+  5: [868, 354143734113772]
+  6: [5977759036837, 9630000828442]
