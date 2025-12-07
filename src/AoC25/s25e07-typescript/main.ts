@@ -32,11 +32,11 @@ function main() {
   const STDIN_FD = 0;
   const input = fs.readFileSync(STDIN_FD, "utf-8").trim();
 
-  console.log("AoC YYYY Day X: Title");
+  console.log("AoC 2025 Day 7: Laboratories");
   console.log("=".repeat(38));
 
   // Part 1
-  const part1 = runPart("Part 1", solvePart1, input, 0); // TODO: Update expected value
+  const part1 = runPart("Part 1", solvePart1, input, 1698);
   const status1 = part1.passed ? "✅" : "❌";
   console.log(
     `Part 1: ${status1} ${part1.result} (expected: ${
@@ -45,7 +45,7 @@ function main() {
   );
 
   // Part 2
-  const part2 = runPart("Part 2", solvePart2, input, 0); // TODO: Update expected value
+  const part2 = runPart("Part 2", solvePart2, input, 95408386769474);
   const status2 = part2.passed ? "✅" : "❌";
   console.log(
     `Part 2: ${status2} ${part2.result} (expected: ${

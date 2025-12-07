@@ -21,13 +21,13 @@ const sampleInput = `.......S.......
 describe("Part 1", () => {
   test("should solve sample input correctly", () => {
     const result = solvePart1(sampleInput);
-    expect(result).toBe(21); // Update with expected value
+    expect(result).toBe(21);
   });
 });
 
 describe("Part 2", () => {
   test("should solve sample input correctly", () => {
     const result = solvePart2(sampleInput);
-    expect(result).toBe(0); // Update with expected value when implemented
+    expect(result).toBe(40);
   });
 });

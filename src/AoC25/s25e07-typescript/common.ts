@@ -51,6 +51,34 @@ export function solvePart1(input: string): number {
  */
 export function solvePart2(input: string): number {
   const lines = parseInput(input);
-  // TODO: Implement solution
-  return 0;
+  const dp = lines.map((line) => Array(line.length).fill(-1));
+
+  let sIndex = lines[0].indexOf("S");
+  if (sIndex == -1) {
+    throw new Error(`No start position in the first line: ${lines[0]}`);
+  }
+
+  const countPaths = (row: number, col: number): number => {
+    if (row >= lines.length) return 1;
+
+    if (dp[row][col] != -1) return dp[row][col];
+
+    let symbol = lines[row][col];
+    switch (symbol) {
+      case ".": {
+        let result = countPaths(row + 1, col);
+        dp[row][col] = result;
+        return result;
+      }
+      case "^": {
+        let result = countPaths(row, col - 1) + countPaths(row, col + 1);
+        dp[row][col] = result;
+        return result;
+      }
+      default:
+        throw new Error(`Illegal symbol: ${symbol}`);
+    }
+  };
+
+  return countPaths(1, sIndex);
 }
