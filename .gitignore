@@ -12,5 +12,8 @@
 # Bazel
 /bazel-*
 
+# Node et. al
+node_modules/
+
 # Agents
-/.claude/
+.claude/

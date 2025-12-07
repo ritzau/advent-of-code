@@ -1,6 +1,6 @@
 """Build targets for Advent of Code TypeScript solution."""
 
-load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_test")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@npm_typescript_template//:defs.bzl", "npm_link_all_packages")
 
@@ -15,10 +15,35 @@ ts_project(
         "part1.ts",
         "part2.ts",
     ],
+    declaration = True,
     resolve_json_module = True,
     transpiler = "tsc",
     tsconfig = ":tsconfig.json",
     deps = [":node_modules/@types/node"],
+)
+
+# Compile test files
+ts_project(
+    name = "test_sources",
+    srcs = ["common.test.ts"],
+    declaration = True,
+    resolve_json_module = True,
+    transpiler = "tsc",
+    tsconfig = ":tsconfig.json",
+    deps = [
+        ":node_modules/@types/node",
+        ":typescript_sources",
+    ],
+)
+
+# Test target using Node.js built-in test runner
+js_test(
+    name = "test",
+    data = [
+        ":test_sources",
+        ":typescript_sources",
+    ],
+    entry_point = "common.test.js",
 )
 
 # Main verification binary - runs both parts and validates results
