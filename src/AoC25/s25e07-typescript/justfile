@@ -1,0 +1,30 @@
+# Advent of Code Solution
+# All commands use Bazel for reproducible builds
+
+# Build the solution
+build:
+    bazel build //templates/typescript:main
+
+# Run the main verification binary
+run:
+    bazel run //templates/typescript:main
+
+# Run a specific part with input from stdin
+run-part PART:
+    bazel run //templates/typescript:part{{PART}}
+
+# Run type check
+check-type:
+    bazel build //templates/typescript:common_ts //templates/typescript:main_ts //templates/typescript:part1_ts //templates/typescript:part2_ts
+
+# Run all checks (build + typecheck)
+check-all: build check-type
+
+# Format code
+format:
+    prettier --write "*.ts"
+
+# Clean build artifacts
+clean:
+    bazel clean
+    rm -rf dist/ node_modules/
