@@ -1,7 +1,6 @@
 """Build targets for Advent of Code TypeScript solution."""
 
-load("@aspect_rules_jest//jest:defs.bzl", "jest_test")
-load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_test")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@npm_s25e07_typescript//:defs.bzl", "npm_link_all_packages")
 
@@ -32,25 +31,19 @@ ts_project(
     transpiler = "tsc",
     tsconfig = ":tsconfig.json",
     deps = [
-        ":node_modules/@jest/globals",
-        ":node_modules/@types/jest",
         ":node_modules/@types/node",
         ":typescript_sources",
     ],
 )
 
-# Jest test target
-jest_test(
+# Test target using Node.js built-in test runner
+js_test(
     name = "test",
-    config = ":jest.config.js",
     data = [
-        ":node_modules/@jest/globals",
-        ":node_modules/@types/jest",
-        ":node_modules/@types/node",
         ":test_sources",
         ":typescript_sources",
     ],
-    node_modules = ":node_modules",
+    entry_point = "common.test.js",
 )
 
 # Main verification binary - runs both parts and validates results

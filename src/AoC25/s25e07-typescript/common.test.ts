@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { solvePart1, solvePart2 } from "./common";
+import { describe, test } from "node:test";
+import assert from "node:assert";
+import { solvePart1, solvePart2 } from "./common.js";
 
 const sampleInput = `.......S.......
 ...............
@@ -21,13 +22,13 @@ const sampleInput = `.......S.......
 describe("Part 1", () => {
   test("should solve sample input correctly", () => {
     const result = solvePart1(sampleInput);
-    expect(result).toBe(21);
+    assert.strictEqual(result, 21);
   });
 });
 
 describe("Part 2", () => {
   test("should solve sample input correctly", () => {
     const result = solvePart2(sampleInput);
-    expect(result).toBe(40);
+    assert.strictEqual(result, 40);
   });
 });
