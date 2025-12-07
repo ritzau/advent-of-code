@@ -2,11 +2,12 @@
   "name": "s16e01-typescript",
   "version": "0.1.0",
   "private": true,
+  "dependencies": {
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2",
+    "@types/node": "^22.0.0"
+  },
   "pnpm": {
     "onlyBuiltDependencies": []
-  },
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.0.0"
   }
 }

@@ -108,26 +108,41 @@ use_repo(rules_ts_ext, "npm_typescript")
 
 # npm dependencies
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
+
+# Template
 npm.npm_translate_lock(
     name = "npm_typescript_template",
     pnpm_lock = "//templates/typescript:pnpm-lock.yaml",
 )
 use_repo(npm, "npm_typescript_template")
+
+# s23
 npm.npm_translate_lock(
     name = "npm_aoc23",
     pnpm_lock = "//src/AoC23:pnpm-lock.yaml",
 )
 use_repo(npm, "npm_aoc23")
+
+# s16e01
 npm.npm_translate_lock(
     name = "npm_s16e01_typescript",
     pnpm_lock = "//src/AoC16/s16e01-typescript:pnpm-lock.yaml",
 )
 use_repo(npm, "npm_s16e01_typescript")
+
+# Tools
 npm.npm_translate_lock(
     name = "npm_tools",
     pnpm_lock = "//tools:pnpm-lock.yaml",
 )
 use_repo(npm, "npm_tools")
+
+# s25e07
+npm.npm_translate_lock(
+    name = "npm_s25e07_typescript",
+    pnpm_lock = "//src/AoC25/s25e07-typescript:pnpm-lock.yaml",
+)
+use_repo(npm, "npm_s25e07_typescript")
 
 ###############################################################################
 # Kotlin/JVM Toolchain and Dependencies
