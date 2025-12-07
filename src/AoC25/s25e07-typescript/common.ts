@@ -1,8 +1,5 @@
 /** Common utilities for this day's solution. */
 
-/**
- * Parse input into lines.
- */
 export function parseInput(data: string): string[][] {
   return data
     .trim()
@@ -10,9 +7,6 @@ export function parseInput(data: string): string[][] {
     .map((line) => Array.from(line));
 }
 
-/**
- * Solve Part 1
- */
 export function solvePart1(input: string): number {
   const lines = parseInput(input);
   let sIndex = lines[0].indexOf("S");
@@ -46,35 +40,28 @@ export function solvePart1(input: string): number {
   return splitCount;
 }
 
-/**
- * Solve Part 2
- */
 export function solvePart2(input: string): number {
   const lines = parseInput(input);
-  const dp = lines.map((line) => Array(line.length).fill(-1));
+  const cache = lines.map((line) => Array(line.length).fill(-1));
 
-  let sIndex = lines[0].indexOf("S");
-  if (sIndex == -1) {
+  const sIndex = lines[0].indexOf("S");
+  if (sIndex === -1) {
     throw new Error(`No start position in the first line: ${lines[0]}`);
   }
 
   const countPaths = (row: number, col: number): number => {
     if (row >= lines.length) return 1;
+    if (cache[row][col] !== -1) return cache[row][col];
+    return (cache[row][col] = calculatePaths(row, col));
+  };
 
-    if (dp[row][col] != -1) return dp[row][col];
-
-    let symbol = lines[row][col];
+  const calculatePaths = (row: number, col: number): number => {
+    const symbol = lines[row][col];
     switch (symbol) {
-      case ".": {
-        let result = countPaths(row + 1, col);
-        dp[row][col] = result;
-        return result;
-      }
-      case "^": {
-        let result = countPaths(row, col - 1) + countPaths(row, col + 1);
-        dp[row][col] = result;
-        return result;
-      }
+      case ".":
+        return countPaths(row + 1, col);
+      case "^":
+        return countPaths(row + 1, col - 1) + countPaths(row + 1, col + 1);
       default:
         throw new Error(`Illegal symbol: ${symbol}`);
     }
