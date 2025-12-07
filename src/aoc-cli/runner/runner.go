@@ -70,6 +70,11 @@ func (r *Runner) RunPart(paths *builder.SolutionPaths, part int, input string) R
 
 	cmd.Dir = r.rootDir // Set working directory to repo root for relative path resolution
 
+	// TypeScript/JavaScript binaries built with aspect_rules_js require BAZEL_BINDIR
+	if paths.Language == "typescript" {
+		cmd.Env = append(os.Environ(), "BAZEL_BINDIR=.")
+	}
+
 	cmd.Stdin = strings.NewReader(input)
 
 	var stdout, stderr bytes.Buffer
