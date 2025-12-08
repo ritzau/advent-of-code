@@ -39,7 +39,7 @@ py_binary(
 
 # Unit tests
 py_test(
-    name = "s25e08_test",
+    name = "test",
     srcs = [
         "tests/__init__.py",
         "tests/test_solution.py",

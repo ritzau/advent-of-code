@@ -17,7 +17,7 @@ def main():
     start = time.perf_counter()
     result1 = solve_part1(input_text)
     duration1 = time.perf_counter() - start
-    expected_part1 = 0  # TODO: Update with expected value
+    expected_part1 = 57564
     pass1 = result1 == expected_part1
 
     print(
@@ -29,7 +29,7 @@ def main():
     start = time.perf_counter()
     result2 = solve_part2(input_text)
     duration2 = time.perf_counter() - start
-    expected_part2 = 0  # TODO: Update with expected value
+    expected_part2 = 133296744
     pass2 = result2 == expected_part2
 
     print(

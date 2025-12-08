@@ -1,5 +1,8 @@
 """Tests for AoC 2016 Day 1 solution."""
 
+import sys
+import pytest
+
 from s16e01 import solve_part1, solve_part2
 
 
@@ -25,3 +28,7 @@ class TestPart2:
     def test_sample_1(self):
         """R8, R4, R4, R8 - first location visited twice is 4 blocks away, due East."""
         assert solve_part2("R8, R4, R4, R8") == 4
+
+
+if __name__ == "__main__":
+    sys.exit(pytest.main([__file__, "-v"]))

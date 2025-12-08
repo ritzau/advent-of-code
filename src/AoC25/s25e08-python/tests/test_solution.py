@@ -1,5 +1,6 @@
 """Tests for AoC solution."""
 
+import sys
 import pytest
 
 from s25e08 import solve_part1, solve_part2
@@ -27,22 +28,19 @@ sample_input = """\
 425,690,689"""
 
 
-# Keep pytest available for potential fixtures/parametrize decorators
-_ = pytest
-
-
 class TestPart1:
     """Tests for part 1."""
 
     def test_sample_1(self):
-        """TODO: Add sample test description."""
-        global sample_input
-        assert solve_part1(sample_input) == 20
+        assert solve_part1(sample_input) == 40
 
 
 class TestPart2:
     """Tests for part 2."""
 
     def test_sample_1(self):
-        """TODO: Add sample test description."""
         assert solve_part2(sample_input) == 25272
+
+
+if __name__ == "__main__":
+    sys.exit(pytest.main([__file__, "-v"]))
