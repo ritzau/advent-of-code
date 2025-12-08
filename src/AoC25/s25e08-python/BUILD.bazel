@@ -1,0 +1,52 @@
+"""Build targets for Advent of Code Python solution."""
+
+load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
+
+# Solution library containing the core solve functions
+py_library(
+    name = "s25e08",
+    srcs = [
+        "s25e08/__init__.py",
+        "s25e08/common.py",
+    ],
+    imports = ["."],
+    visibility = ["//visibility:public"],
+)
+
+# Main verification binary - runs both parts and validates results
+py_binary(
+    name = "main",
+    srcs = ["s25e08/main.py"],
+    main = "s25e08/main.py",
+    deps = [":s25e08"],
+)
+
+# Part 1 binary - outputs only part 1 result
+py_binary(
+    name = "part1",
+    srcs = ["s25e08/part1.py"],
+    main = "s25e08/part1.py",
+    deps = [":s25e08"],
+)
+
+# Part 2 binary - outputs only part 2 result
+py_binary(
+    name = "part2",
+    srcs = ["s25e08/part2.py"],
+    main = "s25e08/part2.py",
+    deps = [":s25e08"],
+)
+
+# Unit tests
+py_test(
+    name = "test",
+    srcs = [
+        "tests/__init__.py",
+        "tests/test_solution.py",
+    ],
+    main = "tests/test_solution.py",
+    deps = [
+        ":s25e08",
+        "@pip_python_template//pytest",
+    ],
+)

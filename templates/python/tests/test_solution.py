@@ -1,5 +1,6 @@
 """Tests for AoC solution."""
 
+import sys
 import pytest
 
 from template_python import solve_part1, solve_part2
@@ -24,3 +25,7 @@ class TestPart2:
         """TODO: Add sample test description."""
         # TODO: Add sample test
         assert solve_part2("sample input") == 0
+
+
+if __name__ == "__main__":
+    sys.exit(pytest.main([__file__, "-v"]))
