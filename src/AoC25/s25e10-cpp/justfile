@@ -1,0 +1,31 @@
+# Build all targets
+build:
+    bazel build //templates/cpp/...
+
+# Run the main verification binary
+run:
+    bazel run //templates/cpp/src:main
+
+# Run a specific part (1 or 2)
+run-part PART:
+    bazel run //templates/cpp/src:part{{PART}}
+
+# Run tests
+test:
+    bazel test //templates/cpp/...
+
+# Format code
+format:
+    find src tests -name "*.cpp" -o -name "*.h" | xargs clang-format -i
+
+# Run all checks (build, test, format)
+check-all: build test check-format
+
+# Check code formatting
+check-format:
+    @echo "Checking code formatting..."
+    @find src tests -name "*.cpp" -o -name "*.h" | xargs clang-format --dry-run -Werror
+
+# Clean build artifacts
+clean:
+    bazel clean
