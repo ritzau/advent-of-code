@@ -11,18 +11,18 @@ fun main() {
   println("======================================")
 
   // Part 1
-  var result1 = 0
+  var result1 = 0L
   val duration1 = measureTimeMillis { result1 = solvePart1(input) }
-  val expectedPart1 = 0 // TODO: Update with expected value
+  val expectedPart1 = 0L // TODO: Update with expected value
   val pass1 = result1 == expectedPart1
   val emoji1 = if (pass1) "✅" else "❌"
 
   println("Part 1: $emoji1 $result1 (expected: $expectedPart1) [${duration1}ms]")
 
   // Part 2
-  var result2 = 0
+  var result2 = 0L
   val duration2 = measureTimeMillis { result2 = solvePart2(input) }
-  val expectedPart2 = 0 // TODO: Update with expected value
+  val expectedPart2 = 0L // TODO: Update with expected value
   val pass2 = result2 == expectedPart2
   val emoji2 = if (pass2) "✅" else "❌"
 

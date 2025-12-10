@@ -1,8 +1,19 @@
 // Simple Kotlin test runner (no JUnit dependency)
 
+const val SAMPLE_INPUT = """
+7,1
+11,1
+11,7
+9,7
+9,5
+2,5
+2,3
+7,3
+"""
+
 fun assertEquals(
-    expected: Int,
-    actual: Int,
+    expected: Long,
+    actual: Long,
     message: String,
 ) {
   if (expected != actual) {
@@ -19,14 +30,8 @@ fun runTests() {
 }
 
 fun test1() {
-  // TODO: Add sample input and expected output from problem description
-  val input =
-      """
-        sample input here
-        """
-          .trimIndent()
-  val expected = 0 // TODO: Update with expected value
-  val result = solvePart1(input)
+  val expected = 50L
+  val result = solvePart1(SAMPLE_INPUT)
   assertEquals(expected, result, "Part 1 sample test")
 }
 
@@ -37,7 +42,7 @@ fun test2() {
         sample input here
         """
           .trimIndent()
-  val expected = 0 // TODO: Update with expected value
+  val expected = 0L // TODO: Update with expected value
   val result = solvePart2(input)
   assertEquals(expected, result, "Part 2 sample test")
 }
