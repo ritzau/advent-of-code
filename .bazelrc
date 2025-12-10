@@ -17,8 +17,8 @@ build --color=yes
 test --color=yes
 
 # C++ settings
-build --cxxopt=-std=c++20
-build --host_cxxopt=-std=c++20
+build --cxxopt=-std=c++23
+build --host_cxxopt=-std=c++23
 build --cxxopt=-Wall
 build --cxxopt=-Wextra
 build --cxxopt=-Wpedantic

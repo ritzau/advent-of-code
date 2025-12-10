@@ -1,32 +1,46 @@
 #include "solution.h"
 
 #include <algorithm>
+#include <deque>
 #include <iostream>
 #include <memory>
+#include <numeric>
+#include <ranges>
 #include <set>
 #include <sstream>
+#include <unordered_set>
 #include <vector>
 
 namespace aoc {
 
-    using LightConfig = std::vector<bool>;
-    using ButtonConfig = std::vector<std::vector<int>>;
-    using JoltageConfig = std::vector<int>;
+using LightConfig = std::vector<bool>;
+using ButtonConfig = std::vector<std::vector<int>>;
+using JoltageConfig = std::vector<int>;
 
-    struct MachineConfig {
-        LightConfig lights;
-        ButtonConfig buttons;
-        JoltageConfig joltage;
-    };
+struct MachineConfig {
+    LightConfig lights;
+    ButtonConfig buttons;
+    JoltageConfig joltage;
+};
 
-    struct BfsNode {
-        BfsNode(std::shared_ptr<BfsNode> p, LightConfig l, int s) :
-            parent(std::move(p)), lights(l), steps(s) {}
+// Note: std::vector<bool> doesn't have a standard hash function, so we provide one
+// This implementation uses boost::hash_combine's algorithm for efficient hashing
+struct LightConfigHash {
+    std::size_t operator()(const LightConfig& config) const noexcept {
+        std::size_t hash = config.size();
+        for (std::size_t i = 0; i < config.size(); ++i) {
+            if (config[i]) {
+                hash ^= std::hash<std::size_t>{}(i) + 0x9e3779b9 + (hash << 6) + (hash >> 2);
+            }
+        }
+        return hash;
+    }
+};
 
-        std::shared_ptr<BfsNode> parent;
-        LightConfig lights;
-        int steps;
-    };
+struct BfsNode {
+    LightConfig lights;
+    int steps;
+};
 
 // Utility function to split a string by a delimiter
 static std::vector<std::string> split(const std::string& str, char delimiter) {
@@ -48,7 +62,8 @@ static std::vector<MachineConfig> parse_input(const std::string& input) {
     std::vector<MachineConfig> configs;
 
     while (std::getline(stream, line)) {
-        if (line.empty()) continue;
+        if (line.empty())
+            continue;
 
         MachineConfig config;
 
@@ -65,93 +80,66 @@ static std::vector<MachineConfig> parse_input(const std::string& input) {
         }
         lights_str = lights_str.substr(1, lights_str.size() - 2);
         std::transform(lights_str.begin(), lights_str.end(), std::back_inserter(config.lights),
-            [](char c) { return c == '#'; });
-
-        // std::cout << "Parsed lights: ";
-        // for (bool light : config.lights) {
-        //     std::cout << (light ? '#' : '.');
-        // }
-        // std::cout << std::endl;
+                       [](char c) { return c == '#'; });
 
         for (auto word : words) {
-            // std::cout << "Word: " << word << std::endl;
-            if (word.size() > 2 &&word.at(0) == '(') {
+            if (word.size() > 2 && word.at(0) == '(') {
                 if (word.back() != ')') {
                     throw std::runtime_error("Invalid button configuration: " + word);
                 }
 
                 word = word.substr(1, word.size() - 2);
-                auto ids_str= split(word, ',');
+                auto ids_str = split(word, ',');
                 std::vector<int> ids;
                 std::transform(ids_str.begin(), ids_str.end(), std::back_inserter(ids),
-                    [](const std::string& s) { return std::stoi(s); });
+                               [](const std::string& s) { return std::stoi(s); });
 
                 config.buttons.push_back(ids);
-
-                // std::cout << "Parsed button: ";
-                // for (int id : ids) {
-                //     std::cout << id << " ";
-                // }
-                // std::cout << std::endl;
             }
         }
         configs.push_back(config);
     }
 
-    // std::cout << "Total lines parsed: " << lines.size() << std::endl;
-
     return configs;
 }
 
 int64_t minimum_clicks(const MachineConfig& config) {
-    auto visited = std::set<LightConfig>();
-    auto root = std::make_shared<BfsNode>(nullptr, std::vector<bool>(config.lights.size()), 0);
-    std::vector<std::shared_ptr<BfsNode>> queue;
-    queue.push_back(root);
+    std::unordered_set<LightConfig, LightConfigHash> visited;
+    std::deque<BfsNode> queue;
+
+    queue.emplace_back(LightConfig(config.lights.size()), 0);
 
     while (!queue.empty()) {
-        auto current = queue.front();
-        queue.erase(queue.begin());
+        auto current = std::move(queue.front());
+        queue.pop_front();
 
-        if (current->lights == config.lights) {
-            int64_t steps = current->steps;
-            return steps;
+        if (current.lights == config.lights) {
+            return current.steps;
         }
 
-        if (visited.contains(current->lights)) {
+        if (!visited.insert(current.lights).second) {
             continue;
         }
-        visited.insert(current->lights);
 
         for (const auto& button : config.buttons) {
-            LightConfig new_lights = current->lights;
+            auto new_lights = current.lights;
             for (int id : button) {
-                if (id >= 0 && id < static_cast<int>(new_lights.size())) {
+                if (id >= 0 && id < std::ssize(new_lights)) {
                     new_lights[id] = !new_lights[id];
                 }
             }
-            auto child = std::make_shared<BfsNode>(current, new_lights, current->steps + 1);
-            queue.push_back(child);
+            queue.emplace_back(std::move(new_lights), current.steps + 1);
         }
     }
     return -1;
 }
 
 int64_t solve_part1(const std::string& input) {
-    auto machines = parse_input(input);
-    // std::cout << "Number of configurations: " << machines.size() << std::endl;
+    auto clicks = parse_input(input) | std::views::transform([](const auto& machine) {
+                      return minimum_clicks(machine);
+                  });
 
-    int64_t total_clicks = 0;
-    for (const auto& machine : machines) {
-        // std::cout << "Processing machine with " << machine.lights.size() << " lights and "
-        //           << machine.buttons.size() << " buttons." << std::endl;
-        int64_t clicks = minimum_clicks(machine);
-        // std::cout << "Minimum clicks needed: " << clicks << std::endl;
-        total_clicks += clicks;
-    }
-
-    // TODO: Implement part 1 solution
-    return total_clicks;
+    return std::ranges::fold_left(clicks, int64_t{0}, std::plus{});
 }
 
 int64_t solve_part2(const std::string& input) {

@@ -236,26 +236,40 @@ func (b *Builder) findBinariesFast(pkgPath, solutionPath string) (string, string
 
 	basePath := filepath.Join(b.rootDir, "bazel-out")
 
-	// Find all configuration directories (e.g., darwin_x86_64-fastbuild, darwin_x86_64-fastbuild-ST-*)
+	// Find all configuration directories (e.g., darwin_x86_64-fastbuild, darwin_x86_64-opt)
 	entries, err := os.ReadDir(basePath)
 	if err != nil {
 		return "", "", fmt.Errorf("failed to read bazel-out: %w", err)
 	}
 
+	// Prioritize opt configuration since we build with -c opt
+	var orderedEntries []os.DirEntry
+	var otherEntries []os.DirEntry
 	for _, entry := range entries {
 		if !entry.IsDir() {
 			continue
 		}
+		// Prioritize *-opt configurations
+		if strings.Contains(entry.Name(), "-opt") && !strings.Contains(entry.Name(), "-opt-exec") {
+			orderedEntries = append(orderedEntries, entry)
+		} else {
+			otherEntries = append(otherEntries, entry)
+		}
+	}
+	orderedEntries = append(orderedEntries, otherEntries...)
 
+	for _, entry := range orderedEntries {
 		// Try to find part1 and part2 binaries
 		configPath := filepath.Join(basePath, entry.Name(), "bin", relPath)
 
-		part1Path, err := b.findBinaryInDir(filepath.Join(configPath, "part1"))
+		// For C++ and native binaries, the binary is directly in configPath (e.g., configPath/part1)
+		// For JVM/CLR binaries, the binary is in a subdirectory (e.g., configPath/part1/part1.sh)
+		part1Path, err := b.findBinary(configPath, "part1")
 		if err != nil {
 			continue
 		}
 
-		part2Path, err := b.findBinaryInDir(filepath.Join(configPath, "part2"))
+		part2Path, err := b.findBinary(configPath, "part2")
 		if err != nil {
 			continue
 		}
@@ -264,6 +278,30 @@ func (b *Builder) findBinariesFast(pkgPath, solutionPath string) (string, string
 	}
 
 	return "", "", fmt.Errorf("binaries not found in bazel-out")
+}
+
+// findBinary finds an executable binary for the given target name
+// It first checks if the binary exists as a file directly in configPath (for C++, Rust, etc.)
+// Then falls back to looking in a subdirectory (for JVM/CLR/Node.js with wrapper scripts)
+func (b *Builder) findBinary(configPath, targetName string) (string, error) {
+	// First, check if the binary is directly in configPath (C++, Rust, native binaries)
+	directPath := filepath.Join(configPath, targetName)
+	if info, err := os.Stat(directPath); err == nil && !info.IsDir() {
+		// Found a file - verify it's executable
+		if info.Mode()&0o111 != 0 {
+			return directPath, nil
+		}
+	}
+
+	// Try subdirectory with underscore suffix (TypeScript/Node.js: part1_/part1)
+	targetDirWithUnderscore := filepath.Join(configPath, targetName+"_")
+	if path, err := b.findBinaryInDir(targetDirWithUnderscore); err == nil {
+		return path, nil
+	}
+
+	// Fall back to looking in a subdirectory without suffix (JVM/CLR binaries: part1/part1)
+	targetDir := filepath.Join(configPath, targetName)
+	return b.findBinaryInDir(targetDir)
 }
 
 // findBinaryInDir finds an executable binary in a directory
@@ -343,7 +381,7 @@ func (b *Builder) buildWithBazel(year, day int, solutionPath, solutionName strin
 	targetKey := fmt.Sprintf("%s+%s", part1Target, part2Target)
 	if !b.builtTargets[targetKey] {
 		// Build both targets
-		cmd := exec.Command("bazel", "build", part1Target, part2Target)
+		cmd := exec.Command("bazel", "build", "-c", "opt", part1Target, part2Target)
 		cmd.Dir = b.rootDir
 		output, err := cmd.CombinedOutput()
 		if err != nil {
@@ -383,7 +421,7 @@ func (b *Builder) buildWithBazel(year, day int, solutionPath, solutionName strin
 
 // queryBazelOutput queries Bazel for the output path of a target
 func (b *Builder) queryBazelOutput(target string) (string, error) {
-	cmd := exec.Command("bazel", "cquery", "--output=files", "--color=no", target)
+	cmd := exec.Command("bazel", "cquery", "--output=files", "--color=no", "-c", "opt", target)
 	cmd.Dir = b.rootDir
 	output, err := cmd.Output()
 	if err != nil {

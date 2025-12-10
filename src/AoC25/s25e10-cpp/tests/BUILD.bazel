@@ -1,7 +1,0 @@
-"""Test targets for Advent of Code solution."""
-
-cc_test(
-    name = "solution_test",
-    srcs = ["test_solution.cpp"],
-    deps = ["//src/AoC25/s25e10-cpp/src:solution"],
-)

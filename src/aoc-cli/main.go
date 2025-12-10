@@ -724,7 +724,7 @@ func formatPartResult(r runner.Result, expectedResult string, hasExpected bool) 
 
 	// Checkmarks take 2 visual columns, so we pad to 24 chars + space + checkmark (2 visual) = 27 visual columns
 	// We need to add one more space after checkmark to reach 28 total
-	// Without checkmark, we pad to 28 chars
+	// Without checkmark, we pad to 26 chars to match the visual width
 	if hasExpected {
 		if r.Output == expectedResult {
 			return fmt.Sprintf("%-22s ✅ ", output)
@@ -732,7 +732,7 @@ func formatPartResult(r runner.Result, expectedResult string, hasExpected bool) 
 		return fmt.Sprintf("%-22s ❌ ", output)
 	}
 
-	return fmt.Sprintf("%-28s", output)
+	return fmt.Sprintf("%-26s", output)
 }
 
 func formatDuration(d time.Duration) string {

@@ -1,1 +1,39 @@
-"""Root build file for Advent of Code C++ template."""
+"""Build targets for Advent of Code solution."""
+
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+
+# Solution library containing the core solve functions
+cc_library(
+    name = "solution",
+    srcs = ["src/solution.cpp"],
+    hdrs = ["src/solution.h"],
+    includes = ["src"],
+    visibility = ["//visibility:public"],
+)
+
+# Main verification binary - runs both parts and validates results
+cc_binary(
+    name = "main",
+    srcs = ["src/main.cpp"],
+    deps = [":solution"],
+)
+
+# Part 1 binary - outputs only part 1 result
+cc_binary(
+    name = "part1",
+    srcs = ["src/part1.cpp"],
+    deps = [":solution"],
+)
+
+# Part 2 binary - outputs only part 2 result
+cc_binary(
+    name = "part2",
+    srcs = ["src/part2.cpp"],
+    deps = [":solution"],
+)
+
+cc_test(
+    name = "solution_test",
+    srcs = ["tests/test_solution.cpp"],
+    deps = [":solution"],
+)
