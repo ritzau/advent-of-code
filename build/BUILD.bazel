@@ -1,5 +1,22 @@
 """Bazel rules and macros for Advent of Code."""
 
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
 exports_files([
     "haskell.bzl",
 ])
+
+genrule(
+    name = "workspace_status_header",
+    srcs = ["generate_header.sh"],
+    outs = ["workspace_status.h"],
+    cmd = "$(location generate_header.sh) $@",
+    stamp = 1,
+)
+
+cc_library(
+    name = "workspace_status",
+    hdrs = [":workspace_status_header"],
+    includes = ["."],
+    visibility = ["//visibility:public"],
+)
