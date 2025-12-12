@@ -4,7 +4,7 @@
 common --enable_bzlmod
 
 # Collect workspace status
-build --workspace_status_command=./build/generate_status.sh
+build --workspace_status_command=./build/status/generate_status.sh
 
 # Optimize release builds
 build:release --compilation_mode=opt

@@ -1,7 +1,42 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_go//go:def.bzl", "go_binary")
+load("@rules_java//java:java_binary.bzl", "java_binary")
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
+load("@rules_python//python:defs.bzl", "py_binary")
 
 cc_binary(
-    name = "example",
+    name = "cpp",
     srcs = ["example.cpp"],
-    deps = ["//build:workspace_status"],
+    deps = ["//build/status:cpp"],
+)
+
+py_binary(
+    name = "python",
+    srcs = ["example.py"],
+    main = "example.py",
+    deps = ["//build/status:python"],
+)
+
+kt_jvm_binary(
+    name = "kotlin",
+    srcs = ["example.kt"],
+    main_class = "ExampleKt",
+    deps = ["//build/status:kotlin"],
+)
+
+java_binary(
+    name = "kotlin_standalone",
+    create_executable = True,
+    main_class = "ExampleKt",
+    runtime_deps = [
+        ":kotlin",
+    ],
+)
+
+go_binary(
+    name = "go",
+    srcs = ["example.go"],
+    deps = [
+        "//build/status:go",
+    ],
 )

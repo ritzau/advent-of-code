@@ -16,16 +16,25 @@ function get_tags() {
 	echo "${tags%,}"
 }
 
+function get_commit_time() {
+	if date --version >/dev/null 2>&1; then
+		# GNU date (Linux)
+		date -u -d "@$(git log -1 --pretty=%ct)" +"%Y-%m-%dT%H:%M:%SZ"
+	else
+		# BSD date (macOS)
+		date -u -r $(git log -1 --pretty=%ct) +"%Y-%m-%dT%H:%M:%SZ"
+	fi
+}
+
+function get_escaped_body() {
+	local body=$(git log -1 --pretty=format:'%b')
+	echo "${body//$'\n'/\\n}"
+}
+
 echo "STABLE_GIT_COMMIT_SHA $(git rev-parse HEAD)"
 echo "STABLE_GIT_BRANCH $(git rev-parse --abbrev-ref HEAD)"
-if date --version >/dev/null 2>&1; then
-	# GNU date (Linux)
-	echo "STABLE_GIT_COMMIT_TIME $(date -u -d "@$(git log -1 --pretty=%ct)" +"%Y-%m-%dT%H:%M:%SZ")"
-else
-	# BSD date (macOS)
-	echo "STABLE_GIT_COMMIT_TIME $(date -u -r $(git log -1 --pretty=%ct) +"%Y-%m-%dT%H:%M:%SZ")"
-fi
+echo "STABLE_GIT_COMMIT_TIME $(get_commit_time)"
 echo "STABLE_GIT_COMMIT_TITLE $(git log -1 --pretty=format:'%s')"
-echo "STABLE_GIT_COMMIT_BODY $(git log -1 --pretty=format:'%b' | tr '\n' '\\n')"
+echo "STABLE_GIT_COMMIT_BODY $(get_escaped_body)"
 echo "STABLE_GIT_TAGS $(get_tags)"
 echo "STABLE_GIT_IS_DIRTY $(dirty_state)"

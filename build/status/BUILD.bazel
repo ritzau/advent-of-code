@@ -1,0 +1,81 @@
+"""Bazel rules and macros for Advent of Code."""
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_go//go:def.bzl", "go_library")
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
+load("@rules_python//python:defs.bzl", "py_library")
+
+genrule(
+    name = "workspace_status_cpp",
+    srcs = [
+        "generate_cpp.sh",
+        "read_workspace_status.sh",
+    ],
+    outs = ["workspace_status.h"],
+    cmd = "$(location generate_cpp.sh) $@",
+    stamp = 1,
+)
+
+genrule(
+    name = "workspace_status_go",
+    srcs = [
+        "generate_go.sh",
+        "read_workspace_status.sh",
+    ],
+    outs = ["workspace_status.go"],
+    cmd = "$(location generate_go.sh) $@",
+    stamp = 1,
+)
+
+genrule(
+    name = "workspace_status_kotlin",
+    srcs = [
+        "generate_kotlin.sh",
+        "read_workspace_status.sh",
+    ],
+    outs = ["WorkspaceStatus.kt"],
+    cmd = "$(location generate_kotlin.sh) $@",
+    stamp = 1,
+)
+
+genrule(
+    name = "workspace_status_python",
+    srcs = [
+        "generate_python.sh",
+        "read_workspace_status.sh",
+    ],
+    outs = ["workspace_status.py"],
+    cmd = "$(location generate_python.sh) $@",
+    stamp = 1,
+)
+
+# C++ library
+cc_library(
+    name = "cpp",
+    hdrs = [":workspace_status_cpp"],
+    includes = ["."],
+    visibility = ["//visibility:public"],
+)
+
+# Go library
+go_library(
+    name = "go",
+    srcs = [":workspace_status_go"],
+    importpath = "foo/workspace",
+    visibility = ["//visibility:public"],
+)
+
+# Kotlin library
+kt_jvm_library(
+    name = "kotlin",
+    srcs = [":workspace_status_kotlin"],
+    visibility = ["//visibility:public"],
+)
+
+# Python library
+py_library(
+    name = "python",
+    srcs = [":workspace_status_python"],
+    imports = ["."],
+    visibility = ["//visibility:public"],
+)
