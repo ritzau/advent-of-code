@@ -113,7 +113,7 @@ fun debugInteractive(input: String) {
         x to y
       }
 
-  val segmentMaps = buildSegmentMaps(coords)
+  val segmentMaps = buildSegmentMaps(coords, verbose = true)
   val candidates = mutableListOf<RectCandidate>()
 
   // Collect all rectangle candidates

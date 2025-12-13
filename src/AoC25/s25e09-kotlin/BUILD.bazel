@@ -5,7 +5,10 @@ load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library", "kt_jvm
 # Common library with solve functions
 kt_jvm_library(
     name = "common",
-    srcs = ["main/kotlin/Common.kt"],
+    srcs = [
+        "main/kotlin/Common.kt",
+        "main/kotlin/Visualization.kt",
+    ],
 )
 
 # Main verification binary - runs both parts and validates results

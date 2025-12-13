@@ -7,13 +7,13 @@ import kotlin.system.measureTimeMillis
 fun main() {
   val input = generateSequence(::readLine).joinToString("\n")
 
-  println("AoC YEAR Day X: TITLE")
+  println("AoC YEAR Day 9: Movie Theater")
   println("======================================")
 
   // Part 1
   var result1 = 0L
   val duration1 = measureTimeMillis { result1 = solvePart1(input) }
-  val expectedPart1 = 0L // TODO: Update with expected value
+  val expectedPart1 = 4777816465L
   val pass1 = result1 == expectedPart1
   val emoji1 = if (pass1) "✅" else "❌"
 
@@ -22,7 +22,7 @@ fun main() {
   // Part 2
   var result2 = 0L
   val duration2 = measureTimeMillis { result2 = solvePart2(input) }
-  val expectedPart2 = 0L // TODO: Update with expected value
+  val expectedPart2 = 1410501884L
   val pass2 = result2 == expectedPart2
   val emoji2 = if (pass2) "✅" else "❌"
 

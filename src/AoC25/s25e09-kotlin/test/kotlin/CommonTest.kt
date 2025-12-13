@@ -37,7 +37,7 @@ fun test1() {
 
 fun test2() {
   val expected = 24L
-  val result = solvePart2(SAMPLE_INPUT)
+  val result = solvePart2(SAMPLE_INPUT, verbose = true)
   assertEquals(expected, result, "Part 2 sample test")
 }
 
