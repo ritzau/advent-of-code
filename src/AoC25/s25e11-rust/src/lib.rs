@@ -1,16 +1,16 @@
 use std::collections::HashMap;
 
-type Graph = HashMap<String, Vec<String>>;
+type Graph<'a> = HashMap<&'a str, Vec<&'a str>>;
 
-pub fn parse_input(input: &str) -> Graph {
+pub fn parse_input(input: &str) -> Graph<'_> {
     let mut graph = Graph::new();
 
     for line in input.trim().lines() {
         let parts: Vec<&str> = line.split(": ").collect();
-        let name = parts[0].to_string();
+        let name = parts[0];
 
         if parts.len() > 1 {
-            let children: Vec<String> = parts[1].split(' ').map(String::from).collect();
+            let children: Vec<&str> = parts[1].split(' ').collect();
             graph.insert(name, children);
         }
     }
