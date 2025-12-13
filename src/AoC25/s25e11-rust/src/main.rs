@@ -30,7 +30,7 @@ fn main() {
     let start = Instant::now();
     let result2 = solve_part2(&input);
     let duration2 = start.elapsed();
-    const EXPECTED_PART2: i64 = 0; // TODO: Update with expected answer
+    const EXPECTED_PART2: i64 = 315116216513280;
     let pass2 = result2 == EXPECTED_PART2;
 
     println!(

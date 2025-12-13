@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 type Graph<'a> = HashMap<&'a str, Vec<&'a str>>;
 
@@ -32,55 +32,41 @@ fn count_paths(node: &str, graph: &Graph) -> i64 {
 fn count_paths_with_required_helper<'a>(
     node: &'a str,
     graph: &Graph<'a>,
-    visited: &mut HashSet<&'a str>,
-    memo: &mut HashMap<(&'a str, u8), i64>,
+    seen_fft: bool,
+    seen_dac: bool,
+    memo: &mut HashMap<(&'a str, bool, bool), i64>,
 ) -> i64 {
     if node == "out" {
-        // Check if we've visited both required nodes (bits 0 and 1 set)
-        let seen_fft = visited.contains("fft");
-        let seen_dac = visited.contains("dac");
         return if seen_fft && seen_dac { 1 } else { 0 };
     }
 
-    // Encode which required nodes we've seen as bits
-    let mut state: u8 = 0;
-    if visited.contains("fft") {
-        state |= 1; // bit 0
-    }
-    if visited.contains("dac") {
-        state |= 2; // bit 1
-    }
-
-    let memo_key = (node, state);
+    let memo_key = (node, seen_fft, seen_dac);
     if let Some(&cached) = memo.get(&memo_key) {
         return cached;
     }
 
-    visited.insert(node);
+    let new_seen_fft = seen_fft || node == "fft";
+    let new_seen_dac = seen_dac || node == "dac";
 
     let result = graph
         .get(node)
         .map(|children| {
             children
                 .iter()
-                .map(|child| count_paths_with_required_helper(child, graph, visited, memo))
+                .map(|child| {
+                    count_paths_with_required_helper(child, graph, new_seen_fft, new_seen_dac, memo)
+                })
                 .sum()
         })
         .unwrap_or(0);
-
-    visited.remove(node);
 
     memo.insert(memo_key, result);
     result
 }
 
-fn count_paths_with_required<'a>(
-    node: &'a str,
-    graph: &Graph<'a>,
-    visited: &mut HashSet<&'a str>,
-) -> i64 {
+fn count_paths_with_required<'a>(node: &'a str, graph: &Graph<'a>) -> i64 {
     let mut memo = HashMap::new();
-    count_paths_with_required_helper(node, graph, visited, &mut memo)
+    count_paths_with_required_helper(node, graph, false, false, &mut memo)
 }
 
 pub fn solve_part1(input: &str) -> i64 {
@@ -90,8 +76,7 @@ pub fn solve_part1(input: &str) -> i64 {
 
 pub fn solve_part2(input: &str) -> i64 {
     let graph = parse_input(input);
-    let mut visited = HashSet::new();
-    count_paths_with_required("svr", &graph, &mut visited)
+    count_paths_with_required("svr", &graph)
 }
 
 #[cfg(test)]
