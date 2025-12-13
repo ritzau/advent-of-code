@@ -8,10 +8,11 @@
       "upgradePackages": true
     },
     "ghcr.io/devcontainers-community/features/bazel:1": {},
+    "ghcr.io/devcontainers-extra/features/haskell:2": {},
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.13"
     },
-    "ghcr.io/devcontainers-extra/features/haskell:2": {}
+    "ghcr.io/devcontainers/features/java:1": {}
   },
 
   "customizations": {
