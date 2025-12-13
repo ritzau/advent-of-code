@@ -165,32 +165,32 @@ int64_t minimum_clicks_for_joltage(const MachineConfig& config) {
     std::ranges::sort(buttons, [](const auto& a, const auto& b) {
         return a.size() < b.size();
     });
-    
+
     struct DfsState {
         JoltageConfig current;
         size_t button_index;
         int64_t clicks;
     };
-    
+
     std::vector<DfsState> stack;
     stack.push_back({JoltageConfig(config.joltage.size(), 0), 0, 0});
-    
+
     while (!stack.empty()) {
         auto state = std::move(stack.back());
         stack.pop_back();
-        
+
         // Check if we've reached the target configuration
         if (state.current == config.joltage) {
             return state.clicks;
         }
-        
+
         // If we've processed all buttons, this path doesn't work
         if (state.button_index >= buttons.size()) {
             continue;
         }
-        
+
         const auto& button = buttons[state.button_index];
-        
+
         // Calculate maximum presses without overflow
         int max_presses = std::numeric_limits<int>::max();
         for (int id : button) {
@@ -199,7 +199,7 @@ int64_t minimum_clicks_for_joltage(const MachineConfig& config) {
                 max_presses = std::min(max_presses, diff);
             }
         }
-        
+
         // Try all possible press counts from max_presses down to 0
         for (int presses = max_presses; presses >= 0; --presses) {
             auto new_state = state.current;
@@ -211,46 +211,48 @@ int64_t minimum_clicks_for_joltage(const MachineConfig& config) {
             stack.push_back({std::move(new_state), state.button_index + 1, state.clicks + presses});
         }
     }
-    
+
     return -1;
 }
 
 int64_t solve_part2(const std::string& input) {
+    return 0;
+
     auto machines = parse_input(input);
-    
+
     // Sort machines by number of buttons (ascending)
     std::ranges::sort(machines, [](const auto& a, const auto& b) {
         return a.buttons.size() < b.buttons.size();
     });
-    
+
     // Shuffle to keep pace consistent
     std::random_device rd;
     std::mt19937 gen(rd());
     std::ranges::shuffle(machines, gen);
-    
+
     const size_t num_threads = std::thread::hardware_concurrency();
     const size_t total_machines = machines.size();
-    
+
     std::cout << "Starting " << num_threads << " worker threads for " << total_machines << " machines\n";
-    
+
     std::queue<size_t> work_queue;
     for (size_t i = 0; i < total_machines; ++i) {
         work_queue.push(i);
     }
-    
+
     std::mutex queue_mutex;
     std::mutex output_mutex;
     std::atomic<size_t> completed{0};
     std::atomic<int64_t> total{0};
-    
+
     auto start_time = std::chrono::high_resolution_clock::now();
-    
+
     auto worker = [&](size_t thread_id) {
         {
             std::lock_guard<std::mutex> lock(output_mutex);
             std::cout << "Thread " << thread_id << " started\n";
         }
-        
+
         while (true) {
             size_t index;
             {
@@ -261,33 +263,33 @@ int64_t solve_part2(const std::string& input) {
                 index = work_queue.front();
                 work_queue.pop();
             }
-            
+
             const auto& machine = machines[index];
-            
+
             {
                 std::lock_guard<std::mutex> lock(output_mutex);
-                std::cout << "Thread " << thread_id << " starting machine " << index 
-                          << " (buttons: " << machine.buttons.size() 
+                std::cout << "Thread " << thread_id << " starting machine " << index
+                          << " (buttons: " << machine.buttons.size()
                           << ", lights: " << machine.lights.size() << ")\n";
             }
-            
+
             auto machine_start = std::chrono::high_resolution_clock::now();
             int64_t result = minimum_clicks_for_joltage(machine);
             auto machine_end = std::chrono::high_resolution_clock::now();
-            
+
             total += result;
             size_t done = ++completed;
-            
+
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(machine_end - machine_start);
             auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(machine_end - start_time);
             double percent = (static_cast<double>(done) / total_machines) * 100.0;
-            
+
             // Calculate ETA
             double avg_time = static_cast<double>(elapsed.count()) / done;
             int eta_seconds = static_cast<int>(avg_time * (total_machines - done));
             int eta_minutes = eta_seconds / 60;
             eta_seconds %= 60;
-            
+
             {
                 std::lock_guard<std::mutex> lock(output_mutex);
                 std::cout << "Machine " << done << "/" << total_machines
@@ -299,15 +301,15 @@ int64_t solve_part2(const std::string& input) {
             }
         }
     };
-    
+
     std::vector<std::thread> threads;
     for (size_t i = 0; i < num_threads; ++i) {
         threads.emplace_back(worker, i);
     }
-    
+
     for (auto& thread : threads) {
         thread.join();
     }
-    
+
     return total.load();
 }}  // namespace aoc
