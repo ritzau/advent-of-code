@@ -36,14 +36,8 @@ fun test1() {
 }
 
 fun test2() {
-  // TODO: Add sample input and expected output from problem description
-  val input =
-      """
-        sample input here
-        """
-          .trimIndent()
-  val expected = 0L // TODO: Update with expected value
-  val result = solvePart2(input)
+  val expected = 24L
+  val result = solvePart2(SAMPLE_INPUT)
   assertEquals(expected, result, "Part 2 sample test")
 }
 

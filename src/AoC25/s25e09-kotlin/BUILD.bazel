@@ -32,6 +32,14 @@ kt_jvm_binary(
     deps = [":common"],
 )
 
+# Interactive debugger
+kt_jvm_binary(
+    name = "debug",
+    srcs = ["main/kotlin/InteractiveDebug.kt"],
+    main_class = "InteractiveDebugKt",
+    deps = [":common"],
+)
+
 # Tests
 kt_jvm_test(
     name = "test",
