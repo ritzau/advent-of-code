@@ -1,0 +1,12 @@
+[package]
+name = "s25e11-rust"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "s25e11-rust-part1"
+path = "src/bin/part1.rs"
+
+[[bin]]
+name = "s25e11-rust-part2"
+path = "src/bin/part2.rs"
