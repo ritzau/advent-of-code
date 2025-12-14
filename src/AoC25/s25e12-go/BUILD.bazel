@@ -1,0 +1,36 @@
+"""Build targets for Advent of Code Go solution."""
+
+load("@rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+
+# Main verification binary - runs both parts and validates results
+go_binary(
+    name = "main",
+    srcs = ["main.go"],
+    deps = [":common"],
+)
+
+go_binary(
+    name = "part1",
+    srcs = ["cmd/s25e12-go-part1/main.go"],
+    deps = [":common"],
+)
+
+go_binary(
+    name = "part2",
+    srcs = ["cmd/s25e12-go-part2/main.go"],
+    deps = [":common"],
+)
+
+go_library(
+    name = "common",
+    srcs = ["common/common.go"],
+    importpath = "s25e12-go/common",
+    visibility = ["//src/AoC25/s25e12-go:__subpackages__"],
+)
+
+# Unit tests
+go_test(
+    name = "test",
+    srcs = ["common/common_test.go"],
+    embed = [":common"],
+)
